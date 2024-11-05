@@ -4,6 +4,34 @@ use yii\db\Migration;
 
 class m130524_201442_init extends Migration
 {
+  /*  ----/PERMISSÕES DAS ROLES /----*/
+    /*
+    ADMIN
+    Gestão do back-office:
+•	Ver, editar, criar e apagar utilizadores
+•	Ver, editar, criar e apagar produtos
+•	Ver, editar, criar e apagar categorias
+•	Ver, apagar avaliações
+•	Ver, editar, criar e apagar encomendas
+•	Ver, editar (editar o estado da fatura)
+•	Ver, editar, criar e apagar ivas
+•	Ver, editar, criar empresa
+
+    GESTOR
+    Gestão do back-office:
+•	Ver, editar, criar e apagar produtos
+•	Ver, editar, criar e apagar categorias
+•	Ver, editar faturas
+•	Ver, apagar avaliações
+•	Ver, editar encomendas
+
+    CLIENTE
+    Gestão do front-office:
+•	Fazer encomendas
+•	Editar os dados pessoais
+•	Consultar faturas
+•	Fazer avaliações*/
+
     public function up()
     {
         $tableOptions = null;
