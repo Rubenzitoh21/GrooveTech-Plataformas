@@ -6,7 +6,7 @@ use yii\rest\ActiveController;
 
 class CategoriaController extends ActiveController
 {
-    public $modelClass = 'common\models\Categorias';
+    public $modelClass = 'common\models\CategoriasProdutos';
 
     public function actionIndex()
     {

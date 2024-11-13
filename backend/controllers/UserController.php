@@ -2,16 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\Expedicoes;
-use backend\models\ExpedicoesSearch;
+use common\models\User;
+use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ExpedicoesController implements the CRUD actions for Expedicoes model.
+ * UserController implements the CRUD actions for User model.
  */
-class ExpedicoesController extends Controller
+class UserController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,13 +32,13 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Lists all Expedicoes models.
+     * Lists all User models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ExpedicoesSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -48,8 +48,8 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Displays a single Expedicoes model.
-     * @param int $id ID
+     * Displays a single User model.
+     * @param int $id
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -61,13 +61,13 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Creates a new Expedicoes model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Expedicoes();
+        $model = new User();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -83,9 +83,9 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Updates an existing Expedicoes model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
+     * @param int $id
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -103,9 +103,9 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Deletes an existing Expedicoes model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
+     * @param int $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -117,15 +117,15 @@ class ExpedicoesController extends Controller
     }
 
     /**
-     * Finds the Expedicoes model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Expedicoes the loaded model
+     * @param int $id
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Expedicoes::findOne(['id' => $id])) !== null) {
+        if (($model = User::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

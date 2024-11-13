@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\CategoriasProdutos;
+use common\models\User;
 
 /**
- * CategoriasProdutosSearch represents the model behind the search form of `common\models\CategoriasProdutos`.
+ * UserSearch represents the model behind the search form of `common\models\User`.
  */
-class CategoriasProdutosSearch extends CategoriasProdutos
+class UserSearch extends User
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CategoriasProdutosSearch extends CategoriasProdutos
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['nome', 'obs'], 'safe'],
+            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CategoriasProdutosSearch extends CategoriasProdutos
      */
     public function search($params)
     {
-        $query = CategoriasProdutos::find();
+        $query = User::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +59,17 @@ class CategoriasProdutosSearch extends CategoriasProdutos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'obs', $this->obs]);
+        $query->andFilterWhere(['like', 'username', $this->username])
+            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
+            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
+            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'verification_token', $this->verification_token]);
 
         return $dataProvider;
     }
