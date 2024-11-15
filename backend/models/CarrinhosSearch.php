@@ -17,7 +17,7 @@ class CarrinhosSearch extends Carrinhos
     public function rules()
     {
         return [
-            [['id', 'user_profile_id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
             [['dtapedido', 'metodo_envio', 'status'], 'safe'],
             [['valortotal'], 'number'],
         ];
@@ -62,7 +62,7 @@ class CarrinhosSearch extends Carrinhos
             'id' => $this->id,
             'dtapedido' => $this->dtapedido,
             'valortotal' => $this->valortotal,
-            'user_profile_id' => $this->user_profile_id,
+            'user_id' => $this->user_id,
         ]);
 
         $query->andFilterWhere(['like', 'metodo_envio', $this->metodo_envio])

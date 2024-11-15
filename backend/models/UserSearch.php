@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\User;
@@ -11,6 +12,8 @@ use common\models\User;
  */
 class UserSearch extends User
 {
+    public $role;
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +22,7 @@ class UserSearch extends User
         return [
             [['id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
+            [['role'], 'safe'],
         ];
     }
 
@@ -38,21 +42,23 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $rolesToExclude = [])
     {
         $query = User::find();
 
-        // add conditions that should always apply here
+        $query->andWhere(['<>', 'id', Yii::$app->user->identity->id]);
+
+        $query->leftJoin('auth_assignment', 'auth_assignment.user_id = user.id');
+
+        if (!empty($rolesToExclude)) {
+            $query->andWhere(['NOT IN', 'auth_assignment.item_name', $rolesToExclude]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
@@ -69,7 +75,8 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'verification_token', $this->verification_token]);
+            ->andFilterWhere(['like', 'verification_token', $this->verification_token])
+            ->andFilterWhere(['like', 'auth_assignment.item_name', $this->role]);
 
         return $dataProvider;
     }

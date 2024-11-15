@@ -2,7 +2,10 @@
 
 namespace common\models;
 
+
+use Carbon\Carbon;
 use Yii;
+use backend\models\AuthAssignment;
 
 /**
  * This is the model class for table "user_profile".
@@ -18,12 +21,13 @@ use Yii;
  * @property string|null $dtaregisto
  * @property string|null $telefone
  * @property string|null $genero
- *
- * @property Carrinhos[] $carrinhos
- * @property Faturas[] $faturas
+ * @property int $user_id
+ * @property User $user
  */
 class UserProfile extends \yii\db\ActiveRecord
 {
+
+    const SCENARIO_USERPROFILE = 'userprofile';
     /**
      * {@inheritdoc}
      */
@@ -38,14 +42,22 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['primeironome', 'apelido','dtanasc', 'dtaregisto','genero', 'user_id'], 'required'
+                ,'message'=>'Este campo é obrigatório'],
+            [['primeironome', 'apelido'], 'string', 'max' => 50],
             [['dtanasc', 'dtaregisto'], 'safe'],
             [['genero'], 'string'],
-            [['primeironome', 'apelido'], 'string', 'max' => 50],
             [['codigopostal'], 'string', 'max' => 8],
             [['localidade', 'rua'], 'string', 'max' => 100],
-            [['nif'], 'string', 'max' => 10],
-            [['telefone'], 'string', 'max' => 12],
+            [['nif'], 'string', 'max' => 10, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 digitos', 'tooLong' => 'Não pode ter mais de 9 digitos'],
             [['nif'], 'unique'],
+            [['nif'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'Só são aceites números.'],
+            [['telefone'], 'string', 'max' => 9, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 digitos', 'tooLong' => 'Não pode ter mais de 9 digitos'],
+            [['telefone'], 'unique'],
+            [['telefone'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'Só são aceites números .'],
+            [['user_id'], 'integer'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['rua', 'codigopostal', 'localidade', 'telefone', 'nif','primeironome','apelido'], 'required','on' => self::SCENARIO_USERPROFILE],
         ];
     }
 
@@ -66,26 +78,51 @@ class UserProfile extends \yii\db\ActiveRecord
             'dtaregisto' => 'Dtaregisto',
             'telefone' => 'Telefone',
             'genero' => 'Genero',
+            'user_id' => 'User ID',
+            'email' => 'Email',
         ];
     }
 
-    /**
-     * Gets query for [[Carrinhos]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCarrinhos()
+    public function scenarios()
     {
-        return $this->hasMany(Carrinhos::class, ['user_profile_id' => 'id']);
+        $scenarios = parent::scenarios();
+        // Define a scenario for the password-related actions
+        $scenarios[self::SCENARIO_USERPROFILE] = ['rua', 'codigopostal', 'localidade', 'telefone', 'nif','primeironome','apelido'];
+        return $scenarios;
     }
 
     /**
-     * Gets query for [[Faturas]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFaturas()
+    public function getUser()
     {
-        return $this->hasMany(Faturas::class, ['user_profile_id' => 'id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getAuth()
+    {
+        return $this->hasOne(AuthAssignment::class, ['user_id' => 'user_id']);
+    }
+
+    public function updateProfile()
+    {
+
+        $Profile = UserProfile::findOne(['id' => $this->id]);
+
+        $Profile->primeironome = $this->primeironome;
+        $Profile->apelido = $this->apelido;
+        $Profile->codigopostal = $this->codigopostal;
+        $Profile->localidade = $this->localidade;
+        $Profile->rua = $this->rua;
+        $Profile->nif = $this->nif;
+        $Profile->dtanasc = $this->dtanasc;
+        $Profile->dtaregisto = Carbon::now();
+        $Profile->genero = $this->genero;
+        $Profile->telefone = $this->telefone;
+
+
+        return $Profile->save();
     }
 }

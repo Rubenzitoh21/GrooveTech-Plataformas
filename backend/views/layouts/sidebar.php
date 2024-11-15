@@ -1,50 +1,58 @@
+<?php
+
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+/* @var $assetDir string */
+
+use backend\assets\AppAsset;
+use yii\bootstrap5\Html;
+
+AppAsset::register($this);
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="../" class="brand-link">
-        <img src="<?=$assetDir?>/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <?= Html::img('@web/img/logo_gt.png',
+            [
+            'alt'=>'Groove Tech Logo',
+            'class'=>'brand-image img-circle elevation-3',
+        ]) ?>
         <span class="brand-text font-weight-light">Groove Tech</span>
+    </a>
+
+    <!--icon de terminar a sessão -> fas fa-sign-out-alt-->
+    <a class="brand-link">
+        <?php
+        if (!Yii::$app->user->isGuest) {
+            echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
+                . Html::submitButton(
+                    '<i class="fas fa-sign-out-alt" style="opacity: .8"></i> Logout (' . Yii::$app->user->identity->username . ')',
+                    ['class' => 'btn btn-link logout font-weight-light']
+                )
+                . Html::endForm();
+        }
+        ?>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="<?=$assetDir?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                <a href="" class="d-block">Alexander Pierce</a>
-            </div>
-        </div>
-
-        <!-- SidebarSearch Form -->
-        <!-- href be escaped -->
-         <!--<div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
-            </div>
-        </div>-->
-
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
             <?php
+            $userRole = Yii::$app->user->can('admin') ? 'admin' : 'gestor';
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['label' => 'Yii2 PROVIDED', 'header' => true],
-                    ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
+//                    ['label' => 'Yii2 PROVIDED', 'header' => true],
+//                    ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Gestão de Dados', 'header' => true],
 //                    [
 //                        'label' => 'Gestão de Dados', 'icon' => 'fas fa-file',
 //                        'items' => [
-                            ['label' => 'Gerir Trabalhadores', 'icon' => 'users', 'url' => ['/user/index']],
-                            ['label' => 'IVAS', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index']],
-                            ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index']],
+                            ['label' => 'Gerir Trabalhadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => ($userRole == 'admin')],
+                            ['label' => 'Gerir Clientes', 'icon' => 'users', 'url' => ['clientes/index'], 'visible' => ($userRole == 'admin')],
+//                            ['label' => 'IVAS', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index']],
+//                            ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index']],
 //                        ],
 //                    ],
                 ],

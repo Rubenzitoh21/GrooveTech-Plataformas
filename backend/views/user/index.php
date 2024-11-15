@@ -10,20 +10,19 @@ use yii\grid\GridView;
 /** @var backend\models\UserSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Users';
+$this->title = 'Registo de Trabalhadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Trabalhador', ['create'], ['id' => 'criar-trabalhador', 'class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <?php /*= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -46,7 +45,45 @@ $this->params['breadcrumbs'][] = $this->title;
                  }
             ],
         ],
-    ]); ?>
+    ]); */?>
+
+    <?=
+    GridView::widget([
+        'id' => 'trabalhadores-grid',
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+
+        'columns' => [
+            /*['class' => 'yii\grid\SerialColumn'],*/
+            /*'id',*/
+            'username',
+            'email',
+            [
+                'attribute' => 'role',
+                'label' => 'Role',
+                'value' => function ($model) {
+                    switch ($model->auth['item_name']) {
+                        case 'admin':
+                            return 'Administrador';
+                        case 'gestor':
+                            return 'Gestor';
+                        default:
+                            return $model->auth['item_name'];
+                    }
+                },
+            ],
+
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, User $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                },
+            ],
+        ],
+
+    ]);
+
+    ?>
 
 
 </div>

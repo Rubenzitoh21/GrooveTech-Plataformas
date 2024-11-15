@@ -2,8 +2,11 @@
 
 namespace backend\controllers;
 
+use app\models\UserForm;
 use common\models\User;
 use backend\models\UserSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +30,16 @@ class UserController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                            'roles' => ['admin', 'gestor'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -39,7 +52,7 @@ class UserController extends Controller
     public function actionIndex()
     {
         $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->search($this->request->queryParams, ['cliente']);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -67,19 +80,15 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new UserForm();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model->createUser()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', ['model' => $model]);
     }
 
     /**
@@ -91,9 +100,24 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = new UserForm();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        $user = User::findOne(['id' => $id]);
+
+        $rolename = Yii::$app->authManager->getRolesByUser($id);
+
+        foreach ($rolename as $role) {
+            $roleName = $role->name;
+            $model->role = $roleName;
+        }
+
+        $model->username = $user->username;
+
+        $model->email = $user->email;
+
+        $model->id = $id;
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->updateUser()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

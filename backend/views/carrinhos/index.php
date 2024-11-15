@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'metodo_envio',
             'status',
             'valortotal',
-            //'user_profile_id',
+            //'user_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Carrinhos $model, $key, $index, $column) {

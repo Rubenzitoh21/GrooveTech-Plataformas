@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'dtaregisto',
             //'telefone',
             //'genero',
+            //'user_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, UserProfile $model, $key, $index, $column) {

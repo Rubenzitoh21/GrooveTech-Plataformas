@@ -15,6 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Site controller
@@ -29,19 +30,28 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'perfil'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?'], // allow guests (unauthenticated users)
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['perfil', 'logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'], // allow only authenticated users
                     ],
                 ],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest) {
+                        Yii::$app->getResponse()->redirect(['site/login'])->send();
+                        Yii::$app->end();
+                    } else {
+                        // Show an access denied message for authenticated users
+                        throw new ForbiddenHttpException('You are not allowed to perform this action.');
+                    }
+                },
             ],
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -91,7 +101,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (!Yii::$app->user->can('backendAccess'))
+                return $this->goHome();
+
+            else {
+
+                Yii::$app->user->logout();
+                Yii::$app->session->setFlash('error', 'Somente clientes pode dar login!');
+
+                return $this->refresh();
+            }
         }
 
         $model->password = '';
