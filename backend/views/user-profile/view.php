@@ -6,14 +6,13 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var common\models\UserProfile $model */
 
-$this->title = $model->id;
+$this->title = $model->user->username;
 $this->params['breadcrumbs'][] = ['label' => 'User Profiles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="user-profile-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+//            'id',
             'primeironome',
             'apelido',
             'codigopostal',
@@ -40,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dtaregisto',
             'telefone',
             'genero',
-            'user_id',
+//            'user_id',
         ],
     ]) ?>
 

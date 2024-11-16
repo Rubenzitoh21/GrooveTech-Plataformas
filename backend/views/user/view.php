@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var common\models\User $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Registo de Trabalhadores', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Gestão de Trabalhadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

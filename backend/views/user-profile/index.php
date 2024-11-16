@@ -10,42 +10,50 @@ use yii\grid\GridView;
 /** @var backend\models\UserProfileSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'User Profiles';
+$this->title = 'Registo dos Clientes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-profile-index">
+<div class="users-data-index">
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+        <div class="alert alert-success">
+            <?= Yii::$app->session->getFlash('success') ?>
+        </div>
+    <?php elseif (Yii::$app->session->hasFlash('error')): ?>
+        <div class="alert alert-danger">
+            <?= Yii::$app->session->getFlash('error') ?>
+        </div>
+    <?php endif; ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create User Profile', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <!-- <h1><?php /*= Html::encode($this->title) */?></h1> -->
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'primeironome',
+        'columns' => [
+            /*['class' => 'yii\grid\SerialColumn'],*/
+
+            /*'id',*/
+            'user.username',
+            'primeironome:text:Nome',
             'apelido',
-            'codigopostal',
-            'localidade',
-            //'rua',
-            //'nif',
-            //'dtanasc',
-            //'dtaregisto',
-            //'telefone',
-            //'genero',
-            //'user_id',
+            'user.email',
+            /*'auth.item_name:text:Role',*/
+            [
+                'attribute' => 'auth.item_name',
+                'label' => 'Role',
+                'value' => function ($model) {
+                    return $model->auth['item_name'] === 'cliente' ? 'Cliente' : $model->auth['item_name'];
+                },
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, UserProfile $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                    return Url::toRoute([$action, 'id' => $model->id, 'user_id' => $model->user_id]);
+                }
             ],
         ],
     ]); ?>

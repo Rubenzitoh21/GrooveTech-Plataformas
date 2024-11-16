@@ -15,9 +15,9 @@ AppAsset::register($this);
     <a href="../" class="brand-link">
         <?= Html::img('@web/img/logo_gt.png',
             [
-            'alt'=>'Groove Tech Logo',
-            'class'=>'brand-image img-circle elevation-3',
-        ]) ?>
+                'alt'=>'Groove Tech Logo',
+                'class'=>'brand-image img-circle elevation-3',
+            ]) ?>
         <span class="brand-text font-weight-light">Groove Tech</span>
     </a>
 
@@ -45,16 +45,10 @@ AppAsset::register($this);
 //                    ['label' => 'Yii2 PROVIDED', 'header' => true],
 //                    ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
+                    ['label' => 'Gestão de Utilizadores', 'header' => true],
+                        ['label' => 'Gerir Trabalhadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => ($userRole == 'admin')],
+                        ['label' => 'Gerir Clientes', 'icon' => 'users', 'url' => ['/user-profile/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Dados', 'header' => true],
-//                    [
-//                        'label' => 'Gestão de Dados', 'icon' => 'fas fa-file',
-//                        'items' => [
-                            ['label' => 'Gerir Trabalhadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => ($userRole == 'admin')],
-                            ['label' => 'Gerir Clientes', 'icon' => 'users', 'url' => ['clientes/index'], 'visible' => ($userRole == 'admin')],
-//                            ['label' => 'IVAS', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index']],
-//                            ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index']],
-//                        ],
-//                    ],
                 ],
             ]);
             ?>
