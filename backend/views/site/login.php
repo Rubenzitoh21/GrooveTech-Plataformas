@@ -4,12 +4,18 @@ use yii\helpers\Html;
 
 ?>
 
-<div class="container mt-5">
+<div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col-md-6">
             <div class="card px-5 py-5" id="form1">
                 <div class="card-body login-card-body site-login">
-                    <h3 class="login-box-msg text-center p-4"><b>Groove Tech - Backend</b></h3>
+                    <?= Html::img('@web/img/logo_gt.png', [
+                        'alt' => 'Groove Tech Logo',
+                        'class' => 'mx-auto d-block',
+                        'style' => 'width: 200px; height: auto;'
+                    ]) ?>
+                    <h1 class="login-box-msg text-center p-4"><b>Backend</b></h1>
+                    <br>
                     <?php
                     //Mensagem de flash de erro
                     if (Yii::$app->session->hasFlash('error')) {

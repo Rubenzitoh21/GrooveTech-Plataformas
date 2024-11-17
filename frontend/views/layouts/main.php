@@ -21,6 +21,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/img/logo_gt.png">
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -35,24 +36,22 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'Início', 'url' => ['/site/index']],
+        ['label' => 'Produtos', 'url' => ['/produtos/index']],
+        ['label' => 'Carrinho', 'url' => ['/carrinhos/index']],
     ];
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-    }
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
         'items' => $menuItems,
     ]);
     if (Yii::$app->user->isGuest) {
-        echo Html::tag('div',Html::a('Login',['/site/login'],['class' => ['btn btn-link login text-decoration-none']]),['class' => ['d-flex']]);
+        echo Html::tag('div',Html::a('Iniciar Sessão',['/site/login'],['class' => ['btn btn-link login text-decoration-none']]),['class' => ['d-flex']]);
+        echo Html::tag('div',Html::a('Criar Conta',['/site/signup'],['class' => ['btn btn-link signup text-decoration-none']]),['class' => ['d-flex']]);
     } else {
         echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Terminar Sessão (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout text-decoration-none']
             )
             . Html::endForm();
@@ -73,8 +72,18 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
-        <p class="float-end"><?= Yii::powered() ?></p>
+        <p class="d-inline-block me-4">
+            <?= Html::a('Contactos', ['/site/contact'],['class' => ['btn btn-link login text-decoration-none']]) ?>
+        </p>
+        <p class="d-inline-block me-4">
+            <?= Html::a('Sobre', ['/site/about'],['class' => ['btn btn-link login text-decoration-none']]) ?>
+        </p>
+        <p class="d-inline-block me-4">
+            &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>
+        </p>
+        <p class="d-inline-block float-end">
+            <?= Yii::powered() ?>
+        </p>
     </div>
 </footer>
 
