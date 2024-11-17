@@ -29,7 +29,7 @@ $this->params['breadcrumbs'] = [['label' => "$this->title"]];
     </div>
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
-            <?= Html::img('@web/img/logo_gt.png', [
+            <?= Html::img('@web/images/logo_gt.png', [
                 'alt' => 'Groove Tech Logo',
                 'class' => 'img-thumbnail'
             ]) ?>

@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="my-1 mx-0" style="color:#999;">
                     Esqueceu-se da sua password? <?= Html::a('Repor', ['site/request-password-reset']) ?>.
                 </div>
-
+                <br>
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Iniciar Sessão', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

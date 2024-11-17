@@ -9,7 +9,7 @@ use yii\helpers\Html;
         <div class="col-md-6">
             <div class="card px-5 py-5" id="form1">
                 <div class="card-body login-card-body site-login">
-                    <?= Html::img('@web/img/logo_gt.png', [
+                    <?= Html::img('@web/images/logo_gt.png', [
                         'alt' => 'Groove Tech Logo',
                         'class' => 'mx-auto d-block',
                         'style' => 'width: 200px; height: auto;'

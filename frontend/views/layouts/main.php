@@ -21,7 +21,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/img/logo_gt.png">
+    <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/images/logo_gt.png">
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -41,13 +41,18 @@ AppAsset::register($this);
         ['label' => 'Carrinho', 'url' => ['/carrinhos/index']],
     ];
 
+    if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Criar Conta', 'url' => ['/site/signup']];
+    } else {
+        $menuItems[] = ['label' => 'Perfil', 'url' => ['/site/perfil']];
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
         'items' => $menuItems,
     ]);
     if (Yii::$app->user->isGuest) {
         echo Html::tag('div',Html::a('Iniciar Sessão',['/site/login'],['class' => ['btn btn-link login text-decoration-none']]),['class' => ['d-flex']]);
-        echo Html::tag('div',Html::a('Criar Conta',['/site/signup'],['class' => ['btn btn-link signup text-decoration-none']]),['class' => ['d-flex']]);
     } else {
         echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
             . Html::submitButton(

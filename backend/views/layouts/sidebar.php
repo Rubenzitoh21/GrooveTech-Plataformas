@@ -12,8 +12,8 @@ AppAsset::register($this);
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../" class="brand-link">
-        <?= Html::img('@web/img/logo_gt.png',
+    <a href="<?= Yii::getAlias('@web') ?>" class="brand-link" >
+        <?= Html::img('@web/images/logo_gt.png',
             [
                 'alt'=>'Groove Tech Logo',
                 'class'=>'brand-image img-circle elevation-3',
