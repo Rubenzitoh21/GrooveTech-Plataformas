@@ -10,15 +10,13 @@ use yii\grid\GridView;
 /** @var backend\models\CategoriasProdutosSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Categorias Produtos';
+$this->title = 'Categorias de Produtos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="categorias-produtos-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Categorias Produtos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Categoria de Produtos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

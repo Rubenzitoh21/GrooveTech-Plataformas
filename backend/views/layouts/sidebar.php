@@ -12,7 +12,7 @@ AppAsset::register($this);
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="<?= Yii::getAlias('@web') ?>" class="brand-link" >
+    <a href="<?= Yii::getAlias('../') ?>" class="brand-link" >
         <?= Html::img('@web/images/logo_gt.png',
             [
                 'alt'=>'Groove Tech Logo',
@@ -42,13 +42,20 @@ AppAsset::register($this);
             $userRole = Yii::$app->user->can('admin') ? 'admin' : 'gestor';
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-//                    ['label' => 'Yii2 PROVIDED', 'header' => true],
-//                    ['label' => 'Login', 'url' => ['site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
+                    ['label' => 'Perfil', 'header' => true],
+                        ['label' => 'Perfil', 'icon' => 'fas fa-user', 'url' => ['/perfil/index']],
                     ['label' => 'Gestão de Utilizadores', 'header' => true],
                         ['label' => 'Gerir Trabalhadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => ($userRole == 'admin')],
                         ['label' => 'Gerir Clientes', 'icon' => 'users', 'url' => ['/user-profile/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Dados', 'header' => true],
+                        ['label' => 'Gerir Faturas', 'icon' => 'fas fa-file-invoice', 'url' => ['/faturas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Gerir Expediçoes', 'icon' => 'fas fa-plane', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Gerir Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                    ['label' => 'Gestão de Produtos', 'header' => true],
+                        ['label' => 'Gerir Categorias', 'icon' => 'fa-solid fa-box', 'url' => ['/categorias-produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Gerir Produtos', 'icon' => 'fa-solid fa-tag', 'url' => ['/produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Gerir Ivas', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                 ],
             ]);
             ?>
