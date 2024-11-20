@@ -7,7 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var backend\models\ProdutosCarrinhosSearch $searchModel */
+/** @var common\models\ProdutosCarrinhosSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Produtos Carrinhos';

@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Faturas;
+use common\models\LinhasFaturas;
 
 /**
- * FaturasSearch represents the model behind the search form of `common\models\Faturas`.
+ * LinhasFaturasSearch represents the model behind the search form of `common\models\LinhasFaturas`.
  */
-class FaturasSearch extends Faturas
+class LinhasFaturasSearch extends LinhasFaturas
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class FaturasSearch extends Faturas
     public function rules()
     {
         return [
-            [['id', 'user_id'], 'integer'],
-            [['data', 'status'], 'safe'],
-            [['valortotal'], 'number'],
+            [['id', 'faturas_id', 'avaliacoes_id'], 'integer'],
+            [['quantidade'], 'safe'],
+            [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class FaturasSearch extends Faturas
      */
     public function search($params)
     {
-        $query = Faturas::find();
+        $query = LinhasFaturas::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,14 @@ class FaturasSearch extends Faturas
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'data' => $this->data,
-            'valortotal' => $this->valortotal,
-            'user_id' => $this->user_id,
+            'preco_venda' => $this->preco_venda,
+            'valor_iva' => $this->valor_iva,
+            'subtotal' => $this->subtotal,
+            'faturas_id' => $this->faturas_id,
+            'avaliacoes_id' => $this->avaliacoes_id,
         ]);
 
-        $query->andFilterWhere(['like', 'status', $this->status]);
+        $query->andFilterWhere(['like', 'quantidade', $this->quantidade]);
 
         return $dataProvider;
     }

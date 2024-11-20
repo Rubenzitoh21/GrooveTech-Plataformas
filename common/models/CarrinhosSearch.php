@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\ProdutosCarrinhos;
+use common\models\Carrinhos;
 
 /**
- * ProdutosCarrinhosSearch represents the model behind the search form of `common\models\ProdutosCarrinhos`.
+ * CarrinhosSearch represents the model behind the search form of `common\models\Carrinhos`.
  */
-class ProdutosCarrinhosSearch extends ProdutosCarrinhos
+class CarrinhosSearch extends Carrinhos
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class ProdutosCarrinhosSearch extends ProdutosCarrinhos
     public function rules()
     {
         return [
-            [['id', 'produtos_id', 'carrinhos_id'], 'integer'],
-            [['quantidade'], 'safe'],
-            [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
+            [['id', 'user_id'], 'integer'],
+            [['dtapedido', 'metodo_envio', 'status'], 'safe'],
+            [['valortotal'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ProdutosCarrinhosSearch extends ProdutosCarrinhos
      */
     public function search($params)
     {
-        $query = ProdutosCarrinhos::find();
+        $query = Carrinhos::find();
 
         // add conditions that should always apply here
 
@@ -60,14 +60,13 @@ class ProdutosCarrinhosSearch extends ProdutosCarrinhos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'preco_venda' => $this->preco_venda,
-            'valor_iva' => $this->valor_iva,
-            'subtotal' => $this->subtotal,
-            'produtos_id' => $this->produtos_id,
-            'carrinhos_id' => $this->carrinhos_id,
+            'dtapedido' => $this->dtapedido,
+            'valortotal' => $this->valortotal,
+            'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'quantidade', $this->quantidade]);
+        $query->andFilterWhere(['like', 'metodo_envio', $this->metodo_envio])
+            ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }

@@ -7,7 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var backend\models\PagamentosSearch $searchModel */
+/** @var common\models\PagamentosSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Pagamentos';

@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\LinhasFaturas;
+use common\models\Produtos;
 
 /**
- * LinhasFaturasSearch represents the model behind the search form of `common\models\LinhasFaturas`.
+ * ProdutosSearch represents the model behind the search form of `common\models\Produtos`.
  */
-class LinhasFaturasSearch extends LinhasFaturas
+class ProdutosSearch extends Produtos
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class LinhasFaturasSearch extends LinhasFaturas
     public function rules()
     {
         return [
-            [['id', 'faturas_id', 'avaliacoes_id'], 'integer'],
-            [['quantidade'], 'safe'],
-            [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
+            [['id', 'categorias_produtos_id', 'ivas_id'], 'integer'],
+            [['nome', 'descricao', 'obs'], 'safe'],
+            [['preco'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class LinhasFaturasSearch extends LinhasFaturas
      */
     public function search($params)
     {
-        $query = LinhasFaturas::find();
+        $query = Produtos::find();
 
         // add conditions that should always apply here
 
@@ -60,14 +60,14 @@ class LinhasFaturasSearch extends LinhasFaturas
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'preco_venda' => $this->preco_venda,
-            'valor_iva' => $this->valor_iva,
-            'subtotal' => $this->subtotal,
-            'faturas_id' => $this->faturas_id,
-            'avaliacoes_id' => $this->avaliacoes_id,
+            'preco' => $this->preco,
+            'categorias_produtos_id' => $this->categorias_produtos_id,
+            'ivas_id' => $this->ivas_id,
         ]);
 
-        $query->andFilterWhere(['like', 'quantidade', $this->quantidade]);
+        $query->andFilterWhere(['like', 'nome', $this->nome])
+            ->andFilterWhere(['like', 'descricao', $this->descricao])
+            ->andFilterWhere(['like', 'obs', $this->obs]);
 
         return $dataProvider;
     }

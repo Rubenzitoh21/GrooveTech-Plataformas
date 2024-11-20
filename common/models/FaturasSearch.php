@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Avaliacoes;
+use common\models\Faturas;
 
 /**
- * AvaliacoesSearch represents the model behind the search form of `common\models\Avaliacoes`.
+ * FaturasSearch represents the model behind the search form of `common\models\Faturas`.
  */
-class AvaliacoesSearch extends Avaliacoes
+class FaturasSearch extends Faturas
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,9 @@ class AvaliacoesSearch extends Avaliacoes
     public function rules()
     {
         return [
-            [['id', 'rating', 'user_id'], 'integer'],
-            [['comentario', 'dtarating'], 'safe'],
+            [['id', 'user_id'], 'integer'],
+            [['data', 'status'], 'safe'],
+            [['valortotal'], 'number'],
         ];
     }
 
@@ -40,7 +41,7 @@ class AvaliacoesSearch extends Avaliacoes
      */
     public function search($params)
     {
-        $query = Avaliacoes::find();
+        $query = Faturas::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +60,12 @@ class AvaliacoesSearch extends Avaliacoes
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dtarating' => $this->dtarating,
-            'rating' => $this->rating,
+            'data' => $this->data,
+            'valortotal' => $this->valortotal,
             'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'comentario', $this->comentario]);
+        $query->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }

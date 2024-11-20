@@ -20,12 +20,12 @@ use yii\widgets\ActiveForm;
         "admin" => 'Administrador',
         "gestor" => 'Gestor',
     ],
-        ['prompt' => 'Selecione o tipo de role do user']
+        ['prompt' => 'Selecione o role do user']
     );
     ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\UserProfile;
 use backend\models\UserProfileSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,17 @@ class UserProfileController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'update', 'delete'],
+                            'roles' => ['admin', 'gestor'],
+                        ],
                     ],
                 ],
             ]

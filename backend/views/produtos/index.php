@@ -7,7 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var backend\models\ProdutosSearch $searchModel */
+/** @var common\models\ProdutosSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Produtos';
@@ -15,10 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="produtos-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Produtos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Produto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -31,15 +30,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'nome',
-            'descricao',
-            'preco',
+            'Descrição' => 'descricao',
+            'Preço (€)' => 'preco',
             'obs',
             //'categorias_produtos_id',
             //'ivas_id',
             [
+                'attribute' => 'categorias_produtos_id',
+                'label' => 'Categoria',
+                'value' => function ($model) {
+                    return $model->categoriasProdutos->nome;
+                },
+            ],
+            [
+                'attribute' => 'ivas_id',
+                'label' => 'IVA (%)',
+                'value' => function ($model) {
+                    return $model->ivas->percentagem;
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Produtos $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
+//                    return Url::toRoute([$action, 'id' => $model->id]);
+                    return Url::toRoute([$action, 'id' => $model->id, 'categorias_produtos_id' => $model->categorias_produtos_id, 'ivas_id' => $model->ivas_id]);
                  }
             ],
         ],

@@ -3,7 +3,8 @@
 namespace backend\controllers;
 
 use common\models\Carrinhos;
-use backend\models\CarrinhosSearch;
+use common\models\CarrinhosSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,17 @@ class CarrinhosController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'update', 'delete'],
+                            'roles' => ['admin', 'gestor'],
+                        ],
                     ],
                 ],
             ]

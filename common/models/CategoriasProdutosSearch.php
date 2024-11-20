@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Pagamentos;
+use common\models\CategoriasProdutos;
 
 /**
- * PagamentosSearch represents the model behind the search form of `common\models\Pagamentos`.
+ * CategoriasProdutosSearch represents the model behind the search form of `common\models\CategoriasProdutos`.
  */
-class PagamentosSearch extends Pagamentos
+class CategoriasProdutosSearch extends CategoriasProdutos
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class PagamentosSearch extends Pagamentos
     public function rules()
     {
         return [
-            [['id', 'faturas_id'], 'integer'],
-            [['metodopag', 'data'], 'safe'],
-            [['valor'], 'number'],
+            [['id'], 'integer'],
+            [['nome', 'obs'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class PagamentosSearch extends Pagamentos
      */
     public function search($params)
     {
-        $query = Pagamentos::find();
+        $query = CategoriasProdutos::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +59,10 @@ class PagamentosSearch extends Pagamentos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'valor' => $this->valor,
-            'data' => $this->data,
-            'faturas_id' => $this->faturas_id,
         ]);
 
-        $query->andFilterWhere(['like', 'metodopag', $this->metodopag]);
+        $query->andFilterWhere(['like', 'nome', $this->nome])
+            ->andFilterWhere(['like', 'obs', $this->obs]);
 
         return $dataProvider;
     }

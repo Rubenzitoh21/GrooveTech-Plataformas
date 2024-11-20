@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\CategoriasProdutos;
+use common\models\Avaliacoes;
 
 /**
- * CategoriasProdutosSearch represents the model behind the search form of `common\models\CategoriasProdutos`.
+ * AvaliacoesSearch represents the model behind the search form of `common\models\Avaliacoes`.
  */
-class CategoriasProdutosSearch extends CategoriasProdutos
+class AvaliacoesSearch extends Avaliacoes
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CategoriasProdutosSearch extends CategoriasProdutos
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['nome', 'obs'], 'safe'],
+            [['id', 'rating', 'user_id'], 'integer'],
+            [['comentario', 'dtarating'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class CategoriasProdutosSearch extends CategoriasProdutos
      */
     public function search($params)
     {
-        $query = CategoriasProdutos::find();
+        $query = Avaliacoes::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +59,12 @@ class CategoriasProdutosSearch extends CategoriasProdutos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'dtarating' => $this->dtarating,
+            'rating' => $this->rating,
+            'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'obs', $this->obs]);
+        $query->andFilterWhere(['like', 'comentario', $this->comentario]);
 
         return $dataProvider;
     }

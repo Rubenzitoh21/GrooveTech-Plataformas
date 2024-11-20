@@ -1,5 +1,8 @@
 <?php
 
+use common\models\Ivas;
+use common\models\CategoriasProdutos;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,18 +17,24 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'descricao')->label('Descrição')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'preco')->textInput() ?>
+    <?= $form->field($model, 'preco')->label('Preço')->textInput() ?>
 
     <?= $form->field($model, 'obs')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'categorias_produtos_id')->textInput() ?>
+    <?= $form->field($model, 'categorias_produtos_id')->label('Categoria')->dropDownList(
+        ArrayHelper::map(CategoriasProdutos::find()->all(), 'id', 'nome'),
+        ['prompt' => 'Selecione a categoria do produto']
+    ) ?>
 
-    <?= $form->field($model, 'ivas_id')->textInput() ?>
+    <?= $form->field($model, 'ivas_id')->label('IVA')->dropDownList(
+        ArrayHelper::map(Ivas::find()->where(['vigor' => '1'])->all(), 'id', 'percentagem'),
+        ['prompt' => 'Selecione o IVA do produto']
+    ) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

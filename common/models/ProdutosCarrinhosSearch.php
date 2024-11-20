@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Produtos;
+use common\models\ProdutosCarrinhos;
 
 /**
- * ProdutosSearch represents the model behind the search form of `common\models\Produtos`.
+ * ProdutosCarrinhosSearch represents the model behind the search form of `common\models\ProdutosCarrinhos`.
  */
-class ProdutosSearch extends Produtos
+class ProdutosCarrinhosSearch extends ProdutosCarrinhos
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class ProdutosSearch extends Produtos
     public function rules()
     {
         return [
-            [['id', 'categorias_produtos_id', 'ivas_id'], 'integer'],
-            [['nome', 'descricao', 'obs'], 'safe'],
-            [['preco'], 'number'],
+            [['id', 'produtos_id', 'carrinhos_id'], 'integer'],
+            [['quantidade'], 'safe'],
+            [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ProdutosSearch extends Produtos
      */
     public function search($params)
     {
-        $query = Produtos::find();
+        $query = ProdutosCarrinhos::find();
 
         // add conditions that should always apply here
 
@@ -60,14 +60,14 @@ class ProdutosSearch extends Produtos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'preco' => $this->preco,
-            'categorias_produtos_id' => $this->categorias_produtos_id,
-            'ivas_id' => $this->ivas_id,
+            'preco_venda' => $this->preco_venda,
+            'valor_iva' => $this->valor_iva,
+            'subtotal' => $this->subtotal,
+            'produtos_id' => $this->produtos_id,
+            'carrinhos_id' => $this->carrinhos_id,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'descricao', $this->descricao])
-            ->andFilterWhere(['like', 'obs', $this->obs]);
+        $query->andFilterWhere(['like', 'quantidade', $this->quantidade]);
 
         return $dataProvider;
     }
