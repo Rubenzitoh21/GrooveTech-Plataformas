@@ -2,12 +2,13 @@
 
 namespace backend\controllers;
 
-use app\models\Empresas;
+use backend\models\Empresas;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * EmpresasController implements the CRUD actions for Empresas model.
@@ -34,7 +35,7 @@ class EmpresasController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'update', 'delete'],
+                            'actions' => ['index', 'view', 'update'],
                             'roles' => ['admin'],
                         ],
                     ],
@@ -85,7 +86,7 @@ class EmpresasController extends Controller
     /**
      * Creates a new Empresas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -108,7 +109,7 @@ class EmpresasController extends Controller
      * Updates an existing Empresas model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
@@ -128,7 +129,7 @@ class EmpresasController extends Controller
      * Deletes an existing Empresas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
