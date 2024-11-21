@@ -39,7 +39,7 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_verEmpresa = $auth->createPermission('verEmpresa');
         $auth->add($permission_verEmpresa);
 
-        // Permissão para acessar o backend
+        // Permissão para aceder o backend
         $permission_backendAccess = $auth->createPermission('backendAccess');
         $auth->add($permission_backendAccess);
 
@@ -85,7 +85,7 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_editarFaturas = $auth->createPermission('editarFaturas');
         $auth->add($permission_editarFaturas);
 
-        // Permissões para editar dados de ivas e empresas
+        // Permissões para editar dados de ivas
         $permission_editarIvas = $auth->createPermission('editarIvas');
         $auth->add($permission_editarIvas);
 
@@ -95,6 +95,7 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_apagarIvas = $auth->createPermission('apagarIvas');
         $auth->add($permission_apagarIvas);
 
+        // Permissão para editar dados da empresa
         $permission_editarEmpresa = $auth->createPermission('editarEmpresa');
         $auth->add($permission_editarEmpresa);
 
@@ -124,6 +125,12 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $auth->addChild($role_gestor, $permission_verProdutos);
         $auth->addChild($role_gestor, $permission_verCategorias);
         $auth->addChild($role_gestor, $permission_verAvaliacoes);
+        $auth->addChild($role_gestor, $permission_editarFaturas);
+        $auth->addChild($role_gestor, $permission_editarIvas);
+        $auth->addChild($role_gestor, $permission_criarIvas);
+        $auth->addChild($role_gestor, $permission_apagarIvas);
+        $auth->addChild($role_gestor, $permission_verFaturas);
+        $auth->addChild($role_gestor, $permission_verIvas);
 
         // Role Admin
         $role_admin = $auth->createRole('admin');
@@ -133,14 +140,8 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $auth->addChild($role_admin, $permission_editarUsers);
         $auth->addChild($role_admin, $permission_criarUsers);
         $auth->addChild($role_admin, $permission_apagarUsers);
-        $auth->addChild($role_admin, $permission_editarFaturas);
-        $auth->addChild($role_admin, $permission_editarIvas);
-        $auth->addChild($role_admin, $permission_criarIvas);
-        $auth->addChild($role_admin, $permission_apagarIvas);
         $auth->addChild($role_admin, $permission_editarEmpresa);
         $auth->addChild($role_admin, $permission_verUsers);
-        $auth->addChild($role_admin, $permission_verFaturas);
-        $auth->addChild($role_admin, $permission_verIvas);
         $auth->addChild($role_admin, $permission_verEmpresa);
 
         // Role Cliente
