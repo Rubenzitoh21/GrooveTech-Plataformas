@@ -7,6 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
+/** @var common\models\CarrinhosSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Carrinhos';
@@ -20,9 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Carrinhos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -31,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'metodo_envio',
             'status',
             'valortotal',
-            //'user_profile_id',
+            //'user_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Carrinhos $model, $key, $index, $column) {

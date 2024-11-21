@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\AuthAssignment;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -22,12 +23,20 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property Avaliacoes[] $avaliacoes
+ * @property Carrinhos[] $carrinhos
+ * @property UserProfile[] $userProfiles
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+    const SCENARIO_PASSWORD = 'password';
+    public $currentPassword;
+    public $newPassword;
+    public $confirmPassword;
 
 
     /**
@@ -54,8 +63,60 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+//            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+//            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [['username', 'auth_key', 'password_hash', 'email', 'status', 'created_at', 'updated_at'], 'required', 'message' => 'Este campo é obrigatório.'],
+            /*[['status', 'created_at', 'updated_at'], 'integer'],*/
+            [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
+            [['password_reset_token'], 'unique'],
+
+            [['newPassword', 'currentPassword', 'confirmPassword'], 'required','on' => self::SCENARIO_PASSWORD, 'message' => 'Este campo é obrigatório.'],
+            [['currentPassword'], 'validateCurrentPassword', 'on' => self::SCENARIO_PASSWORD],
+            [['newPassword', 'confirmPassword'], 'string', 'min' => 6, 'on' => self::SCENARIO_PASSWORD],
+            [['newPassword', 'confirmPassword'], 'filter', 'filter' => 'trim', 'on' => self::SCENARIO_PASSWORD],
+            [['confirmPassword'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'Passwords do not match', 'on' => self::SCENARIO_PASSWORD],
+        ];
+    }
+
+    public function validateCurrentPassword()
+    {
+        if (!$this->verifyPassword($this->currentPassword)) {
+            $this->addError("currentPassword", 'Current password is incorrect');
+        }
+    }
+
+    public function verifyPassword($password)
+    {
+        $dbpassword = static::findOne(['username' => Yii::$app->user->identity->username])->password_hash;
+        return Yii::$app->security->validatePassword($password, $dbpassword);
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        // Define a scenario for the password-related actions
+        $scenarios[self::SCENARIO_PASSWORD] = ['newPassword', 'currentPassword', 'confirmPassword'];
+        return $scenarios;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'username' => 'Username',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'verification_token' => 'Verification Token',
         ];
     }
 
@@ -72,7 +133,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+//        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        {
+            return static::findOne(['auth_key' => $token, 'status' =>
+                self::STATUS_ACTIVE]);
+        }
     }
 
     /**
@@ -209,5 +274,35 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function getAvaliacoes()
+    {
+        return $this->hasMany(Avaliacoes::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Carrinhos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCarrinhos()
+    {
+        return $this->hasMany(Carrinhos::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UsersDatas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientes()
+    {
+        return $this->hasMany(UserProfile::class, ['user_id' => 'id']);
+    }
+
+    public function getAuth()
+    {
+        return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
     }
 }

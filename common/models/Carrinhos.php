@@ -12,10 +12,10 @@ use Yii;
  * @property string $metodo_envio
  * @property string $status
  * @property float $valortotal
- * @property int $user_profile_id
+ * @property int $user_id
  *
  * @property ProdutosCarrinhos[] $produtosCarrinhos
- * @property UserProfile $userProfile
+ * @property User $user
  */
 class Carrinhos extends \yii\db\ActiveRecord
 {
@@ -33,13 +33,13 @@ class Carrinhos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dtapedido', 'metodo_envio', 'status', 'valortotal', 'user_profile_id'], 'required'],
+            [['dtapedido', 'metodo_envio', 'status', 'valortotal', 'user_id'], 'required'],
             [['dtapedido'], 'safe'],
             [['valortotal'], 'number'],
-            [['user_profile_id'], 'integer'],
+            [['user_id'], 'integer'],
             [['metodo_envio'], 'string', 'max' => 45],
             [['status'], 'string', 'max' => 50],
-            [['user_profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserProfile::class, 'targetAttribute' => ['user_profile_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -54,7 +54,7 @@ class Carrinhos extends \yii\db\ActiveRecord
             'metodo_envio' => 'Metodo Envio',
             'status' => 'Status',
             'valortotal' => 'Valortotal',
-            'user_profile_id' => 'User Profile ID',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -69,12 +69,12 @@ class Carrinhos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[UserProfile]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserProfile()
+    public function getUser()
     {
-        return $this->hasOne(UserProfile::class, ['id' => 'user_profile_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

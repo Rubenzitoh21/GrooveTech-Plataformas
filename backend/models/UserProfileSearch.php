@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -17,7 +17,7 @@ class UserProfileSearch extends UserProfile
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'user_id'], 'integer'],
             [['primeironome', 'apelido', 'codigopostal', 'localidade', 'rua', 'nif', 'dtanasc', 'dtaregisto', 'telefone', 'genero'], 'safe'],
         ];
     }
@@ -61,6 +61,7 @@ class UserProfileSearch extends UserProfile
             'id' => $this->id,
             'dtanasc' => $this->dtanasc,
             'dtaregisto' => $this->dtaregisto,
+            'user_id' => $this->user_id,
         ]);
 
         $query->andFilterWhere(['like', 'primeironome', $this->primeironome])

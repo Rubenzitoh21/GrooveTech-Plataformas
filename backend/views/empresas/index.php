@@ -1,6 +1,6 @@
 <?php
 
-use app\models\Empresas;
+use backend\models\Empresas;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,16 +9,15 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Empresas';
+$this->title = 'Dados da Empresa';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="empresas-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Empresas', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<!---->
+<!--    <p>-->
+<!--        --><?php //= Html::a('Create Empresas', ['create'], ['class' => 'btn btn-success']) ?>
+<!--    </p>-->
 
 
     <?= GridView::widget([
@@ -26,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'designacaosocial',
-            'email:email',
+//            'id',
+            'designacaosocial:text:Designação Social',
+            'email',
             'telefone',
             'nif',
             //'rua',
@@ -37,9 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //'capitalsocial',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {update}',
                 'urlCreator' => function ($action, Empresas $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

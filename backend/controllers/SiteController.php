@@ -24,13 +24,24 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
                         'allow' => true,
+                        'actions' => ['login', 'error', 'logout'],
                     ],
                     [
-                        'actions' => ['logout', 'index'],
                         'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                    ],
+
+                    [
+                        'allow' => true,
+                        'actions' => ['logout', 'error'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['admin', 'gestor'],
                     ],
                 ],
             ],
@@ -80,7 +91,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (Yii::$app->user->can('backendAccess'))
+                return $this->goHome();
+
+            else {
+
+                Yii::$app->user->logout();
+                Yii::$app->session->setFlash('error', 'O cliente não pode aceder a esta área!');
+
+                return $this->refresh();
+            }
         }
 
         $model->password = '';

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\ProdutosSearch $model */
+/** @var common\models\ProdutosSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'ivas_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 

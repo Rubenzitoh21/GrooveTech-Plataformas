@@ -13,14 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="produtos-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Tem a certeza que pretende eliminar este Produto?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -31,11 +30,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'nome',
-            'descricao',
-            'preco',
+            'Descrição' => 'descricao',
+            'Preço (€)' => 'preco',
             'obs',
-            'categorias_produtos_id',
-            'ivas_id',
+            //'categorias_produtos_id',
+            //'ivas_id',
+            [
+                'attribute' => 'categorias_produtos_id',
+                'label' => 'Categoria',
+                'value' => function ($model) {
+                    return $model->categoriasProdutos->nome;
+                },
+            ],
+            [
+                'attribute' => 'ivas_id',
+                'label' => 'IVA (%)',
+                'value' => function ($model) {
+                    return $model->ivas->percentagem;
+                },
+            ],
         ],
     ]) ?>
 

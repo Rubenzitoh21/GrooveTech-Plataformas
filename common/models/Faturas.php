@@ -11,12 +11,12 @@ use Yii;
  * @property string $data
  * @property float $valortotal
  * @property string $status
- * @property int $user_profile_id
+ * @property int $user_id
  *
  * @property Expedicoes[] $expedicoes
  * @property LinhasFaturas[] $linhasFaturas
  * @property Pagamentos[] $pagamentos
- * @property UserProfile $userProfile
+ * @property User $user
  */
 class Faturas extends \yii\db\ActiveRecord
 {
@@ -34,12 +34,12 @@ class Faturas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'valortotal', 'status', 'user_profile_id'], 'required'],
+            [['data', 'valortotal', 'status', 'user_id'], 'required'],
             [['data'], 'safe'],
             [['valortotal'], 'number'],
-            [['user_profile_id'], 'integer'],
+            [['user_id'], 'integer'],
             [['status'], 'string', 'max' => 50],
-            [['user_profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserProfile::class, 'targetAttribute' => ['user_profile_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class Faturas extends \yii\db\ActiveRecord
             'data' => 'Data',
             'valortotal' => 'Valortotal',
             'status' => 'Status',
-            'user_profile_id' => 'User Profile ID',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -88,12 +88,12 @@ class Faturas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[UserProfile]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUserProfile()
+    public function getUser()
     {
-        return $this->hasOne(UserProfile::class, ['id' => 'user_profile_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

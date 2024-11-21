@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use common\models\UserProfile;
+use common\models\User;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -15,6 +17,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Site controller
@@ -29,19 +32,28 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'perfil'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?'], // allow guests (unauthenticated users)
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['perfil', 'logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'], // allow only authenticated users
                     ],
                 ],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest) {
+                        Yii::$app->getResponse()->redirect(['site/login'])->send();
+                        Yii::$app->end();
+                    } else {
+                        // Show an access denied message for authenticated users
+                        throw new ForbiddenHttpException('You are not allowed to perform this action.');
+                    }
+                },
             ],
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -91,7 +103,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (!Yii::$app->user->can('backendAccess'))
+                return $this->goHome();
+
+            else {
+
+                Yii::$app->user->logout();
+                Yii::$app->session->setFlash('error', 'Somente clientes pode dar login!');
+
+                return $this->refresh();
+            }
         }
 
         $model->password = '';
@@ -154,8 +175,9 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success', 'Registo com sucesso. Obrigado pelo registo!');
             return $this->goHome();
         }
 
@@ -254,6 +276,65 @@ class SiteController extends Controller
 
         return $this->render('resendVerificationEmail', [
             'model' => $model
+        ]);
+    }
+
+    public function actionPerfil()
+    {
+        $userId = Yii::$app->user->identity->id;
+        $userData = User::findOne($userId);
+        $userDataAdditional = UserProfile::findOne(['user_id' => $userId]);
+
+        $userDataEditMode = Yii::$app->request->get('editUserData') === 'true';
+        $userMoradaDataEditMode = Yii::$app->request->get('editUserMoradaData') === 'true';
+        $passwordEditMode = Yii::$app->request->get('editPassword') === 'true';
+
+        $passwordModel = new User(['scenario' => User::SCENARIO_PASSWORD]);
+
+        // Check if the form is submitted
+        if (Yii::$app->request->isPost) {
+
+            // Check if the form is for password change
+            if ($passwordEditMode && $passwordModel->load(Yii::$app->request->post())) {
+                if ($passwordModel->validate()) {
+                    // Update the user's password
+                    $userData->setPassword($passwordModel->newPassword);
+                    $userData->generateAuthKey();
+
+                    if ($userData->save()) {
+                        // Regenerate the identity cookie to prevent automatic logout
+                        Yii::$app->user->identity = User::findOne($userId);
+                        Yii::$app->user->login($userData);
+
+                        Yii::$app->session->setFlash('success', 'Password alterada com sucesso!');
+                        return $this->refresh(); // Refresh the page after processing the form
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Erro ao alterar a password.');
+                    }
+                }
+            } elseif ($userDataEditMode || $userMoradaDataEditMode ) {
+                // The user data update form was submitted, handle it
+                $userData->load(Yii::$app->request->post());
+                $userDataAdditional->load(Yii::$app->request->post());
+
+
+                // Validate and save the user data models
+                if ($userData->save() && $userDataAdditional->save()) {
+                    Yii::$app->session->setFlash('success', 'Dados atualizados com sucesso!');
+                    return $this->redirect(['site/perfil']);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Erro ao atualizar os dados.');
+                }
+            }
+        }
+
+        return $this->render('perfil', [
+            'userData' => $userData,
+            'userDataAdditional' => $userDataAdditional,
+            'userDataEditMode' => $userDataEditMode,
+            'userMoradaDataEditMode' => $userMoradaDataEditMode,
+            'passwordEditMode' => $passwordEditMode,
+            'passwordModel' => $passwordModel,
         ]);
     }
 }

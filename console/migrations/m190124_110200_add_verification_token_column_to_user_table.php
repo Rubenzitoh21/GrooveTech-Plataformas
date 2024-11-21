@@ -6,7 +6,14 @@ class m190124_110200_add_verification_token_column_to_user_table extends Migrati
 {
     public function up()
     {
-        $this->addColumn('{{%user}}', 'verification_token', $this->string()->defaultValue(null));
+        $table = '{{%user}}';
+        $column = 'verification_token';
+
+        if ($this->db->schema->getTableSchema($table, true)->getColumn($column) === null) {
+            $this->addColumn($table, $column, $this->string()->defaultValue(null));
+        } else {
+            echo "A coluna '{$column}' já existe na tabela '{$table}'. Nenhuma ação foi tomada.\n";
+        }
     }
 
     public function down()
