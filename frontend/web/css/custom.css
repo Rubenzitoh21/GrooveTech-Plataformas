@@ -1,0 +1,61 @@
+
+
+/* Main */
+main {
+    margin-top: 50px;
+}
+
+/* Navbar Principal */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 100px !important;
+    background-image: radial-gradient(#5460f8, #04093b) !important;
+}
+/* Links da Navbar Principal */
+.navbar-nav .nav-link {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    color: #FFFFFF !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #04093b !important;
+}
+
+.navbar-brand:hover {
+    color: #04093b !important;
+}
+
+
+
+/* Navbar Interna*/
+.navbar-inner {
+    background-color: transparent;
+    color: #FFFFFF !important;
+}
+
+/* Links da Navbar Interna */
+.navbar-inner .nav-link {
+    color: #FFFFFF !important;
+}
+
+.navbar-inner .nav-link:hover {
+    color: #04093b !important;
+}
+
+.navbar-inner .fa {
+    color: #FFFFFF !important;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.navbar-inner .fa:hover {
+    color: #04093b !important;
+}
+
+
+

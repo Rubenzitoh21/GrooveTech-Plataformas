@@ -8,7 +8,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
 $this->title = 'Iniciar Sessão';
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -34,6 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
             <?php ActiveForm::end(); ?>
+        </div>
+        <div class="col-lg-5 offset-lg-1 ">
+            <div>
+                <h3>Ainda não tem uma conta?</h3>
+                <p>Crie já uma conta para aproveitar todos os nossos serviços!</p>
+                <?= Html::a('Criar Conta', ['site/signup'], ['class' => 'btn btn-primary']) ?>
+            </div>
         </div>
     </div>
 </div>
