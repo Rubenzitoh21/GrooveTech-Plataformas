@@ -23,7 +23,7 @@ AppAsset::register($this);
     <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/images/logo_gt.png">
     <link rel="stylesheet" href="<?= Url::to('@web/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/templatemo.css') ?>">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">-->
     <link rel="stylesheet" href="<?= Url::to('@web/css/fontawesome.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/custom.css') ?>">
 </head>

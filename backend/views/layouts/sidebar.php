@@ -11,6 +11,7 @@ use yii\bootstrap5\Html;
 AppAsset::register($this);
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <div style="position: fixed">
     <!-- Brand Logo -->
     <a href="<?= Yii::getAlias('../') ?>" class="brand-link" >
         <?= Html::img('@web/images/logo_gt.png',
@@ -34,9 +35,9 @@ AppAsset::register($this);
         }
         ?>
     </a>
-
+    </div>
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" style="margin-top: 120px; height: calc(100vh - 120px);">
         <nav class="mt-2">
             <?php
             $userRole = Yii::$app->user->can('admin') ? 'admin' : 'gestor';
@@ -52,7 +53,7 @@ AppAsset::register($this);
                         ['label' => 'Clientes', 'icon' => 'users', 'url' => ['/user-profile/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Dados', 'header' => true],
                         ['label' => 'Faturas', 'icon' => 'fas fa-file-invoice', 'url' => ['/faturas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
-                        ['label' => 'Expediçoes', 'icon' => 'fas fa-plane', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Expediçoes', 'icon' => 'fa-solid fa-dolly', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card', 'url' => ['/pagamentos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Produtos', 'header' => true],
