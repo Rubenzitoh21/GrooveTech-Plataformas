@@ -1,4 +1,4 @@
-
+/* Custom CSS */
 
 /* Main */
 main {
@@ -55,6 +55,14 @@ main {
 
 .navbar-inner .fa:hover {
     color: #04093b !important;
+}
+
+
+.page-link.disabled {
+    color: #ccc !important;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
 }
 
 
