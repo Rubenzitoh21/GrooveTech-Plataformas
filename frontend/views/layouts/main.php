@@ -59,12 +59,22 @@ AppAsset::register($this);
                 </ul>
             </div>
             <div class="navbar-inner align-self-center d-flex">
-
+                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="inputMobileSearch" placeholder="Pesquisar...">
+                        <div class="input-group-text">
+                            <i class="fa fa-fw fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+                <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
+                    <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                </a>
                 <a class="nav-icon position-relative text-decoration-none" href="<?= Url::to(['/carrinhos/index']) ?>">
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                     <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
                 </a>
-                <a class="nav-icon position-relative text-decoration-none" href="<?= Yii::$app->user->isGuest ? Url::to(['/site/login']) : Url::to(['/site/perfil']) ?>">
+                <a class="nav-icon position-relative text-decoration-none" href="<?= Yii::$app->user->isGuest ? Url::to(['/site/login']) : Url::to(['/perfil/index']) ?>">
                     <i class="fa fa-fw fa-user text-dark mr-3"></i>
                 </a>
                 <?php if (!Yii::$app->user->isGuest): ?>
@@ -80,8 +90,24 @@ AppAsset::register($this);
 
     </div>
 </nav>
-<!-- Close Header -->
 
+<!-- Close Header -->
+<!-- Modal -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Pesquisar...">
+                <button type="submit" class="input-group-text bg-success text-light">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <main role="main" >
     <div class="container">
         <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
@@ -92,13 +118,19 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p>&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <p>&copy; GrooveTech <?= date('Y') ?></p>
         <p class="float-end"><?= Yii::powered() ?></p>
     </div>
 </footer>
 
 <?php $this->endBody() ?>
+<!-- Scripts -->
+<script src="<?= Url::to('@web/js/jquery-1.11.0.min.js') ?>"></script>
+<script src="<?= Url::to('@web/js/jquery-migrate-1.2.1.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= Url::to('@web/js/templatemo.js') ?>"></script>
+<script src="<?= Url::to('@web/js/custom.js') ?>"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>

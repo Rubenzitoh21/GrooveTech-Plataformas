@@ -7,9 +7,7 @@ use yii\helpers\Html;
 /** @var common\models\User $userData */
 /** @var common\models\UserProfile $userDataAdditional */
 /** @var common\models\User $passwordModel */
-/** @var bool $passwordEditMode */
-/** @var bool $userDataEditMode */
-/** @var bool $userMoradaDataEditMode */
+/** @var bool $mode */
 
 $this->title = 'Perfil';
 //$this->params['breadcrumbs'][] = $this->title;
@@ -20,28 +18,22 @@ $this->title = 'Perfil';
             <h1 class="mb-4 mt-5" style="flex: 1;">Perfil</h1>
             <?= Html::a('Ver Faturas', ['faturas/index'], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="row g-4">
+        <div id="dados-pessoais" class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4 justify-content-center">
                     <!-- Profile Section -->
                     <div class="col-md-10">
                         <div class="card">
                             <div class="card-body d-flex align-items-center position-relative">
-                                <!--                                <div class="col-md-5">-->
-                                <!--                                    <img src="--><?php //echo $imageUrl; ?><!--" alt="Profile Image"-->
-                                <!--                                         class="img-fluid rounded-circle mb-3 mb-md-0">-->
-                                <!--                                </div>-->
-                                <div class="vertical-bar"></div>
                                 <div class="col-md-7 ps-md-4">
                                     <h2>Dados Pessoais</h2>
                                     <hr>
 
-                                    <?php if ($userDataEditMode): ?>
+                                    <?php if ($mode === 'data'): ?>
                                         <?php
                                         $form = ActiveForm::begin([
-                                            'id' => 'profile-form-user-data',
                                             'options' => ['class' => 'form'],
-                                            'action' => ['site/perfil', 'editUserData' => 'true'], // Update the action attribute
+                                            'action' => ['perfil/index', 'mode' => 'data'], // Update the action attribute
                                             'method' => 'post', // Set the method to post
                                         ]);
                                         ?>
@@ -63,7 +55,7 @@ $this->title = 'Perfil';
                                             "F" => 'Feminino',
                                         ],
                                         ['prompt' => 'Selecione o seu género']
-                                        )->label('Género') ?>
+                                    )->label('Género') ?>
 
                                         <?= $form->field($userDataAdditional, 'dtanasc')->label('Data de Nascimento')->textInput([
                                             'id' => 'datepicker',
@@ -82,11 +74,11 @@ $this->title = 'Perfil';
                                         ?>
                                         <br>
                                         <?= Html::submitButton('Atualizar', ['class' => 'btn btn-primary']) ?>
-                                        <?php if ($userDataEditMode): ?>
-                                            <?= Html::a('Cancelar', ['site/perfil', 'editUserData' => 'false'], ['class' => 'btn btn-secondary']) ?>
+                                        <?php if ($mode === 'data'): ?>
+                                            <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         <?php endif; ?>
                                         <?php ActiveForm::end(); ?>
-                                        <?php else: ?>
+                                    <?php else: ?>
                                         <p><b>Nome de Utilizador:</b> <?= Html::encode($userData->username) ?></p>
                                         <p><b>Nome:</b> <?= Html::encode($userDataAdditional->primeironome) ?></p>
                                         <p><b>Apelido:</b> <?= Html::encode($userDataAdditional->apelido) ?></p>
@@ -99,8 +91,8 @@ $this->title = 'Perfil';
                                         <p><b>Género:</b> <?= Html::encode($generoLabel) ?></p>
                                         <p><b>Data de Nascimento:</b> <?= Html::encode($userDataAdditional->dtanasc) ?>
                                         </p>
-                                        <?php if (!$userDataEditMode): ?>
-                                            <?= Html::a('Editar Dados', ['site/perfil', 'editUserData' => 'true'], ['class' => 'btn btn-primary']) ?>
+                                        <?php if ($mode === null): ?>
+                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'data','#' => 'dados-pessoais'], ['class' => 'btn btn-primary']) ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -112,7 +104,7 @@ $this->title = 'Perfil';
             </div>
         </div>
         <br>
-        <div class="row g-4">
+        <div id="morada" class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4 justify-content-center">
                     <!-- Profile Section -->
@@ -123,12 +115,12 @@ $this->title = 'Perfil';
                                     <h2>Dados De Morada</h2>
                                     <hr>
 
-                                    <?php if ($userMoradaDataEditMode): ?>
+                                    <?php if ($mode === 'morada'): ?>
                                         <?php
                                         $form = ActiveForm::begin([
                                             'id' => 'profile-form-user-morada-data',
                                             'options' => ['class' => 'form'],
-                                            'action' => ['site/perfil', 'editUserMoradaData' => 'true'], // Update the action attribute
+                                            'action' => ['perfil/index', 'mode' => 'morada'], // Update the action attribute
                                             'method' => 'post', // Set the method to post
                                         ]);
                                         ?>
@@ -139,17 +131,17 @@ $this->title = 'Perfil';
                                         <?= $form->field($userDataAdditional, 'codigopostal')->textInput(['value' => $userDataAdditional->codigopostal, 'placeholder' => 'Insira o seu código postal'])->label('Código Postal') ?>
                                         <br>
                                         <?= Html::submitButton('Atualizar', ['class' => 'btn btn-primary']) ?>
-                                        <?php if ($userMoradaDataEditMode): ?>
-                                            <?= Html::a('Cancelar', ['site/perfil', 'editUserMoradaData' => 'false'], ['class' => 'btn btn-secondary']) ?>
+                                        <?php if ($mode == 'morada'): ?>
+                                            <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         <?php endif; ?>
                                         <?php ActiveForm::end(); ?>
-                                        <?php else: ?>
+                                    <?php else: ?>
                                         <p><b>Rua:</b> <?= Html::encode($userDataAdditional->rua) ?></p>
                                         <p><b>Localidade:</b> <?= Html::encode($userDataAdditional->localidade) ?></p>
                                         <p><b>Código Postal:</b> <?= Html::encode($userDataAdditional->codigopostal) ?>
                                         </p>
-                                        <?php if (!$userMoradaDataEditMode): ?>
-                                            <?= Html::a('Editar Dados', ['site/perfil', 'editUserMoradaData' => 'true'], ['class' => 'btn btn-primary']) ?>
+                                        <?php if ($mode === null): ?>
+                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'morada', '#' => 'morada'], ['class' => 'btn btn-primary']) ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -161,7 +153,7 @@ $this->title = 'Perfil';
             </div>
         </div>
         <br>
-        <div class="row g-4">
+        <div id="password" class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4 justify-content-center">
                     <!-- Password Section -->
@@ -172,12 +164,12 @@ $this->title = 'Perfil';
                                     <h2>Alterar Password</h2>
                                     <hr>
 
-                                    <?php if ($passwordEditMode): ?>
+                                    <?php if ($mode === 'password'): ?>
                                         <?php
                                         $formPassword = ActiveForm::begin([
                                             'id' => 'password-form',
                                             'options' => ['class' => 'form'],
-                                            'action' => ['site/perfil', 'editPassword' => 'true'], // Update the action attribute
+                                            'action' => ['perfil/index', 'mode' => 'password'], // Update the action attribute
                                             'method' => 'post', // Set the method to post
                                         ]);
                                         ?>
@@ -190,14 +182,14 @@ $this->title = 'Perfil';
                                         <br>
                                         <div class="d-flex gap-2">
                                             <?= Html::submitButton('Alterar Password', ['class' => 'btn btn-primary']) ?>
-                                            <?= Html::a('Cancelar', ['site/perfil', 'editPassword' => 'false'], ['class' => 'btn btn-secondary']) ?>
+                                            <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         </div>
 
                                         <?php ActiveForm::end(); ?>
+                                    <?php endif; ?>
 
-
-                                    <?php else: ?>
-                                        <?= Html::a('Alterar Password', ['site/perfil', 'editPassword' => 'true'], ['class' => 'btn btn-primary']) ?>
+                                    <?php if ($mode === null): ?>
+                                        <?= Html::a('Alterar Password', ['perfil/index', 'mode' => 'password', '#' => 'password'], ['class' => 'btn btn-primary']) ?>
                                     <?php endif; ?>
 
                                 </div>
