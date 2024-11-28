@@ -15,28 +15,53 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="imagens-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Imagens', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+<!--    --><?php //= GridView::widget([
+//        'dataProvider' => $dataProvider,
+//        'filterModel' => $searchModel,
+//        'columns' => [
+//            ['class' => 'yii\grid\SerialColumn'],
+//
+//            'id',
+//            'fileName',
+//            'produto_id',
+//            [
+//                'class' => ActionColumn::className(),
+//                'urlCreator' => function ($action, Imagens $model, $key, $index, $column) {
+//                    return Url::toRoute([$action, 'id' => $model->id]);
+//                 }
+//            ],
+//        ],
+//    ]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'label' => 'Imagens',
+                'format' => 'raw',
+                'value' => function ($model) {
 
-            'id',
-            'fileName',
-            'produto_id',
+                    $imagePath = '@web/public/produtos/' . $model->fileName;
+
+                    return Html::img($imagePath, ['alt' => 'Imagens', 'style' => 'max-width:100px;']);
+                },
+            ],
+            [
+                'attribute' => 'nomeProduto',
+                'label' => 'Produto',
+                'value' => function ($model) {
+                    return $model->produto->nome;
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Imagens $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                    return Url::toRoute([$action, 'id' => $model->id, 'produto_id' => $model->produto_id]);
+                }
             ],
         ],
     ]); ?>

@@ -60,6 +60,7 @@ AppAsset::register($this);
                         ['label' => 'Categorias', 'icon' => 'fa-solid fa-box', 'url' => ['/categorias-produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Produtos', 'icon' => 'fa-solid fa-tag', 'url' => ['/produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Ivas', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Imagens', 'icon' => 'fa-solid fa-image', 'url' => ['/imagens/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                 ],
             ]);
             ?>

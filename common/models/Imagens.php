@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\Produtos;
 
 /**
  * This is the model class for table "imagens".
@@ -15,6 +16,8 @@ use Yii;
  */
 class Imagens extends \yii\db\ActiveRecord
 {
+    public $imageFiles;
+
     /**
      * {@inheritdoc}
      */
@@ -29,12 +32,36 @@ class Imagens extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fileName', 'produto_id'], 'required'],
+            [['id'], 'safe'],
+            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
+            [['produto_id'], 'required', 'message' => 'Tem de selecionar um produto para ser associado à imagem'],
             [['produto_id'], 'integer'],
-            [['fileName'], 'string', 'max' => 255],
             [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
         ];
     }
+
+    public function upload()
+    {
+        $uploadPaths = [];
+
+        if ($this->validate()) {
+
+            foreach ($this->imageFiles as $file) {
+                $uid = uniqid();
+                $uploadPathBack = Yii::getAlias('@backend/web/public/produtos/') . $uid . $file->baseName . '.' . $file->extension;
+                $uploadPathFront = Yii::getAlias('@frontend/web/public/produtos/') . $uid . $file->baseName . '.' . $file->extension;
+
+                $file->saveAs($uploadPathBack, false);
+                $file->saveAs($uploadPathFront, false);
+                $uploadPaths[] = $uploadPathBack;
+
+            }
+            return $uploadPaths;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * {@inheritdoc}
@@ -43,8 +70,8 @@ class Imagens extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fileName' => 'File Name',
-            'produto_id' => 'Produto ID',
+            'fileName' => 'Imagems',
+            'produto_id' => 'Id do Produto',
         ];
     }
 
