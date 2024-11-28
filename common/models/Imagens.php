@@ -2,8 +2,10 @@
 
 namespace common\models;
 
+use Exception;
 use Yii;
 use common\models\Produtos;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "imagens".
@@ -48,17 +50,49 @@ class Imagens extends \yii\db\ActiveRecord
 
             foreach ($this->imageFiles as $file) {
                 $uid = uniqid();
-                $uploadPathBack = Yii::getAlias('@backend/web/public/produtos/') . $uid . $file->baseName . '.' . $file->extension;
-                $uploadPathFront = Yii::getAlias('@frontend/web/public/produtos/') . $uid . $file->baseName . '.' . $file->extension;
+                $fileName = $uid . $file->baseName . '.' . $file->extension;
 
+                // Caminhos para salvar a imagem
+                $uploadPathBack = Yii::getAlias('@backend/web/images/') . $fileName;
+                $uploadPathFront = Yii::getAlias('@frontend/web/images/') . $fileName;
+
+                // Salva temporariamente a imagem original
                 $file->saveAs($uploadPathBack, false);
-                $file->saveAs($uploadPathFront, false);
-                $uploadPaths[] = $uploadPathBack;
 
+                // Redimensiona/corta e salva diretamente sobrescrevendo o arquivo original
+                Image::thumbnail($uploadPathBack, 500, 600)
+                    ->save($uploadPathBack, ['quality' => 80]);
+
+                // Copia a imagem processada para o diretório do frontend
+                copy($uploadPathBack, $uploadPathFront);
+
+                // Adiciona o caminho da imagem processada ao array de caminhos
+                $uploadPaths[] = $uploadPathBack;
             }
+
             return $uploadPaths;
         } else {
             return false;
+        }
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $filePathBackend = Yii::getAlias('@backend/web/images/') . $this->fileName;
+        $filePathFrontend = Yii::getAlias('@frontend/web/images/') . $this->fileName;
+
+        try {
+            if (file_exists($filePathBackend)) {
+                unlink($filePathBackend);
+            }
+
+            if (file_exists($filePathFrontend)) {
+                unlink($filePathFrontend);
+            }
+        } catch (Exception $e) {
+            Yii::error("Erro ao excluir arquivo: " . $e->getMessage(), __METHOD__);
         }
     }
 

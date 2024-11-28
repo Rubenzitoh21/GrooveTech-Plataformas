@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
         ArrayHelper::map(Produtos::find()->all(), 'id', 'nome'),
         [
             'prompt' => 'Selecione o produto para associar à imagem',
-            'disabled' => true, // Add this line to disable the dropdown
+            'disabled' => true,
         ]
     ) ?>
     <?= $form->field($model, 'imageFiles[]')->label('Selecionar Imagem')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>

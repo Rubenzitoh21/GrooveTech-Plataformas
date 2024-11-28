@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Imagens;
 use backend\models\ImagensSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -83,7 +84,6 @@ class ImagensController extends Controller
     {
         $model = new Imagens();
 
-        // If $produto_id is provided, set it in the model
         if ($produto_id != null) {
             $model->produto_id = $produto_id;
         }
@@ -126,7 +126,7 @@ class ImagensController extends Controller
      * Updates an existing Imagens model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @param int $produto_id Produto ID
+     * @param int $produto_id Produtos ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -135,25 +135,28 @@ class ImagensController extends Controller
         $model = $this->findModel($id, $produto_id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-
-            $model->imageFiles = UploadedFile::getInstances($model, 'imageFile');
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
 
             if ($uploadPaths = $model->upload()) {
-
                 foreach ($uploadPaths as $file) {
-                    $filename = pathinfo($file, PATHINFO_FILENAME);
-                    $model->fileName = $filename;
-                    $model->save();
+                    $fileInfo = pathinfo($file);
+                    $model->fileName = $fileInfo['basename'];
+
+                    if (!$model->save()) {
+                        Yii::$app->session->setFlash('error', 'Erro ao salvar as alterações.');
+                        return $this->redirect(['update', 'id' => $model->id, 'produto_id' => $model->produto_id]);
+                    }
                 }
+
                 return $this->redirect(['view', 'id' => $model->id, 'produto_id' => $model->produto_id]);
             }
         }
 
         return $this->render('update', [
             'model' => $model,
-
         ]);
     }
+
 
     /**
      * Deletes an existing Imagens model.
