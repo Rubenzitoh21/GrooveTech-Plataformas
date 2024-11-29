@@ -26,30 +26,35 @@ class AuthController extends ActiveController
         $password = $request->post('password');
 
         if (empty($username) || empty($password)) {
+            Yii::error("Username e password são obrigatórios.", 'debug');
             throw new BadRequestHttpException("Username e password são obrigatórios.");
         }
 
         $user = $this->modelClass::findOne(['username' => $username]);
 
         if (!$user) {
+            Yii::error("Utilizador não encontrado: $username", 'debug');
             throw new NotFoundHttpException("Utilizador não encontrado.");
         }
 
         if (!$user->validatePassword($password)) {
+            Yii::error("Password inválida para o utilizador: $username", 'debug');
             throw new UnauthorizedHttpException("Password inválida.");
         }
 
-        //generate and return an authentication token
-            $user->generateAuthKey();
-            if (!$user->save()) {
-                throw new ServerErrorHttpException("Erro ao gerar o token de acesso.");
-            }
-            return [
-                'user' => $user,
-                'access_token' => $user->access_token,
-            ];
-    }
+        // Generate and return an authentication token
+        $user->generateAuthKey();
 
+
+        if (!$user->save()) {
+            Yii::error($user->getErrors(), 'debug');
+            throw new ServerErrorHttpException("Erro ao gerar o token de acesso.");
+        }
+
+        return [
+            'user' => $user,
+        ];
+    }
 
 
 }

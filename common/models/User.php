@@ -92,8 +92,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function verifyPassword($password)
     {
-        $dbpassword = static::findOne(['username' => Yii::$app->user->identity->username])->password_hash;
-        return Yii::$app->security->validatePassword($password, $dbpassword);
+        return Yii::$app->security->validatePassword($password,$this->password_hash);
     }
 
     public function scenarios()
