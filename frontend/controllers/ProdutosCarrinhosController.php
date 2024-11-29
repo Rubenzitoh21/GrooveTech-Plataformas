@@ -2,8 +2,12 @@
 
 namespace frontend\controllers;
 
+use Carbon\Carbon;
+use common\models\Carrinhos;
+use common\models\Produtos;
 use common\models\ProdutosCarrinhos;
 use common\models\ProdutosCarrinhosSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -50,13 +54,15 @@ class ProdutosCarrinhosController extends Controller
     /**
      * Displays a single ProdutosCarrinhos model.
      * @param int $id ID
+     * @param int $carrinhos_id Carrinhos ID
+     * @param int $produtos_id Produtoss ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $carrinhos_id, $produtos_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id, $carrinhos_id, $produtos_id),
         ]);
     }
 
@@ -65,36 +71,71 @@ class ProdutosCarrinhosController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($produtos_id)
     {
         $model = new ProdutosCarrinhos();
+        $modelProdutos = Produtos::findOne(['id' => $produtos_id]);
+        $modelCarrinhos = Carrinhos::find()->where(['user_id' => Yii::$app->user->id, 'status' => 'Ativo'])->one();
+        if($modelCarrinhos == null){
+            $modelCarrinhos = new Carrinhos();
+            $modelCarrinhos->user_id = Yii::$app->user->id;
+            $modelCarrinhos->status = 'Ativo';
+            $modelCarrinhos->valortotal = 0;
+            $modelCarrinhos->dtapedido = Carbon::now();
+            $modelCarrinhos->metodo_envio = 'a definir';
+            $modelCarrinhos->save();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        }
+        $model->carrinhos_id = $modelCarrinhos->id;
+        $produtoCarrinhosProdutos = ProdutosCarrinhos::find()->where(['carrinhos_id' => $modelCarrinhos->id, 'produtos_id' => $produtos_id])->one();
+        // Set other attributes and validation as needed
+        $model->produtos_id = $produtos_id;
+
+        if($produtoCarrinhosProdutos != null){
+            $produtoCarrinhosProdutos->quantidade = (intval($produtoCarrinhosProdutos->quantidade) + 1) . '';
+            $produtoCarrinhosProdutos->subtotal = $produtoCarrinhosProdutos->subtotal + $modelProdutos->preco;
+            $produtoCarrinhosProdutos->save();
+            $modelCarrinhos->valortotal = $modelCarrinhos->valortotal + $modelProdutos->preco;
+            $modelCarrinhos->save();
+            $produtoCarrinhosProdutos->save();
+
+            return $this->redirect(['carrinhos/index']);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $model->quantidade = "1";
+        $model->valor_iva = $modelProdutos->preco * ($modelProdutos->ivas->percentagem / 100);
+        $model->subtotal = $model->valor_iva+$modelProdutos->preco * $model->quantidade;
+        $model->preco_venda = $modelProdutos->preco;
+
+        $modelCarrinhos->valortotal = $modelCarrinhos->valortotal + $model->subtotal;
+
+        if ($model->save() && $modelCarrinhos->save()) {
+            return $this->redirect(['carrinhos/index']);
+        } else {
+
+            Yii::$app->session->setFlash('error', 'Error adding the product to the cart.');
+        }
+
+        return $this->redirect(['carrinhos/index']);
     }
+
+
 
     /**
      * Updates an existing ProdutosCarrinhos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
+     * @param int $carrinhos_id Carrinhos ID
+     * @param int $produtos_id Produtos ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $carrinhos_id, $produtos_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($id, $carrinhos_id, $produtos_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id, 'carrinhos_id' => $model->carrinhos_id, 'produtos_id' => $model->produtos_id]);
         }
 
         return $this->render('update', [
@@ -106,26 +147,36 @@ class ProdutosCarrinhosController extends Controller
      * Deletes an existing ProdutosCarrinhos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
+     * @param int $carrinhos_id Carrinhos ID
+     * @param int $produtos_id Produtos ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $carrinhos_id, $produtos_id)
     {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        $modelCarrinhos = Carrinhos::find()->where(['id' => $carrinhos_id])->one();
+        $model = $this->findModel($id, $carrinhos_id, $produtos_id);
+        $modelCarrinhos->valortotal = $modelCarrinhos->valortotal - $model->subtotal;
+        $modelCarrinhos->save();
+
+        $model->delete();
+
+        return $this->redirect(['carrinhos/index']);
     }
 
     /**
      * Finds the ProdutosCarrinhos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
+     * @param int $carrinhos_id Carrinhos ID
+     * @param int $produtos_id Produtoss ID
      * @return ProdutosCarrinhos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($id, $carrinhos_id, $produtos_id)
     {
-        if (($model = ProdutosCarrinhos::findOne(['id' => $id])) !== null) {
+        if (($model = ProdutosCarrinhos::findOne(['id' => $id, 'carrinhos_id' => $carrinhos_id, 'produtos_id' => $produtos_id])) !== null) {
             return $model;
         }
 

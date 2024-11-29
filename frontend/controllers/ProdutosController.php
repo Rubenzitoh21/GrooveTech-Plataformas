@@ -2,8 +2,11 @@
 
 namespace frontend\controllers;
 
+use common\models\CategoriasProdutos;
 use common\models\Produtos;
 use common\models\ProdutosSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,21 +34,39 @@ class ProdutosController extends Controller
         );
     }
 
-    /**
-     * Lists all Produtos models.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex($categorias_id = null, $search = null)
     {
-        $searchModel = new ProdutosSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $query = Produtos::find();
+
+
+        if ($categorias_id !== null) {
+            $query->andWhere(['categorias_produtos_id' => $categorias_id]);
+        }
+
+        if ($search !== null) {
+            $query->andWhere(['like', 'nome', $search]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 12,
+            ],
+        ]);
+
+        $categorias = CategoriasProdutos::find()->all();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'categorias' => $categorias,
+            'categorias_id' => $categorias_id,
+            'search' => $search,
         ]);
     }
+
+
+
+
 
     /**
      * Displays a single Produtos model.

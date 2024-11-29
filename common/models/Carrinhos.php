@@ -50,10 +50,10 @@ class Carrinhos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'dtapedido' => 'Dtapedido',
-            'metodo_envio' => 'Metodo Envio',
+            'dtapedido' => 'Data do Pedido',
+            'metodo_envio' => 'Metodo de Envio',
             'status' => 'Status',
-            'valortotal' => 'Valortotal',
+            'valortotal' => 'Valor total',
             'user_id' => 'User ID',
         ];
     }
@@ -76,5 +76,22 @@ class Carrinhos extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public static function getTotalProdutosCarrinho()
+    {
+        if (Yii::$app->user->isGuest) {
+            return 0;
+        }
+
+        $carrinho = self::findOne(['user_id' => Yii::$app->user->id, 'status' => 'Ativo']);
+
+        if (!$carrinho) {
+            return 0;
+        }
+
+        return ProdutosCarrinhos::find()
+            ->where(['carrinhos_id' => $carrinho->id])
+            ->count();
     }
 }

@@ -7,7 +7,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
+use yii\data\Pagination;
 
 /** @var yii\web\View $this */
 /** @var common\models\ProdutosSearch $searchModel */
@@ -21,110 +23,93 @@ $this->title = 'Produtos';
     <div class="row">
         <!-- Sidebar: Categorias -->
         <div class="col-lg-3">
-            <br>
-            <br>
             <h1 class="h2 pb-4">Categorias:</h1>
-            <ul class="list-unstyled templatemo-accordion">
-                <?php
-                $categorias = CategoriasProdutos::find()->all();
-                foreach ($categorias as $categoria): ?>
+            <ul class="list-unstyled">
+                <li class="pb-3">
+                    <a class="d-flex justify-content-between text-decoration-none"
+                       href="<?= Url::to(['/produtos/index']) ?>">
+                        (<?= Produtos::find()->count() ?>) Mostrar Todos
+                    </a>
+                </li>
+                <?php foreach ($categorias as $categoria): ?>
                     <li class="pb-3">
-                        <a class="d-flex justify-content-between h3 text-decoration-none"
-                           href="<?= Url::to(['produtos/index', 'categoria_id' => $categoria->id]) ?>">
-                            <?= Html::encode($categoria->nome) ?>
+                        <a class="d-flex justify-content-between text-decoration-none"
+                           href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
+                            (<?= $categoria->getProdutos()->count() ?>) <?= Html::encode($categoria->nome) ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
 
-        <!-- Ordem dos produtos -->
+        <!-- Produtos -->
         <div class="col-lg-9">
             <div class="row">
-                <div class="col-md-9">
-                </div>
-                <div class="col-md-3 pb-4">
+                <div class="col-md-6 pb-4">
                     <div class="d-flex">
-                        <select class="form-control">
-                            <option>Recentes</option>
-                            <option>A a Z</option>
-                            <option>Preço Ascendente</option>
-                            <option>Preço Descendente</option>
-                        </select>
+                        <?php $form = ActiveForm::begin(['action' => ['produtos/index'], 'method' => 'get']); ?>
+                        <div class="input-group mb-3">
+                            <?= Html::input('text', 'search', $search, ['class' => 'form-control', 'placeholder' => 'Pesquisar produtos...']) ?>
+                            <?= Html::submitButton(
+                                '<i class="fa fa-fw fa-search text-light mr-3"></i>',
+                                ['class' => 'btn btn-success']
+                            ) ?>
+                        </div>
+                        <?php ActiveForm::end(); ?>
                     </div>
                 </div>
             </div>
-            <!-- Produtos -->
-            <div class="col-lg-9">
-                <?php
-                // Configura o ActiveDataProvider com paginação
-                $query = Produtos::find();
-                if (isset($_GET['categoria_id'])) {
-                    $query->where(['categorias_id' => $_GET['categoria_id']]);
-                }
-
-                $dataProvider = new ActiveDataProvider([
-                    'query' => $query,
-                    'pagination' => [
-                        'pageSize' => 3, // Artigos por página   mudar para 12
-                    ],
-                ]);
-
-                // Obtenha os produtos para a página atual
-                $produtos = $dataProvider->getModels();
-                ?>
-
-                <div class="row">
-                    <?php foreach ($produtos as $produto): ?>
-                        <div class="col-md-4">
-                            <div class="card mb-4 product-wap rounded-0">
-                                <div class="card rounded-0">
-                                    <img class="card-img rounded-0 img-fluid"
-                                         src="<?= Url::to('@web/images/' .
-                                             (!empty($produto->imagens) && isset($produto->imagens[0]->fileName)
-                                                 ? $produto->imagens[0]->fileName
-                                                 : 'default.png')) ?>"
-                                         alt="<?= Html::encode($produto->nome) ?>">
-                                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                        <ul class="list-unstyled">
-                                            <li><a class="btn btn-success text-white mt-2"
-                                                   href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>"><i
-                                                            class="far fa-eye"></i></a></li>
-                                            <li><a class="btn btn-success text-white mt-2"
-                                                   href="<?= Url::to(['carrinhos/add', 'id' => $produto->id]) ?>"><i
-                                                            class="fas fa-cart-plus"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <a href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>"
-                                       class="h3 text-decoration-none"><?= Html::encode($produto->nome) ?></a>
-                                    <p class="text-center mb-0"><?= number_format($produto->preco, 2, ',', '.') ?> €</p>
+            <div class="row">
+                <?php foreach ($dataProvider->getModels() as $produto): ?>
+                    <div class="col-md-4">
+                        <div class="card mb-4 product-wap rounded-0">
+                            <div class="card rounded-0">
+                                <img class="card-img rounded-0 img-fluid"
+                                     src="<?= Url::to('@web/images/' . (!empty($produto->imagens) && isset($produto->imagens[0]->fileName)
+                                             ? $produto->imagens[0]->fileName
+                                             : 'default.png')) ?>"
+                                     alt="<?= Html::encode($produto->nome) ?>">
+                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                    <ul class="list-unstyled">
+                                        <li><a class="btn btn-success text-white mt-2"
+                                               href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>"><i
+                                                        class="far fa-eye"></i></a></li>
+                                        <li><a class="btn btn-success text-white mt-2"
+                                               href="<?= Url::to(['produtos-carrinhos/create', 'produtos_id' => $produto->id]) ?>"><i
+                                                        class="fas fa-cart-plus"></i></a></li>
+                                    </ul>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <a href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>"
+                                   class="h3 text-decoration-none"><?= Html::encode($produto->nome) ?></a>
+                                <p class="text-center mb-0"><?= number_format($produto->preco, 2, ',', '.') ?> €</p>
+                            </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <br>
-            <br>
-            <!-- Paginação -->
-<!--            mudar para 12-->
-            <?php if ($dataProvider->pagination->totalCount > 3): ?>
-                <div class="row">
-                    <?= LinkPager::widget([
-                        'pagination' => $dataProvider->pagination,
-                        'options' => ['class' => 'pagination pagination-lg justify-content-end'],
-                        'linkOptions' => ['class' => 'page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark'],
-                        'activePageCssClass' => 'active rounded-0 mr-3 shadow-sm border-top-0 border-left-0',
-                        'disabledPageCssClass' => 'disabled',
-                    ]); ?>
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-    <!-- End Content -->
 
+
+            <!-- Paginação -->
+            <div class="row">
+                <?php
+                $pagination = $dataProvider->pagination;
+
+                // Verifica se há mais de uma página antes de renderizar a paginação
+                if ($pagination->pageCount > 1) {
+                    echo '<ul class="pagination pagination-lg justify-content-end">';
+                    for ($page = 0; $page < $pagination->pageCount; $page++) {
+                        $activeClass = $pagination->page == $page ? 'active' : '';
+                        echo '<li class="page-item ' . $activeClass . '">';
+                        echo Html::a($page + 1, $pagination->createUrl($page), ['class' => 'page-link']);
+                        echo '</li>';
+                    }
+                    echo '</ul>';
+                }
+                ?>
+            </div>
+        </div>
     </div>
 </div>
 <!-- End Content -->

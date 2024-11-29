@@ -3,6 +3,7 @@
 /** @var \yii\web\View $this */
 /** @var string $content */
 
+use common\models\Carrinhos;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
@@ -20,12 +21,13 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/images/logo_gt.png">
+    <link rel="icon" type="image/png" href="<?= Url::to('@web/images/logo_gt.png') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/templatemo.css') ?>">
 <!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">-->
     <link rel="stylesheet" href="<?= Url::to('@web/css/fontawesome.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/custom.css') ?>">
+
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -59,20 +61,11 @@ AppAsset::register($this);
                 </ul>
             </div>
             <div class="navbar-inner align-self-center d-flex">
-                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="inputMobileSearch" placeholder="Pesquisar...">
-                        <div class="input-group-text">
-                            <i class="fa fa-fw fa-search"></i>
-                        </div>
-                    </div>
-                </div>
-                <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
-                    <i class="fa fa-fw fa-search text-dark mr-2"></i>
-                </a>
                 <a class="nav-icon position-relative text-decoration-none" href="<?= Url::to(['/carrinhos/index']) ?>">
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
+                        <?= Carrinhos::getTotalProdutosCarrinho() ?>
+                    </span>
                 </a>
                 <a class="nav-icon position-relative text-decoration-none" href="<?= Yii::$app->user->isGuest ? Url::to(['/site/login']) : Url::to(['/perfil/index']) ?>">
                     <i class="fa fa-fw fa-user text-dark mr-3"></i>
@@ -92,22 +85,6 @@ AppAsset::register($this);
 </nav>
 
 <!-- Close Header -->
-<!-- Modal -->
-<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="w-100 pt-1 mb-5 text-right">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="" method="get" class="modal-content modal-body border-0 p-0">
-            <div class="input-group mb-2">
-                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Pesquisar...">
-                <button type="submit" class="input-group-text bg-success text-light">
-                    <i class="fa fa-fw fa-search text-white"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 <main role="main" >
     <div class="container">
         <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>

@@ -57,13 +57,14 @@ main {
     color: #04093b !important;
 }
 
-
-.page-link.disabled {
-    color: #ccc !important;
-    cursor: not-allowed;
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
+ul.list-unstyled a {
+    text-decoration: none;
+    color: black;
 }
 
+ul.list-unstyled a:hover {
+    text-decoration: none;
+    color: #5460f8;
+}
 
 
