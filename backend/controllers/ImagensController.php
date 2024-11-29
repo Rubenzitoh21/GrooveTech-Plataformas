@@ -4,10 +4,12 @@ namespace backend\controllers;
 
 use common\models\Imagens;
 use backend\models\ImagensSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ImagensController implements the CRUD actions for Imagens model.
@@ -34,7 +36,7 @@ class ImagensController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'update', 'delete'],
+                            'actions' => ['index', 'view', 'update', 'create', 'delete'],
                             'roles' => ['admin', 'gestor'],
                         ],
                     ],
@@ -62,13 +64,14 @@ class ImagensController extends Controller
     /**
      * Displays a single Imagens model.
      * @param int $id ID
+     * @param int $produto_id Produto ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $produto_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id, $produto_id),
         ]);
     }
 
@@ -77,13 +80,38 @@ class ImagensController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($produto_id = null)
     {
         $model = new Imagens();
 
+        if ($produto_id != null) {
+            $model->produto_id = $produto_id;
+        }
+
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+
+                if ($uploadPaths = $model->upload()) {
+                    foreach ($uploadPaths as $file) {
+                        $newModel = new Imagens();
+                        $newModel->imageFiles = UploadedFile::getInstances($newModel, 'imageFiles');
+
+                        $fileImagem = pathinfo($file);
+
+                        $newModel->fileName = $fileImagem['basename'];
+                        $newModel->produto_id = $model->produto_id;
+                        // If $produto_id is provided, set it in the new model
+                        if ($produto_id != null) {
+                            $newModel->produto_id = $produto_id;
+                        }
+
+                        $newModel->save();
+                    }
+
+                    // Redirect to the index action with or without produto_id
+                    return $this->redirect(['index', 'produto_id' => $produto_id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -98,15 +126,30 @@ class ImagensController extends Controller
      * Updates an existing Imagens model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
+     * @param int $produto_id Produtos ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $produto_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($id, $produto_id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+
+            if ($uploadPaths = $model->upload()) {
+                foreach ($uploadPaths as $file) {
+                    $fileInfo = pathinfo($file);
+                    $model->fileName = $fileInfo['basename'];
+
+                    if (!$model->save()) {
+                        Yii::$app->session->setFlash('error', 'Erro ao salvar as alterações.');
+                        return $this->redirect(['update', 'id' => $model->id, 'produto_id' => $model->produto_id]);
+                    }
+                }
+
+                return $this->redirect(['view', 'id' => $model->id, 'produto_id' => $model->produto_id]);
+            }
         }
 
         return $this->render('update', [
@@ -114,16 +157,18 @@ class ImagensController extends Controller
         ]);
     }
 
+
     /**
      * Deletes an existing Imagens model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
+     * @param int $produto_id Produtos ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $produto_id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id, $produto_id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -132,12 +177,13 @@ class ImagensController extends Controller
      * Finds the Imagens model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
+     * @param int $produto_id Produtos ID
      * @return Imagens the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($id, $produto_id)
     {
-        if (($model = Imagens::findOne(['id' => $id])) !== null) {
+        if (($model = Imagens::findOne(['id' => $id, 'produto_id' => $produto_id])) !== null) {
             return $model;
         }
 

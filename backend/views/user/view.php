@@ -53,7 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             return 'Administrador';
                         case 'gestor':
                             return 'Gestor';
-                        case 'funcionario':
                         default:
                             return $model->auth['item_name'];
                     }

@@ -1,4 +1,4 @@
-
+/* Custom CSS */
 
 /* Main */
 main {
@@ -57,5 +57,14 @@ main {
     color: #04093b !important;
 }
 
+ul.list-unstyled a {
+    text-decoration: none;
+    color: black;
+}
+
+ul.list-unstyled a:hover {
+    text-decoration: none;
+    color: #5460f8;
+}
 
 

@@ -6,21 +6,19 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var common\models\Imagens $model */
 
-$this->title = $model->id;
+$this->title = $model->produto->nome;
 $this->params['breadcrumbs'][] = ['label' => 'Imagens', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="imagens-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Update', ['update', 'id' => $model->id, 'produto_id' => $model->produto_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id, 'produto_id' => $model->produto_id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Tem a certeza que quer eliminar esta imagem?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,10 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'fileName',
-            'produto_id',
+            'fileName:text:Ficheiro',
+            'produto.nome:text:Produto',
         ],
     ]) ?>
 
+    <?= Html::img('@web/images/' . $model->fileName, ['alt' => 'Imagens', 'style' => 'max-width:300px;']); ?>
 </div>

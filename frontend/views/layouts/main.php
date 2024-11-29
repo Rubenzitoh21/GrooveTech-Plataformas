@@ -3,6 +3,7 @@
 /** @var \yii\web\View $this */
 /** @var string $content */
 
+use common\models\Carrinhos;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
@@ -20,12 +21,13 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/images/logo_gt.png">
+    <link rel="icon" type="image/png" href="<?= Url::to('@web/images/logo_gt.png') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/templatemo.css') ?>">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">-->
     <link rel="stylesheet" href="<?= Url::to('@web/css/fontawesome.min.css') ?>">
     <link rel="stylesheet" href="<?= Url::to('@web/css/custom.css') ?>">
+
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -59,12 +61,13 @@ AppAsset::register($this);
                 </ul>
             </div>
             <div class="navbar-inner align-self-center d-flex">
-
                 <a class="nav-icon position-relative text-decoration-none" href="<?= Url::to(['/carrinhos/index']) ?>">
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
+                        <?= Carrinhos::getTotalProdutosCarrinho() ?>
+                    </span>
                 </a>
-                <a class="nav-icon position-relative text-decoration-none" href="<?= Yii::$app->user->isGuest ? Url::to(['/site/login']) : Url::to(['/site/perfil']) ?>">
+                <a class="nav-icon position-relative text-decoration-none" href="<?= Yii::$app->user->isGuest ? Url::to(['/site/login']) : Url::to(['/perfil/index']) ?>">
                     <i class="fa fa-fw fa-user text-dark mr-3"></i>
                 </a>
                 <?php if (!Yii::$app->user->isGuest): ?>
@@ -80,8 +83,8 @@ AppAsset::register($this);
 
     </div>
 </nav>
-<!-- Close Header -->
 
+<!-- Close Header -->
 <main role="main" >
     <div class="container">
         <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
@@ -92,13 +95,19 @@ AppAsset::register($this);
 
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
-        <p>&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
+        <p>&copy; GrooveTech <?= date('Y') ?></p>
         <p class="float-end"><?= Yii::powered() ?></p>
     </div>
 </footer>
 
 <?php $this->endBody() ?>
+<!-- Scripts -->
+<script src="<?= Url::to('@web/js/jquery-1.11.0.min.js') ?>"></script>
+<script src="<?= Url::to('@web/js/jquery-migrate-1.2.1.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= Url::to('@web/js/templatemo.js') ?>"></script>
+<script src="<?= Url::to('@web/js/custom.js') ?>"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>
