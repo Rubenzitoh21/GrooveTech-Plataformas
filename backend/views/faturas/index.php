@@ -7,7 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\FaturasSearch $searchModel */
+/** @var backend\models\FaturasSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Faturas';
@@ -15,11 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="faturas-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Faturas', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<!---->
+<!--    <p>-->
+<!--        --><?php //= Html::a('Create Faturas', ['create'], ['class' => 'btn btn-success']) ?>
+<!--    </p>-->
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -34,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'valortotal',
             'status',
             'user_id',
+            //'pagamentos_id',
+            //'expedicoes_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Faturas $model, $key, $index, $column) {

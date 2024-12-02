@@ -3,8 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Pagamentos;
-use common\models\PagamentosSearch;
-use yii\filters\AccessControl;
+use backend\models\PagamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,17 +25,6 @@ class PagamentosController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
-                    ],
-                ],
-                'access' => [
-                    'class' => AccessControl::class,
-
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'actions' => ['index', 'view', 'update', 'delete'],
-                            'roles' => ['admin', 'gestor'],
-                        ],
                     ],
                 ],
             ]

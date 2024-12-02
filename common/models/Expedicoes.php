@@ -8,11 +8,9 @@ use Yii;
  * This is the model class for table "expedicoes".
  *
  * @property int $id
- * @property string $descricao
- * @property float $valor
- * @property int $faturas_id
+ * @property string $metodoexp
  *
- * @property Faturas $faturas
+ * @property Faturas[] $faturas
  */
 class Expedicoes extends \yii\db\ActiveRecord
 {
@@ -30,11 +28,8 @@ class Expedicoes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descricao', 'valor', 'faturas_id'], 'required'],
-            [['valor'], 'number'],
-            [['faturas_id'], 'integer'],
-            [['descricao'], 'string', 'max' => 45],
-            [['faturas_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faturas::class, 'targetAttribute' => ['faturas_id' => 'id']],
+            [['metodoexp'], 'required'],
+            [['metodoexp'], 'string', 'max' => 45],
         ];
     }
 
@@ -45,9 +40,7 @@ class Expedicoes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descricao' => 'Descricao',
-            'valor' => 'Valor',
-            'faturas_id' => 'Faturas ID',
+            'metodoexp' => 'Metodoexp',
         ];
     }
 
@@ -58,6 +51,6 @@ class Expedicoes extends \yii\db\ActiveRecord
      */
     public function getFaturas()
     {
-        return $this->hasOne(Faturas::class, ['id' => 'faturas_id']);
+        return $this->hasMany(Faturas::class, ['expedicoes_id' => 'id']);
     }
 }

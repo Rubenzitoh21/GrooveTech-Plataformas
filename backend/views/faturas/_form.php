@@ -20,6 +20,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 
+    <?= $form->field($model, 'pagamentos_id')->textInput() ?>
+
+    <?= $form->field($model, 'expedicoes_id')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

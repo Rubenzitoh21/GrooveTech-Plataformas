@@ -12,10 +12,12 @@ use Yii;
  * @property float $valortotal
  * @property string $status
  * @property int $user_id
+ * @property int $pagamentos_id
+ * @property int $expedicoes_id
  *
- * @property Expedicoes[] $expedicoes
+ * @property Expedicoes $expedicoes
  * @property LinhasFaturas[] $linhasFaturas
- * @property Pagamentos[] $pagamentos
+ * @property Pagamentos $pagamentos
  * @property User $user
  */
 class Faturas extends \yii\db\ActiveRecord
@@ -34,11 +36,13 @@ class Faturas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'valortotal', 'status', 'user_id'], 'required'],
+            [['data', 'valortotal', 'status', 'user_id', 'pagamentos_id', 'expedicoes_id'], 'required'],
             [['data'], 'safe'],
             [['valortotal'], 'number'],
-            [['user_id'], 'integer'],
+            [['user_id', 'pagamentos_id', 'expedicoes_id'], 'integer'],
             [['status'], 'string', 'max' => 50],
+            [['expedicoes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expedicoes::class, 'targetAttribute' => ['expedicoes_id' => 'id']],
+            [['pagamentos_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pagamentos::class, 'targetAttribute' => ['pagamentos_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -54,6 +58,8 @@ class Faturas extends \yii\db\ActiveRecord
             'valortotal' => 'Valortotal',
             'status' => 'Status',
             'user_id' => 'User ID',
+            'pagamentos_id' => 'Pagamentos ID',
+            'expedicoes_id' => 'Expedicoes ID',
         ];
     }
 
@@ -64,7 +70,7 @@ class Faturas extends \yii\db\ActiveRecord
      */
     public function getExpedicoes()
     {
-        return $this->hasMany(Expedicoes::class, ['faturas_id' => 'id']);
+        return $this->hasOne(Expedicoes::class, ['id' => 'expedicoes_id']);
     }
 
     /**
@@ -84,7 +90,7 @@ class Faturas extends \yii\db\ActiveRecord
      */
     public function getPagamentos()
     {
-        return $this->hasMany(Pagamentos::class, ['faturas_id' => 'id']);
+        return $this->hasOne(Pagamentos::class, ['id' => 'pagamentos_id']);
     }
 
     /**

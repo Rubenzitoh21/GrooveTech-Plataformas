@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property string $dtapedido
- * @property string $metodo_envio
  * @property string $status
  * @property float $valortotal
  * @property int $user_id
@@ -33,11 +32,10 @@ class Carrinhos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dtapedido', 'metodo_envio', 'status', 'valortotal', 'user_id'], 'required'],
+            [['dtapedido', 'status', 'valortotal', 'user_id'], 'required'],
             [['dtapedido'], 'safe'],
             [['valortotal'], 'number'],
             [['user_id'], 'integer'],
-            [['metodo_envio'], 'string', 'max' => 45],
             [['status'], 'string', 'max' => 50],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -51,7 +49,6 @@ class Carrinhos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'dtapedido' => 'Data do Pedido',
-            'metodo_envio' => 'Metodo de Envio',
             'status' => 'Status',
             'valortotal' => 'Valor total',
             'user_id' => 'User ID',

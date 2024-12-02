@@ -34,6 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'valortotal',
             'status',
             'user_id',
+            'pagamentos_id',
+            'expedicoes_id',
         ],
     ]) ?>
 

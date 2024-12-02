@@ -162,7 +162,6 @@ $this->title = 'Checkout';
                                 <td colspan="5" class="py-5">
                                     <?= $this->render('_form', [
                                         'model' => $model,
-//                                        'pagamento' => $pagamento,
                                     ]) ?>
                                 </td>
                             </tr>

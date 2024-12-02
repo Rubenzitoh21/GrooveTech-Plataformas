@@ -17,9 +17,8 @@ class ExpedicoesSearch extends Expedicoes
     public function rules()
     {
         return [
-            [['id', 'faturas_id'], 'integer'],
-            [['descricao'], 'safe'],
-            [['valor'], 'number'],
+            [['id'], 'integer'],
+            [['metodoexp'], 'safe'],
         ];
     }
 
@@ -60,11 +59,9 @@ class ExpedicoesSearch extends Expedicoes
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'valor' => $this->valor,
-            'faturas_id' => $this->faturas_id,
         ]);
 
-        $query->andFilterWhere(['like', 'descricao', $this->descricao]);
+        $query->andFilterWhere(['like', 'metodoexp', $this->metodoexp]);
 
         return $dataProvider;
     }

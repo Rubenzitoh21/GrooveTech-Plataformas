@@ -17,14 +17,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'descricao') ?>
-
-    <?= $form->field($model, 'valor') ?>
-
-    <?= $form->field($model, 'faturas_id') ?>
+    <?= $form->field($model, 'metodoexp') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 

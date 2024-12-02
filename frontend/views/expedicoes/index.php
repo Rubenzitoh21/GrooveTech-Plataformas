@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Faturas;
+use common\models\Expedicoes;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,15 +9,15 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Faturas';
+$this->title = 'Expedicoes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="faturas-index">
+<div class="expedicoes-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Faturas', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Expedicoes', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -27,15 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'data',
-            'valortotal',
-            'status',
-            'user_id',
-            //'pagamentos_id',
-            //'expedicoes_id',
+            'metodoexp',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Faturas $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Expedicoes $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

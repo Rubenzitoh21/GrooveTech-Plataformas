@@ -1,9 +1,9 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
 use common\models\Expedicoes;
-use backend\models\ExpedicoesSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,11 +38,21 @@ class ExpedicoesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ExpedicoesSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Expedicoes::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

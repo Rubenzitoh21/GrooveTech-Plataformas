@@ -17,7 +17,7 @@ class FaturasSearch extends Faturas
     public function rules()
     {
         return [
-            [['id', 'user_id'], 'integer'],
+            [['id', 'user_id', 'pagamentos_id', 'expedicoes_id'], 'integer'],
             [['data', 'status'], 'safe'],
             [['valortotal'], 'number'],
         ];
@@ -63,6 +63,8 @@ class FaturasSearch extends Faturas
             'data' => $this->data,
             'valortotal' => $this->valortotal,
             'user_id' => $this->user_id,
+            'pagamentos_id' => $this->pagamentos_id,
+            'expedicoes_id' => $this->expedicoes_id,
         ]);
 
         $query->andFilterWhere(['like', 'status', $this->status]);

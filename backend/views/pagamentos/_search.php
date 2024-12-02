@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\PagamentosSearch $model */
+/** @var backend\models\PagamentosSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -18,12 +18,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'metodopag') ?>
-
-    <?= $form->field($model, 'valor') ?>
-
-    <?= $form->field($model, 'data') ?>
-
-    <?= $form->field($model, 'faturas_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

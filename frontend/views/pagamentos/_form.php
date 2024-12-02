@@ -14,12 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'metodopag')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'valor')->textInput() ?>
-
-    <?= $form->field($model, 'data')->textInput() ?>
-
-    <?= $form->field($model, 'faturas_id')->textInput() ?>
-
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

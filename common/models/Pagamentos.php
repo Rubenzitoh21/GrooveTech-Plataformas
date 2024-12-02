@@ -9,11 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property string $metodopag
- * @property float $valor
- * @property string $data
- * @property int $faturas_id
  *
- * @property Faturas $faturas
+ * @property Faturas[] $faturas
  */
 class Pagamentos extends \yii\db\ActiveRecord
 {
@@ -31,12 +28,8 @@ class Pagamentos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['metodopag', 'valor', 'data', 'faturas_id'], 'required'],
-            [['valor'], 'number'],
-            [['data'], 'safe'],
-            [['faturas_id'], 'integer'],
+            [['metodopag'], 'required'],
             [['metodopag'], 'string', 'max' => 45],
-            [['faturas_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faturas::class, 'targetAttribute' => ['faturas_id' => 'id']],
         ];
     }
 
@@ -48,9 +41,6 @@ class Pagamentos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'metodopag' => 'Metodopag',
-            'valor' => 'Valor',
-            'data' => 'Data',
-            'faturas_id' => 'Faturas ID',
         ];
     }
 
@@ -61,6 +51,6 @@ class Pagamentos extends \yii\db\ActiveRecord
      */
     public function getFaturas()
     {
-        return $this->hasOne(Faturas::class, ['id' => 'faturas_id']);
+        return $this->hasMany(Faturas::class, ['pagamentos_id' => 'id']);
     }
 }

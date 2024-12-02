@@ -82,7 +82,6 @@ class ProdutosCarrinhosController extends Controller
             $modelCarrinhos->status = 'Ativo';
             $modelCarrinhos->valortotal = 0;
             $modelCarrinhos->dtapedido = Carbon::now();
-            $modelCarrinhos->metodo_envio = 'a definir';
             $modelCarrinhos->save();
 
         }

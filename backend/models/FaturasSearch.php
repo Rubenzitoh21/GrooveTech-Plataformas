@@ -1,15 +1,15 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Carrinhos;
+use common\models\Faturas;
 
 /**
- * CarrinhosSearch represents the model behind the search form of `common\models\Carrinhos`.
+ * FaturasSearch represents the model behind the search form of `common\models\Faturas`.
  */
-class CarrinhosSearch extends Carrinhos
+class FaturasSearch extends Faturas
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class CarrinhosSearch extends Carrinhos
     public function rules()
     {
         return [
-            [['id', 'user_id'], 'integer'],
-            [['dtapedido', 'metodo_envio', 'status'], 'safe'],
+            [['id', 'user_id', 'pagamentos_id', 'expedicoes_id'], 'integer'],
+            [['data', 'status'], 'safe'],
             [['valortotal'], 'number'],
         ];
     }
@@ -41,7 +41,7 @@ class CarrinhosSearch extends Carrinhos
      */
     public function search($params)
     {
-        $query = Carrinhos::find()->where(['user_id' => $this->user_id, 'status' => 'Ativo']);
+        $query = Faturas::find();
 
         // add conditions that should always apply here
 
@@ -60,9 +60,11 @@ class CarrinhosSearch extends Carrinhos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dtapedido' => $this->dtapedido,
+            'data' => $this->data,
             'valortotal' => $this->valortotal,
             'user_id' => $this->user_id,
+            'pagamentos_id' => $this->pagamentos_id,
+            'expedicoes_id' => $this->expedicoes_id,
         ]);
 
         $query->andFilterWhere(['like', 'status', $this->status]);

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -17,9 +17,8 @@ class PagamentosSearch extends Pagamentos
     public function rules()
     {
         return [
-            [['id', 'faturas_id'], 'integer'],
-            [['metodopag', 'data'], 'safe'],
-            [['valor'], 'number'],
+            [['id'], 'integer'],
+            [['metodopag'], 'safe'],
         ];
     }
 
@@ -60,9 +59,6 @@ class PagamentosSearch extends Pagamentos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'valor' => $this->valor,
-            'data' => $this->data,
-            'faturas_id' => $this->faturas_id,
         ]);
 
         $query->andFilterWhere(['like', 'metodopag', $this->metodopag]);

@@ -114,7 +114,6 @@ class CarrinhosController extends Controller
         $model->status = 'Ativo';
         $model->valortotal = 0;
         $model->dtapedido = carbon::now();
-        $model->metodo_envio = 'a definir';
         $model->save();
 
         return $this->actionIndex();
@@ -151,7 +150,6 @@ class CarrinhosController extends Controller
         $model = $this->findModel($id, $user_id);
         $userData = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
         $userData?->setScenario(UserProfile::SCENARIO_USERPROFILE);
-//        $pagamento = new Pagamentos();
         $fatura = new Faturas();
         $produtoCarrinhoProduto = ProdutosCarrinhos::find()->where(['carrinhos_id' => $model->id])->all();
 
@@ -169,7 +167,6 @@ class CarrinhosController extends Controller
                 return $this->render('checkout', [
                     'model' => $model,
                     'userData' => $userData,
-//                    'pagamento' => $pagamento,
 
 
                 ]);
@@ -178,6 +175,8 @@ class CarrinhosController extends Controller
             $fatura->valortotal = $model->valortotal;
             $fatura->status = 'Paga';
             $fatura->user_id = Yii::$app->user->id;
+            $fatura->expedicoes_id = 27;
+            $fatura->pagamentos_id = 27;
             $fatura->save();
 //
 //            $pagamento->valor = $model->valortotal;

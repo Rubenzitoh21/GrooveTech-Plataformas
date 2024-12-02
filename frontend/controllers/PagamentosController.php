@@ -3,7 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Pagamentos;
-use common\models\PagamentosSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,11 +38,21 @@ class PagamentosController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PagamentosSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Pagamentos::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

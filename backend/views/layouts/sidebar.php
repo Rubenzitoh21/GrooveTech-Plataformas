@@ -54,13 +54,13 @@ AppAsset::register($this);
                     ['label' => 'Gestão de Dados', 'header' => true],
                         ['label' => 'Faturas', 'icon' => 'fas fa-file-invoice', 'url' => ['/faturas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Expediçoes', 'icon' => 'fa-solid fa-dolly', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
-                        ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card', 'url' => ['/pagamentos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Produtos', 'header' => true],
                         ['label' => 'Categorias', 'icon' => 'fa-solid fa-box', 'url' => ['/categorias-produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Produtos', 'icon' => 'fa-solid fa-tag', 'url' => ['/produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Ivas', 'icon' => 'fa-solid fa-percent', 'url' => ['/ivas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                         ['label' => 'Imagens', 'icon' => 'fa-solid fa-image', 'url' => ['/imagens/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                        ['label' => 'Avaliações', 'icon' => 'fa-solid fa-star', 'url' => ['/avaliacoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                 ],
             ]);
             ?>

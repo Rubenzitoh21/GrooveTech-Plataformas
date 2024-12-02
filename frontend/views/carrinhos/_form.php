@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,26 +15,15 @@ use yii\widgets\ActiveForm;
 
 
 
-<!--    --><?php //= $form->field($model, 'metodo_envio')->label('Método de Envio')->dropDownList([
-//        "Recolha" => 'Recolha na Loja',
-//        "Transportadora" => 'Transportadora',
-//    ],
-//        ['prompt' => 'Selecione o Método de Envio']
-//    );
-//    ?>
-<!--    <br>-->
-<!--    --><?php //= $form->field($pagamento, 'metodopag')->label('Método de Pagamento')->dropDownList([
-//        "Cobrança" => 'Cobrança',
-//        'Multibanco' => 'Multibanco',
-//        'Paypal' => 'Paypal',
-//        'MBWay' => 'MBWay',
-//        'Cartão' => 'Cartão',
-//
-//
-//    ],
+<!--    --><?php //= $form->field($model, 'pagamentos_id')->label('Método de Pagamento')->dropDownList(
+//        ArrayHelper::map(\common\models\Pagamentos::find()->all(), 'id', 'metodopag'),
 //        ['prompt' => 'Selecione o Método de Pagamento']
-//    );
-//    ?>
+//    ) ?>
+<!--    <br>-->
+<!--    --><?php //= $form->field($model, 'expedicoes_id')->label('Método de Envio')->dropDownList(
+//        ArrayHelper::map(\common\models\Expedicoes::find()->all(), 'id', 'metodoexp'),
+//        ['prompt' => 'Selecione o Método de Envio']
+//    ) ?>
 
 
     <div class="form-group mt-3">
