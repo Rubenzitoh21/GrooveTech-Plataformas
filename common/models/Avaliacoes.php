@@ -12,8 +12,10 @@ use Yii;
  * @property string $dtarating
  * @property int $rating
  * @property int $user_id
+ * @property int $linhas_faturas_id
  *
- * @property LinhasFaturas[] $linhasFaturas
+ * @property LinhasFaturas $linhasFaturas
+ * @property User $user
  */
 class Avaliacoes extends \yii\db\ActiveRecord
 {
@@ -31,10 +33,12 @@ class Avaliacoes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['comentario', 'dtarating', 'rating', 'user_id'], 'required'],
+            [['comentario', 'dtarating', 'rating', 'user_id', 'linhas_faturas_id'], 'required'],
             [['dtarating'], 'safe'],
-            [['rating', 'user_id'], 'integer'],
+            [['rating', 'user_id', 'linhas_faturas_id'], 'integer'],
             [['comentario'], 'string', 'max' => 200],
+            [['linhas_faturas_id'], 'exist', 'skipOnError' => true, 'targetClass' => LinhasFaturas::class, 'targetAttribute' => ['linhas_faturas_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,6 +53,7 @@ class Avaliacoes extends \yii\db\ActiveRecord
             'dtarating' => 'Dtarating',
             'rating' => 'Rating',
             'user_id' => 'User ID',
+            'linhas_faturas_id' => 'Linhas Faturas ID',
         ];
     }
 
@@ -59,6 +64,16 @@ class Avaliacoes extends \yii\db\ActiveRecord
      */
     public function getLinhasFaturas()
     {
-        return $this->hasMany(LinhasFaturas::class, ['avaliacoes_id' => 'id']);
+        return $this->hasOne(LinhasFaturas::class, ['id' => 'linhas_faturas_id']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

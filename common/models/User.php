@@ -295,9 +295,9 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getClientes()
+    public function getUserProfile()
     {
-        return $this->hasMany(UserProfile::class, ['user_id' => 'id']);
+        return $this->hasOne(UserProfile::class, ['user_id' => 'id']);
     }
 
     public function getAuth()

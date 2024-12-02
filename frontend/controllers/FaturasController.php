@@ -2,7 +2,15 @@
 
 namespace frontend\controllers;
 
+use backend\models\Empresa;
+use backend\models\Empresas;
+use common\models\ClientesForm;
 use common\models\Faturas;
+use common\models\LinhasFaturas;
+use common\models\Pagamentos;
+use common\models\User;
+use common\models\UserProfile;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,7 +73,12 @@ class FaturasController extends Controller
      */
     public function actionView($id)
     {
+        $empresa = Empresas::find()->one();
+        $profile = UserProfile::find()->where(['user_id' => Yii::$app->user->id])->one();
+
         return $this->render('view', [
+            'empresa' => $empresa,
+            'profile' => $profile,
             'model' => $this->findModel($id),
         ]);
     }

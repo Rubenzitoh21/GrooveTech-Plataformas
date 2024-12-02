@@ -13,10 +13,11 @@ use Yii;
  * @property float $valor_iva
  * @property float $subtotal
  * @property int $faturas_id
- * @property int $avaliacoes_id
+ * @property int $produtos_id
  *
- * @property Avaliacoes $avaliacoes
+ * @property Avaliacoes[] $avaliacoes
  * @property Faturas $faturas
+ * @property Produtos $produtos
  */
 class LinhasFaturas extends \yii\db\ActiveRecord
 {
@@ -34,12 +35,12 @@ class LinhasFaturas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantidade', 'preco_venda', 'valor_iva', 'subtotal', 'faturas_id', 'avaliacoes_id'], 'required'],
+            [['quantidade', 'preco_venda', 'valor_iva', 'subtotal', 'faturas_id', 'produtos_id'], 'required'],
             [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
-            [['faturas_id', 'avaliacoes_id'], 'integer'],
+            [['faturas_id', 'produtos_id'], 'integer'],
             [['quantidade'], 'string', 'max' => 45],
-            [['avaliacoes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Avaliacoes::class, 'targetAttribute' => ['avaliacoes_id' => 'id']],
             [['faturas_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faturas::class, 'targetAttribute' => ['faturas_id' => 'id']],
+            [['produtos_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produtos_id' => 'id']],
         ];
     }
 
@@ -55,7 +56,7 @@ class LinhasFaturas extends \yii\db\ActiveRecord
             'valor_iva' => 'Valor Iva',
             'subtotal' => 'Subtotal',
             'faturas_id' => 'Faturas ID',
-            'avaliacoes_id' => 'Avaliacoes ID',
+            'produtos_id' => 'Produtos ID',
         ];
     }
 
@@ -66,7 +67,7 @@ class LinhasFaturas extends \yii\db\ActiveRecord
      */
     public function getAvaliacoes()
     {
-        return $this->hasOne(Avaliacoes::class, ['id' => 'avaliacoes_id']);
+        return $this->hasMany(Avaliacoes::class, ['linhas_faturas_id' => 'id']);
     }
 
     /**
@@ -77,5 +78,15 @@ class LinhasFaturas extends \yii\db\ActiveRecord
     public function getFaturas()
     {
         return $this->hasOne(Faturas::class, ['id' => 'faturas_id']);
+    }
+
+    /**
+     * Gets query for [[Produtos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProdutos()
+    {
+        return $this->hasOne(Produtos::class, ['id' => 'produtos_id']);
     }
 }

@@ -10,31 +10,24 @@ use yii\grid\GridView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Faturas';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="faturas-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Faturas', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+//            'id',
             'data',
-            'valortotal',
+            'valortotal:text:Valor Total',
             'status',
-            'user_id',
+//            'user_id',
             //'pagamentos_id',
             //'expedicoes_id',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view}',
                 'urlCreator' => function ($action, Faturas $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

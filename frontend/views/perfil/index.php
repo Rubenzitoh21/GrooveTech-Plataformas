@@ -73,7 +73,7 @@ $this->title = 'Perfil';
                                         ");
                                         ?>
                                         <br>
-                                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-primary']) ?>
+                                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-success']) ?>
                                         <?php if ($mode === 'data'): ?>
                                             <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         <?php endif; ?>
@@ -92,7 +92,7 @@ $this->title = 'Perfil';
                                         <p><b>Data de Nascimento:</b> <?= Html::encode($userDataAdditional->dtanasc) ?>
                                         </p>
                                         <?php if ($mode === null): ?>
-                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'data','#' => 'dados-pessoais'], ['class' => 'btn btn-primary']) ?>
+                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'data','#' => 'dados-pessoais'], ['class' => 'btn btn-success']) ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -130,7 +130,7 @@ $this->title = 'Perfil';
                                         <br>
                                         <?= $form->field($userDataAdditional, 'codigopostal')->textInput(['value' => $userDataAdditional->codigopostal, 'placeholder' => 'Insira o seu código postal'])->label('Código Postal') ?>
                                         <br>
-                                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-primary']) ?>
+                                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-success']) ?>
                                         <?php if ($mode == 'morada'): ?>
                                             <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         <?php endif; ?>
@@ -141,7 +141,7 @@ $this->title = 'Perfil';
                                         <p><b>Código Postal:</b> <?= Html::encode($userDataAdditional->codigopostal) ?>
                                         </p>
                                         <?php if ($mode === null): ?>
-                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'morada', '#' => 'morada'], ['class' => 'btn btn-primary']) ?>
+                                            <?= Html::a('Editar Dados', ['perfil/index', 'mode' => 'morada', '#' => 'morada'], ['class' => 'btn btn-success']) ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
@@ -181,7 +181,7 @@ $this->title = 'Perfil';
                                         <?= $formPassword->field($passwordModel, 'confirmPassword')->passwordInput(['placeholder' => 'Confirmar Nova Password'])->label('Confirmar Nova Password') ?>
                                         <br>
                                         <div class="d-flex gap-2">
-                                            <?= Html::submitButton('Alterar Password', ['class' => 'btn btn-primary']) ?>
+                                            <?= Html::submitButton('Alterar Password', ['class' => 'btn btn-success']) ?>
                                             <?= Html::a('Cancelar', ['perfil/index', 'mode' => null], ['class' => 'btn btn-secondary']) ?>
                                         </div>
 
@@ -189,7 +189,7 @@ $this->title = 'Perfil';
                                     <?php endif; ?>
 
                                     <?php if ($mode === null): ?>
-                                        <?= Html::a('Alterar Password', ['perfil/index', 'mode' => 'password', '#' => 'password'], ['class' => 'btn btn-primary']) ?>
+                                        <?= Html::a('Alterar Password', ['perfil/index', 'mode' => 'password', '#' => 'password'], ['class' => 'btn btn-success']) ?>
                                     <?php endif; ?>
 
                                 </div>

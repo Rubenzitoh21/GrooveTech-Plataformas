@@ -17,7 +17,7 @@ class AvaliacoesSearch extends Avaliacoes
     public function rules()
     {
         return [
-            [['id', 'rating', 'user_id'], 'integer'],
+            [['id', 'rating', 'user_id', 'linhas_faturas_id'], 'integer'],
             [['comentario', 'dtarating'], 'safe'],
         ];
     }
@@ -62,6 +62,7 @@ class AvaliacoesSearch extends Avaliacoes
             'dtarating' => $this->dtarating,
             'rating' => $this->rating,
             'user_id' => $this->user_id,
+            'linhas_faturas_id' => $this->linhas_faturas_id,
         ]);
 
         $query->andFilterWhere(['like', 'comentario', $this->comentario]);

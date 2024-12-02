@@ -3,6 +3,7 @@
 /** @var yii\web\View $this */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Sobre';
 ?>
@@ -13,8 +14,9 @@ $this->title = 'Sobre';
             <div class="col-lg-6 m-auto">
                 <h1 class="h1">Sobre Nós</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    Lorem ipsum dolor sit amet.
+                    Na GrooveTech, vivemos e respiramos música. Com anos de experiência, somos apaixonados por oferecer
+                    instrumentos musicais de qualidade e acessórios que inspiram músicos de todos os níveis. Seja para
+                    iniciantes ou profissionais, estamos aqui para ajudá-lo a criar o som perfeito.
                 </p>
             </div>
         </div>
@@ -22,8 +24,9 @@ $this->title = 'Sobre';
             <div class="col-lg-6 m-auto">
                 <h1 class="h1">Os Nossos Serviços</h1>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    Lorem ipsum dolor sit amet.
+                    Além de uma ampla seleção de instrumentos e acessórios, oferecemos serviços como manutenção de
+                    instrumentos, aulas de música e consultoria para escolher o equipamento ideal. Tudo para garantir
+                    que a música faça parte da sua vida!
                 </p>
             </div>
         </div>
@@ -91,16 +94,16 @@ $this->title = 'Sobre';
                                     <div class="carousel-item active">
                                         <div class="row">
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_01.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_02.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_03.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_04.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -110,39 +113,20 @@ $this->title = 'Sobre';
                                     <div class="carousel-item">
                                         <div class="row">
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_01.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_02.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_03.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_04.png" alt="Brand Logo"></a>
+                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
                                             </div>
                                         </div>
                                     </div>
                                     <!--End Second slide-->
-
-                                    <!--Third slide-->
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_01.png" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_02.png" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_03.png" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="assets/img/brand_04.png" alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End Third slide-->
 
                                 </div>
                                 <!--End Slides-->

@@ -103,24 +103,23 @@ $this->title = 'Checkout';
                                 <div class="d-flex align-items-center mt-2">
                                     <td> <?= Html::img(
                                             Url::to('@web/images/' . $produtoCarrinho->produtos->imagens[0]->fileName),
-                                            ['class' => 'img-fluid me-5'] + ['width' => '150px', 'height' => '150px']
+                                            ['class' => 'img-fluid me-5'] + ['width' => '100px']
                                         ) ?></td>
 
                                     <?php else : ?>
 
                                         <td><?= Html::img(
                                                 Url::to('@web/images/default.png'),
-                                                ['class' => 'img-fluid me-5'] + ['width' => '150px', 'height' => '150px']
+                                                ['class' => 'img-fluid me-5'] + ['width' => '100px']
                                             ) ?></td>
-
 
                                     <?php endif; ?>
                                 </div>
 
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->produtos->nome) ?></td>
-                                <td class="py-5"><?= Html::encode($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco) . '€' ?></td>
+                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco, 2, ',', '.') ?>€</td>
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->quantidade) ?></td>
-                                <td class="py-5"><?= Html::encode(($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco) * $produtoCarrinho->quantidade) . '€' ?></td>
+                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco*$produtoCarrinho->quantidade, 2, ',', '.') ?>€</td>
                             </tr>
                             <?php endforeach; ?>
 
@@ -129,18 +128,15 @@ $this->title = 'Checkout';
                                 </th>
                                 <td class="py-5">
                                     <p class="mb-0 text-dark text-uppercase py-3">Subtotal</p>
-
                                     <p class="mb-0 text-dark text-uppercase py-3">IVA</p>
-
                                 </td>
                                 <td class="py-5"></td>
                                 <td class="py-5"></td>
 
-
                                 <td class="py-5">
                                     <div class=" border-bottom border-top py-3">
-                                        <p class="mb-0 text-dark"><?= Html::encode($model->valortotal - $iva) . '€' ?></p>
-                                        <p class="mb-0 text-dark py-3"><?= Html::encode($iva) . '€' ?></p>
+                                        <p class="mb-0 text-dark"><?= number_format($model->valortotal - $iva, 2, ',', '.') ?>€</p>
+                                        <p class="mb-0 text-dark py-3"><?= number_format($iva, 2, ',', '.') ?>€</p>
                                     </div>
                                 </td>
                             </tr>
@@ -154,7 +150,7 @@ $this->title = 'Checkout';
                                 <td class="py-5"></td>
                                 <td class="py-5">
                                     <div class="py-3 border-bottom border-top">
-                                        <p class="mb-0 text-dark"><?= Html::encode($model->valortotal) . '€' ?></p>
+                                        <p class="mb-0 text-dark"><?= number_format($model->valortotal, 2, ',', '.') ?>€</p>
                                     </div>
                                 </td>
                             </tr>
@@ -162,6 +158,7 @@ $this->title = 'Checkout';
                                 <td colspan="5" class="py-5">
                                     <?= $this->render('_form', [
                                         'model' => $model,
+                                        'fatura' => $fatura,
                                     ]) ?>
                                 </td>
                             </tr>

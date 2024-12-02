@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use app\models\UserForm;
+use backend\models\UserForm;
 use common\models\User;
 use backend\models\UserSearch;
 use Yii;

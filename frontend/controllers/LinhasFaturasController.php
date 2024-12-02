@@ -1,18 +1,17 @@
 <?php
 
-namespace backend\controllers;
+namespace frontend\controllers;
 
-use common\models\Faturas;
-use backend\models\FaturasSearch;
 use common\models\LinhasFaturas;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * FaturasController implements the CRUD actions for Faturas model.
+ * LinhasFaturasController implements the CRUD actions for LinhasFaturas model.
  */
-class FaturasController extends Controller
+class LinhasFaturasController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,23 +32,33 @@ class FaturasController extends Controller
     }
 
     /**
-     * Lists all Faturas models.
+     * Lists all LinhasFaturas models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new FaturasSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => LinhasFaturas::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Faturas model.
+     * Displays a single LinhasFaturas model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -62,13 +71,13 @@ class FaturasController extends Controller
     }
 
     /**
-     * Creates a new Faturas model.
+     * Creates a new LinhasFaturas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Faturas();
+        $model = new LinhasFaturas();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -84,7 +93,7 @@ class FaturasController extends Controller
     }
 
     /**
-     * Updates an existing Faturas model.
+     * Updates an existing LinhasFaturas model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -104,7 +113,7 @@ class FaturasController extends Controller
     }
 
     /**
-     * Deletes an existing Faturas model.
+     * Deletes an existing LinhasFaturas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -112,27 +121,21 @@ class FaturasController extends Controller
      */
     public function actionDelete($id)
     {
-        $fatura = $this->findModel($id);
-
-        $fatura->status = 'Anulada';
-        $fatura->save();
-
-//        LinhasFaturas::deleteAll(['faturas_id' => $id]);
-//        $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Faturas model based on its primary key value.
+     * Finds the LinhasFaturas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Faturas the loaded model
+     * @return LinhasFaturas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Faturas::findOne(['id' => $id])) !== null) {
+        if (($model = LinhasFaturas::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

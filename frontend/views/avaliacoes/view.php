@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dtarating',
             'rating',
             'user_id',
+            'linhas_faturas_id',
         ],
     ]) ?>
 

@@ -17,7 +17,7 @@ class LinhasFaturasSearch extends LinhasFaturas
     public function rules()
     {
         return [
-            [['id', 'faturas_id', 'avaliacoes_id'], 'integer'],
+            [['id', 'faturas_id', 'produtos_id'], 'integer'],
             [['quantidade'], 'safe'],
             [['preco_venda', 'valor_iva', 'subtotal'], 'number'],
         ];
@@ -64,7 +64,7 @@ class LinhasFaturasSearch extends LinhasFaturas
             'valor_iva' => $this->valor_iva,
             'subtotal' => $this->subtotal,
             'faturas_id' => $this->faturas_id,
-            'avaliacoes_id' => $this->avaliacoes_id,
+            'produtos_id' => $this->produtos_id,
         ]);
 
         $query->andFilterWhere(['like', 'quantidade', $this->quantidade]);

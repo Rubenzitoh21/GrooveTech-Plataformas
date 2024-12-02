@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use Carbon\Carbon;
 use common\models\Carrinhos;
 use common\models\CarrinhosSearch;
-use common\models\ClientesForm;
 use common\models\Faturas;
 use common\models\LinhasFaturas;
 use common\models\Pagamentos;
@@ -154,58 +153,68 @@ class CarrinhosController extends Controller
         $produtoCarrinhoProduto = ProdutosCarrinhos::find()->where(['carrinhos_id' => $model->id])->all();
 
         if ($this->request->isPost) {
-            if (!$userData->validate()) {
+
+            $fatura->load(Yii::$app->request->post());
+            $fatura->data = Carbon::now();
+            $fatura->valortotal = $model->valortotal;
+            $fatura->status = 'Pago';
+            $fatura->user_id = Yii::$app->user->id;
+            $fatura->save();
+
+            if (empty($fatura->pagamentos_id) || empty($fatura->expedicoes_id)) {
+                Yii::$app->session->setFlash('error', 'Por favor, selecione um método de pagamento e um método de envio.');
+                return $this->render('checkout', [
+                    'model' => $model,
+                    'userData' => $userData,
+                    'fatura' => $fatura,
+                ]);
+            }
+
+            if (!$userData->validate() || !$fatura->validate()) {
                 $errorMessages = '';
                 foreach ($userData->errors as $attributeErrors) {
                     foreach ($attributeErrors as $errorMessage) {
                         $errorMessages .= $errorMessage . '<br>';
                     }
                 }
+                foreach ($fatura->errors as $attributeErrors) {
+                    foreach ($attributeErrors as $errorMessage) {
+                        $errorMessages .= $errorMessage . '<br>';
+                    }
+                }
 
-                Yii::$app->session->setFlash('error', 'Erro nos dados do utilizador: <br>' . $errorMessages);
+                Yii::$app->session->setFlash('error', 'Erro nos dados do fornecidos: <br>' . $errorMessages);
 
                 return $this->render('checkout', [
                     'model' => $model,
                     'userData' => $userData,
-
-
+                    'fatura' => $fatura,
                 ]);
             }
-            $fatura->data = Carbon::now();
-            $fatura->valortotal = $model->valortotal;
-            $fatura->status = 'Paga';
-            $fatura->user_id = Yii::$app->user->id;
-            $fatura->expedicoes_id = 27;
-            $fatura->pagamentos_id = 27;
-            $fatura->save();
-//
-//            $pagamento->valor = $model->valortotal;
-//            $pagamento->data = Carbon::now();
-//            $pagamento->fatura_id = $fatura->id;
-//            $pagamento->metodopag = $this->request->post('Pagamentos')['metodopag'];
-//            $pagamento->save();
-//
-//            foreach ($produtoCarrinhoProduto as $produtoCarrinho) {
-//                $linhaFatura = new LinhasFaturas();
-//                $linhaFatura->faturas_id = $fatura->id;
-//                $linhaFatura->produtos_carrinhos_id = $produtoCarrinho->id;
-//                $linhaFatura->save();
-//            }
-//
+
+
+            foreach ($produtoCarrinhoProduto as $produtoCarrinho) {
+                $linhaFatura = new LinhasFaturas();
+                $linhaFatura->quantidade = $produtoCarrinho->quantidade;
+                $linhaFatura->preco_venda = $produtoCarrinho->preco_venda;
+                $linhaFatura->valor_iva = $produtoCarrinho->valor_iva;
+                $linhaFatura->subtotal = $produtoCarrinho->subtotal;
+                $linhaFatura->faturas_id = $fatura->id;
+                $linhaFatura->produtos_id = $produtoCarrinho->produtos_id;
+                $linhaFatura->save();
+            }
+
             $model->status = 'Pago';
             $model->dtapedido = Carbon::now();
-//            $model->metodo_envio = $this->request->post('Carrinhos')['metodo_envio'];
             $model->save();
 
-//            return $this->redirect(['faturas/view', 'id' => $pagamento->faturas_id, 'user_id' => Yii::$app->user->id]);
-            return $this->redirect(['produtos/index']);
+            return $this->redirect(['faturas/view', 'id' => $fatura->id]);
         }
 
         return $this->render('checkout', [
             'model' => $model,
             'userData' => $userData,
-//            'pagamento' => $pagamento,
-
+            'fatura' => $fatura,
         ]);
     }
 

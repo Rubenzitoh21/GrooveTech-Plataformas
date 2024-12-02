@@ -7,7 +7,6 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\AvaliacoesSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Avaliacoes';
@@ -21,11 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Avaliacoes', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -34,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dtarating',
             'rating',
             'user_id',
+            //'linhas_faturas_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Avaliacoes $model, $key, $index, $column) {
