@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'nome',
             'Descrição' => 'descricao',
             'Preço (€)' => 'preco',
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Produtos $model, $key, $index, $column) {
 //                    return Url::toRoute([$action, 'id' => $model->id]);
-                    return Url::toRoute([$action, 'id' => $model->id, 'categorias_produtos_id' => $model->categorias_produtos_id, 'ivas_id' => $model->ivas_id]);
+                    return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
         ],

@@ -28,10 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+//            'id',
             'nome',
             'obs',
         ],
     ]) ?>
 
+    <br>
+    <h3>Produtos</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Nome</th>
+            <th>Descição</th>
+            <th>Observações</th>
+            <th>Preço</th>
+        </tr>
+            <?php foreach ($model->produtos as $produto): ?>
+        <tr>
+            <td><?= $produto->nome ?></td>
+            <td><?= $produto->descricao ?></td>
+            <td><?= $produto->obs ?></td>
+            <td><?= number_format($produto->preco, 2, ',', '.') ?> €</td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 </div>

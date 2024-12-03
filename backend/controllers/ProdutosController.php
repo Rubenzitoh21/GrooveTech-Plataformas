@@ -62,23 +62,13 @@ class ProdutosController extends Controller
     /**
      * Displays a single Produtos model.
      * @param int $id ID
-     * @param int $categorias_produtos_id Categorias Produtos ID
-     * @param int $ivas_id Ivas ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id, int $categorias_produtos_id, int $ivas_id)
+    public function actionView($id)
     {
-        $model = $this->findModel($id, $categorias_produtos_id, $ivas_id);
-
-
-//        return $this->render('view', [
-//            'model' => $this->findModel($id),
-//        ]);
-
         return $this->render('view', [
-            'model' => $model,
-//            'evaluationDataProvider' => $evaluationDataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -93,7 +83,7 @@ class ProdutosController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'categorias_produtos_id' => $model->categorias_produtos_id, 'ivas_id' => $model->ivas_id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -113,12 +103,12 @@ class ProdutosController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $categorias_produtos_id, $ivas_id)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($id, $categorias_produtos_id, $ivas_id);
+        $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'categorias_produtos_id' => $model->categorias_produtos_id, 'ivas_id' => $model->ivas_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -130,14 +120,12 @@ class ProdutosController extends Controller
      * Deletes an existing Produtos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @param int $categorias_produtos_id Categorias Produtos ID
-     * @param int $ivas_id Ivas ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $categorias_produtos_id, $ivas_id)
+    public function actionDelete($id)
     {
-        $this->findModel($id, $categorias_produtos_id, $ivas_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -146,14 +134,12 @@ class ProdutosController extends Controller
      * Finds the Produtos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @param int $categorias_produtos_id Categorias Produtos ID
-     * @param int $ivas_id Ivas ID
      * @return Produtos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, int $categorias_produtos_id, $ivas_id)
+    protected function findModel($id)
     {
-        if (($model = Produtos::findOne(['id' => $id, 'categorias_produtos_id' => $categorias_produtos_id, 'ivas_id' => $ivas_id])) !== null) {
+        if (($model = Produtos::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
