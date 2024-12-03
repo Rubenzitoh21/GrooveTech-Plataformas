@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var common\models\CategoriasProdutos $model */
@@ -45,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
             <?php foreach ($model->produtos as $produto): ?>
         <tr>
-            <td><?= $produto->nome ?></td>
+            <td><a href="<?= Url::to(['/produtos/view', 'id' => $produto->id]); ?>"><?= $produto->nome ?></a></td>
             <td><?= $produto->descricao ?></td>
             <td><?= $produto->obs ?></td>
             <td><?= number_format($produto->preco, 2, ',', '.') ?> €</td>

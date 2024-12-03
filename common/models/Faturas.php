@@ -55,11 +55,11 @@ class Faturas extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'data' => 'Data',
-            'valortotal' => 'Valortotal',
+            'valortotal' => 'Valor total',
             'status' => 'Status',
-            'user_id' => 'User ID',
-            'pagamentos_id' => 'Pagamentos ID',
-            'expedicoes_id' => 'Expedicoes ID',
+            'user_id' => 'Utilizador',
+            'pagamentos_id' => 'Método de Pagamento',
+            'expedicoes_id' => 'Método de Expedição',
         ];
     }
 

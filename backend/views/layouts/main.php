@@ -25,6 +25,7 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <link rel="icon" type="image/png" href="<?= Yii::getAlias('@web') ?>/images/logo_gt.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini">
 <?php $this->beginBody() ?>
@@ -52,4 +53,5 @@ $this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\ha
 <?php $this->endBody() ?>
 </body>
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <?php $this->endPage() ?>

@@ -40,7 +40,7 @@ class Pagamentos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'metodopag' => 'Metodopag',
+            'metodopag' => 'Método de Pagamento',
         ];
     }
 

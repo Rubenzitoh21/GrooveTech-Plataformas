@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="imagens-view">
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id, 'produto_id' => $model->produto_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id, 'produto_id' => $model->produto_id], [
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Tem a certeza que quer eliminar esta imagem?',
@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'fileName:text:Ficheiro',
-            'produto.nome:text:Produto',
+            'fileName',
+            'produto.nome',
         ],
     ]) ?>
 

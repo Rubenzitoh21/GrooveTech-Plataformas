@@ -30,11 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'data',
-            'valortotal',
+            [
+                'attribute' => 'valortotal',
+                'label' => 'Valor Total',
+                'value' => function ($model) {
+                    return number_format($model->valortotal, 2, ',', '.') . ' €';
+                },
+            ],
             'status',
-            'user_id',
-            //'pagamentos_id',
-            //'expedicoes_id',
+            [
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->user->userProfile->primeironome . ' ' . $model->user->userProfile->apelido;
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Faturas $model, $key, $index, $column) {

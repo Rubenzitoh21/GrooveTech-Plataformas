@@ -52,11 +52,11 @@ class LinhasFaturas extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quantidade' => 'Quantidade',
-            'preco_venda' => 'Preco Venda',
-            'valor_iva' => 'Valor Iva',
-            'subtotal' => 'Subtotal',
-            'faturas_id' => 'Faturas ID',
-            'produtos_id' => 'Produtos ID',
+            'preco_venda' => 'Preco Unitário',
+            'valor_iva' => 'Valor do Iva',
+            'subtotal' => 'Sub-total',
+            'faturas_id' => 'Faturas',
+            'produtos_id' => 'Produto',
         ];
     }
 

@@ -11,8 +11,8 @@ use yii\bootstrap5\Html;
 AppAsset::register($this);
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <div style="position: fixed">
-    <!-- Brand Logo -->
+    <div>
+
     <a href="<?= Yii::getAlias('../') ?>" class="brand-link" >
         <?= Html::img('@web/images/logo_gt.png',
             [
@@ -22,7 +22,6 @@ AppAsset::register($this);
         <span class="brand-text font-weight-light">Groove Tech</span>
     </a>
 
-    <!--icon de terminar a sessão -> fas fa-sign-out-alt-->
     <a class="brand-link">
         <?php
         if (!Yii::$app->user->isGuest) {
@@ -37,13 +36,13 @@ AppAsset::register($this);
     </a>
     </div>
     <!-- Sidebar -->
-    <div class="sidebar" style="margin-top: 120px; height: calc(100vh - 120px);">
+    <div class="sidebar">
         <nav class="mt-2">
             <?php
             $userRole = Yii::$app->user->can('admin') ? 'admin' : 'gestor';
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
+//                    ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Perfil', 'header' => true],
                         ['label' => 'Perfil', 'icon' => 'fas fa-id-card', 'url' => ['/perfil/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Empresa', 'header' => true, 'visible' => ($userRole == 'admin')],

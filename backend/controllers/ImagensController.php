@@ -68,10 +68,10 @@ class ImagensController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id, $produto_id)
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id, $produto_id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -80,7 +80,7 @@ class ImagensController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($produto_id = null)
+    public function actionCreate($produto_id = null, $urlCallback = null)
     {
         $model = new Imagens();
 
@@ -109,8 +109,11 @@ class ImagensController extends Controller
                         $newModel->save();
                     }
 
-                    // Redirect to the index action with or without produto_id
-                    return $this->redirect(['index', 'produto_id' => $produto_id]);
+                    if($urlCallback === 'produto'){
+                        return $this->redirect(['produtos/view', 'id' => $model->produto_id]);
+                    } else {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
                 }
             }
         } else {
@@ -130,9 +133,9 @@ class ImagensController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $produto_id)
+    public function actionUpdate($id, $urlCallback = null)
     {
-        $model = $this->findModel($id, $produto_id);
+        $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
@@ -144,11 +147,15 @@ class ImagensController extends Controller
 
                     if (!$model->save()) {
                         Yii::$app->session->setFlash('error', 'Erro ao salvar as alterações.');
-                        return $this->redirect(['update', 'id' => $model->id, 'produto_id' => $model->produto_id]);
+                        return $this->redirect(['update', 'id' => $model->id]);
                     }
                 }
 
-                return $this->redirect(['view', 'id' => $model->id, 'produto_id' => $model->produto_id]);
+                if($urlCallback === 'produto'){
+                    return $this->redirect(['produtos/view', 'id' => $model->produto_id]);
+                } else {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 
@@ -166,9 +173,9 @@ class ImagensController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $produto_id)
+    public function actionDelete($id)
     {
-        $this->findModel($id, $produto_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -181,9 +188,9 @@ class ImagensController extends Controller
      * @return Imagens the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, $produto_id)
+    protected function findModel($id)
     {
-        if (($model = Imagens::findOne(['id' => $id, 'produto_id' => $produto_id])) !== null) {
+        if (($model = Imagens::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

@@ -14,9 +14,23 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'percentagem')->textInput() ?>
 
-    <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'descricao')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'vigor')->textInput() ?>
+    <div class="form-group">
+        <label class="form-label" for="vigor-toggle">Vigor</label>
+        <br>
+        <?= Html::hiddenInput('Ivas[vigor]', 0) ?>
+        <?= Html::checkbox('Ivas[vigor]', $model->vigor, [
+            'id' => 'vigor-toggle',
+            'value' => 1,
+            'data-toggle' => 'toggle',
+            'data-on' => 'Em Vigor',
+            'data-off' => 'Inativo',
+            'data-onstyle' => 'primary',
+            'data-offstyle' => 'danger',
+        ]) ?>
+    </div>
+
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

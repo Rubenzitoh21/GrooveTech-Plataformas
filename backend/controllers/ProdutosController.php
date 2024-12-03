@@ -98,8 +98,6 @@ class ProdutosController extends Controller
      * Updates an existing Produtos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @param int $categorias_produtos_id Categorias Produtos ID
-     * @param int $ivas_id Ivas ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */

@@ -15,8 +15,10 @@ $this->title = 'Perfil';
 <div class="container-fluid">
     <div class="container">
         <div style="display: flex; align-items: center;">
-            <h1 class="mb-4 mt-5" style="flex: 1;">Perfil</h1>
-            <?= Html::a('Ver Faturas', ['faturas/index'], ['class' => 'btn btn-success']) ?>
+            <h1 class="mb-4 mt-5" style="flex: 0.99;">Perfil</h1>
+            <?= Html::a('Avaliar Produtos', ['avaliacoes/index'], ['class' => 'btn btn-success']) ?>
+            <h1 class="mb-4 mt-5" style="flex: 0.01;"></h1>
+            <?= Html::a('As Minhas Faturas', ['faturas/index'], ['class' => 'btn btn-success']) ?>
         </div>
         <div id="dados-pessoais" class="row g-4">
             <div class="col-lg-12">

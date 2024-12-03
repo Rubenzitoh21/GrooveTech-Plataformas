@@ -40,7 +40,7 @@ class Expedicoes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'metodoexp' => 'Metodoexp',
+            'metodoexp' => 'Metodo de Expedição',
         ];
     }
 

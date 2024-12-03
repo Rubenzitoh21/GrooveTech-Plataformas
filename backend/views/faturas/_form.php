@@ -17,9 +17,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'valortotal')->textInput() ?>
 
-    <?= $form->field($model, 'status')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'status')->label('Status')->dropDownList(
+        [
+            'Pago' => 'Pago',
+            'Anulada' => 'Anulada',
+        ],
+        ['prompt' => 'Selecione o Status']
+    ) ?>
 
-<!--    --><?php //= $form->field($model, 'user_id')->textInput() ?>
 
     <?= $form->field($model, 'pagamentos_id')->label('Método de Pagamento')->dropDownList(
         ArrayHelper::map(\common\models\Pagamentos::find()->all(), 'id', 'metodopag'),

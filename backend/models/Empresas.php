@@ -50,14 +50,14 @@ class Empresas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'designacaosocial' => 'Designacaosocial',
-            'email' => 'Email',
+            'designacaosocial' => 'Designação Social',
+            'email' => 'E-Mail',
             'telefone' => 'Telefone',
             'nif' => 'Nif',
             'rua' => 'Rua',
-            'codigopostal' => 'Codigopostal',
+            'codigopostal' => 'Codigo-Postal',
             'localidade' => 'Localidade',
-            'capitalsocial' => 'Capitalsocial',
+            'capitalsocial' => 'Capital Social',
         ];
     }
 }

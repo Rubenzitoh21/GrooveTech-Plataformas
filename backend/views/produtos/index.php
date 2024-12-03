@@ -30,21 +30,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'nome',
-            'Descrição' => 'descricao',
-            'Preço (€)' => 'preco',
+            'descricao',
+            [
+                'attribute' => 'preco',
+                'value' => function ($model) {
+                    return number_format($model->preco, 2, ',', '.') . ' €';
+                },
+            ],
             'obs',
             //'categorias_produtos_id',
             //'ivas_id',
             [
                 'attribute' => 'categorias_produtos_id',
-                'label' => 'Categoria',
                 'value' => function ($model) {
                     return $model->categoriasProdutos->nome;
                 },
             ],
             [
                 'attribute' => 'ivas_id',
-                'label' => 'IVA (%)',
                 'value' => function ($model) {
                     return $model->ivas->percentagem;
                 },
@@ -52,7 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Produtos $model, $key, $index, $column) {
-//                    return Url::toRoute([$action, 'id' => $model->id]);
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
 //            'id',
-            'metodoexp:text:Método de Expedição',
+            'metodoexp',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Expedicoes $model, $key, $index, $column) {

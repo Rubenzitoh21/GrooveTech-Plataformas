@@ -56,11 +56,11 @@ class Produtos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
-            'descricao' => 'Descricao',
-            'preco' => 'Preco',
-            'obs' => 'Obs',
-            'categorias_produtos_id' => 'Categorias Produtos ID',
-            'ivas_id' => 'Ivas ID',
+            'descricao' => 'Descrição',
+            'preco' => 'Preço',
+            'obs' => 'Observações',
+            'categorias_produtos_id' => 'Categoria',
+            'ivas_id' => 'Iva (%)',
         ];
     }
 

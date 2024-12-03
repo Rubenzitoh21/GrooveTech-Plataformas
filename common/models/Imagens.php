@@ -104,7 +104,7 @@ class Imagens extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fileName' => 'Imagems',
+            'fileName' => 'Nome do Ficheiro',
             'produto_id' => 'Id do Produto',
         ];
     }

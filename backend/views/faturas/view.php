@@ -34,9 +34,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'data',
-            'valortotal',
+            [
+                'attribute' => 'valortotal',
+                'label' => 'Valor Total',
+                'value' => function ($model) {
+                    return number_format($model->valortotal, 2, ',', '.') . ' €';
+                },
+            ],
             'status',
-            'user_id',
+            [
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->user->userProfile->primeironome . ' ' . $model->user->userProfile->apelido;
+                },
+            ],
             [
                 'attribute' => 'pagamentos_id',
                 'label' => 'Método de Pagamento',

@@ -43,7 +43,7 @@ class CategoriasProdutos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
-            'obs' => 'Obs',
+            'obs' => 'Observações',
         ];
     }
 

@@ -31,7 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
             'percentagem',
             'descricao',
-            'vigor',
+            [
+                'attribute' => 'vigor',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::tag(
+                        'div',
+                        Html::checkbox('vigor', $model->vigor == 1, [
+                            'data-toggle' => 'toggle',
+                            'data-on' => 'Em Vigor',
+                            'data-off' => 'Inativo',
+                            'data-onstyle' => 'primary',
+                            'data-offstyle' => 'danger',
+                            'disabled' => true,
+                        ]),
+                        ['class' => 'form-check']
+                    );
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Ivas $model, $key, $index, $column) {
@@ -40,6 +57,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
-
 </div>

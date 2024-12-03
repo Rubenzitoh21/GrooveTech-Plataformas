@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Adicionar Imagem', ['imagens/create', 'produto_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Adicionar Imagem', ['imagens/create', 'produto_id' => $model->id, 'urlCallback' => 'produto'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -31,8 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
 //            'id',
             'nome',
-            'Descrição' => 'descricao',
-            'Preço (€)' => 'preco',
+            'descricao',
+            [
+                'attribute' => 'preco',
+                'value' => function ($model) {
+                    return number_format($model->preco, 2, ',', '.') . ' €';
+                },
+            ],
             'obs',
             //'categorias_produtos_id',
             //'ivas_id',
@@ -50,7 +55,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->ivas->percentagem;
                 },
             ],
+            [
+                'attribute' => 'image',
+                'label' => 'Imagem',
+                'format' => 'html',
+                'value' => function ($model) {
+                    if (!empty($model->imagens)) {
+                        $images = '';
+                        foreach ($model->imagens as $imagem) {
+                            $images .= Html::img('@web/images/' . $imagem->fileName, ['class' => 'img-thumbnail', 'style' => 'max-width: 150px; margin-right: 5px;']);
+                        }
+                        return $images;
+                    }
+                    return 'Sem imagem disponível';
+                },
+            ],
         ],
     ]) ?>
-
 </div>
