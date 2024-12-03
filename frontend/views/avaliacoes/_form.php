@@ -12,18 +12,30 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'comentario')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'dtarating')->textInput() ?>
-
-    <?= $form->field($model, 'rating')->textInput() ?>
-
-    <?= $form->field($model, 'user_id')->textInput() ?>
-
-    <?= $form->field($model, 'linhas_faturas_id')->textInput() ?>
+    <?= $form->field($model, 'comentario')->textarea([
+        'maxlength' => true,
+        'rows' => 5,
+        'placeholder' => 'Escreva seu comentário sobre o produto...',
+    ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <label for="rating">Avaliação:</label>
+        <div id="star-rating" class="star-rating">
+            <?php for ($i = 1; $i <= 5; $i++): ?>
+                <span class="fa fa-star star" data-value="<?= $i ?>"></span>
+            <?php endfor; ?>
+        </div>
+        <?= $form->field($model, 'rating')->hiddenInput(['id' => 'rating-value'])->label(false) ?>
+    </div>
+
+    <?= $form->field($model, 'dtarating')->hiddenInput(['value' => date('Y-m-d H:i:s')])->label(false) ?>
+
+    <?= $form->field($model, 'user_id')->hiddenInput(['value' => Yii::$app->user->id])->label(false) ?>
+
+    <?= $form->field($model, 'linhas_faturas_id')->hiddenInput(['value' => $linhaFaturaId])->label(false) ?>
+    <br>
+    <div class="form-group">
+        <?= Html::submitButton('Enviar Avaliação', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

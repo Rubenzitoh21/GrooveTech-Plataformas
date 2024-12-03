@@ -6,6 +6,8 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var common\models\Produtos $model */
+/** @var common\models\Avaliacoes[] $avaliacoes */
+
 
 $this->title = $model->nome;
 \yii\web\YiiAsset::register($this);
@@ -31,13 +33,24 @@ $this->title = $model->nome;
                         <div class="card-body">
                             <h1 class="h2"><?= Html::encode($model->nome) ?></h1>
                             <p class="h3 py-2"><?= number_format($model->preco, 2, ',', '.') ?> €</p>
+
+                            <?php
+                            $rating = $model->getAvaliacoes()->average('rating') ?: 0;
+                            $totalComentarios = $model->getAvaliacoes()->count();
+                            ?>
                             <p class="py-2">
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-secondary"></i>
-                                <span class="list-inline-item text-dark">Rating 4.8 | 36 Comments</span>
+                                <?php if ($totalComentarios > 0): ?>
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="fa fa-star <?= $i <= round($rating) ? 'text-warning' : 'text-secondary' ?>"></i>
+                                    <?php endfor; ?>
+                                    <span class="list-inline-item text-dark">
+                                        Avaliação <?= number_format($rating, 1) ?> | <?= $totalComentarios ?> Comentários
+                                    </span>
+                                <?php else: ?>
+                                    <span class="list-inline-item text-muted">
+                                        Este produto ainda não possui avaliações.
+                                    </span>
+                                <?php endif; ?>
                             </p>
 
                             <h6>Categoria:</h6>
@@ -61,7 +74,33 @@ $this->title = $model->nome;
                 </div>
             </div>
         </div>
+        <!-- Comentários -->
+        <div class="container pb-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card review-card">
+                        <div class="card-body">
+                            <h3 class="h3">Comentários</h3>
+                            <?php if ($totalComentarios > 0): ?>
+                                <ul class="list-group">
+                                    <?php foreach ($model->getAvaliacoes()->all() as $avaliacao): ?>
+                                        <li class="list-group-item">
+                                            <h5><?= Html::encode($avaliacao->user->userProfile->primeironome . ' ' . $avaliacao->user->userProfile->apelido) ?> <small
+                                                        class="text-muted">(<?= Yii::$app->formatter->asDate($avaliacao->dtarating, 'php:d/m/Y') ?>)</small></h5>
+                                            <p><?= Html::encode($avaliacao->comentario) ?></p>
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <i class="fa fa-star <?= $i <= $avaliacao->rating ? 'text-warning' : 'text-secondary' ?>"></i>
+                                            <?php endfor; ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else: ?>
+                                <p class="text-muted">Este produto ainda não possui comentários.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- Close Content -->
-
 </div>

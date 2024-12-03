@@ -67,4 +67,13 @@ ul.list-unstyled a:hover {
     color: #5460f8;
 }
 
+.star-rating .star {
+    cursor: pointer;
+    font-size: 24px;
+    color: #ccc;
+}
+
+.star-rating .star.text-warning {
+    color: #ffc107;
+}
 

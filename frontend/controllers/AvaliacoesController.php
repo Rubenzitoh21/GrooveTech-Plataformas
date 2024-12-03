@@ -3,6 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\Avaliacoes;
+use common\models\LinhasFaturas;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -38,22 +40,15 @@ class AvaliacoesController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Avaliacoes::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+        $userId = Yii::$app->user->id;
+
+        $linhasFatura = LinhasFaturas::find()
+            ->joinWith('faturas')
+            ->where(['faturas.user_id' => $userId])
+            ->all();
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'linhasFatura' => $linhasFatura,
         ]);
     }
 
@@ -75,20 +70,22 @@ class AvaliacoesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($linhaFaturaId)
     {
         $model = new Avaliacoes();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        // Preenche os valores padrão para os campos ocultos
+        $model->linhas_faturas_id = $linhaFaturaId; // Associa a avaliação à linha de fatura
+        $model->user_id = Yii::$app->user->id; // Associa a avaliação ao usuário logado
+        $model->dtarating = date('Y-m-d H:i:s'); // Define a data e hora atual para a avaliação
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'linhaFaturaId' => $linhaFaturaId, // Passa o ID da linha de fatura para a view
         ]);
     }
 

@@ -49,9 +49,9 @@ class Avaliacoes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'comentario' => 'Comentario',
-            'dtarating' => 'Dtarating',
-            'rating' => 'Rating',
+            'comentario' => 'Comentário',
+            'dtarating' => 'Data da avaliação',
+            'rating' => 'Classificação',
             'user_id' => 'User ID',
             'linhas_faturas_id' => 'Linhas Faturas ID',
         ];

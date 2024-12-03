@@ -9,37 +9,41 @@ use yii\grid\GridView;
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Avaliacoes';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Avaliações';
 ?>
 <div class="avaliacoes-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+        <h1>Produtos comprados</h1>
 
-    <p>
-        <?= Html::a('Create Avaliacoes', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'comentario',
-            'dtarating',
-            'rating',
-            'user_id',
-            //'linhas_faturas_id',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Avaliacoes $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
-
-
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th colspan="2">Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($linhasFatura as $linha): ?>
+                <tr>
+                    <td>
+                        <?php if (!empty($linha->produtos->imagens)): ?>
+                            <?= Html::img('@web/images/' . $linha->produtos->imagens[0]->fileName, ['class' => 'img-thumbnail', 'style' => 'max-width: 70px;']) ?>
+                        <?php else: ?>
+                            <?= Html::img('@web/images/default.png', ['class' => 'img-thumbnail', 'style' => 'max-width: 70;']) ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= Html::encode($linha->produtos->nome) ?></td>
+                    <td><?= Html::encode($linha->quantidade) ?></td>
+                    <td><?= number_format($linha->subtotal, 2, ',', '.') ?> €</td>
+                    <td>
+                        <?= Html::a('Avaliar', ['avaliacoes/create', 'linhaFaturaId' => $linha->id], [
+                            'class' => 'btn btn-success',
+                        ]) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
 </div>

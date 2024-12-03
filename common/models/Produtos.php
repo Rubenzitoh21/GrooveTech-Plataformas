@@ -103,4 +103,25 @@ class Produtos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ProdutosCarrinhos::class, ['produtos_id' => 'id']);
     }
+
+    /**
+     * Gets query for [[LinhasFaturas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLinhasFaturas()
+    {
+        return $this->hasMany(LinhasFaturas::class, ['produtos_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Avaliacoes]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAvaliacoes()
+    {
+        return $this->hasMany(Avaliacoes::class, ['linhas_faturas_id' => 'id'])
+            ->via('linhasFaturas');
+    }
 }

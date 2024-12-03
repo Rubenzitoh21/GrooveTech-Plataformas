@@ -5,9 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\Avaliacoes $model */
 
-$this->title = 'Create Avaliacoes';
-$this->params['breadcrumbs'][] = ['label' => 'Avaliacoes', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Avaliar Produto: ' . $model->linhasFaturas->produtos->nome;
 ?>
 <div class="avaliacoes-create">
 
@@ -15,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'linhaFaturaId' => $linhaFaturaId,
     ]) ?>
 
 </div>

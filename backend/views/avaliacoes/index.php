@@ -15,13 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="avaliacoes-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Avaliacoes', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -29,17 +22,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'comentario',
             'dtarating',
-            'rating',
-            'user_id',
-            //'linhas_faturas_id',
+            [
+                'attribute' => 'rating',
+                'format' => 'raw', // Permite HTML bruto na célula
+                'value' => function ($model) {
+                    $stars = '';
+                    for ($i = 1; $i <= 5; $i++) {
+                        $stars .= $i <= $model->rating
+                            ? '<i class="fa fa-star text-warning"></i>' // Estrelas preenchidas
+                            : '<i class="fa fa-star text-secondary"></i>'; // Estrelas vazias
+                    }
+                    return $stars;
+                },
+                'contentOptions' => ['class' => 'text-center'], // Centraliza as estrelas na coluna
+            ],
+
+            [
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->user->userProfile->primeironome . ' ' . $model->user->userProfile->apelido;
+                },
+            ],
             [
                 'class' => ActionColumn::className(),
+                'template' => '{delete}',
                 'urlCreator' => function ($action, Avaliacoes $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

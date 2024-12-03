@@ -102,11 +102,11 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 <!-- Scripts -->
+<script src="<?= Url::to('@web/js/custom.js') ?>"></script>
 <script src="<?= Url::to('@web/js/jquery-1.11.0.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/jquery-migrate-1.2.1.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= Url::to('@web/js/templatemo.js') ?>"></script>
-<script src="<?= Url::to('@web/js/custom.js') ?>"></script>
 
 </body>
 </html>
