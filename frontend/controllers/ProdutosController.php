@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\CategoriasProdutos;
+use common\models\LinhasFaturas;
 use common\models\Produtos;
 use common\models\ProdutosSearch;
 use Yii;
@@ -76,8 +77,19 @@ class ProdutosController extends Controller
      */
     public function actionView($id)
     {
+        $model = Produtos::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('Produto não encontrado.');
+        }
+
+        $foiComprado = $this->foiComprado($id);
+        $ultimaLinhaFaturaId = $this->getUltimaLinhaFatura($id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'foiComprado' => $foiComprado,
+            'ultimaLinhaFaturaId' => $ultimaLinhaFaturaId,
         ]);
     }
 
@@ -95,5 +107,33 @@ class ProdutosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function foiComprado($produtoId)
+    {
+        $userId = Yii::$app->user->id;
+
+        return LinhasFaturas::find()
+            ->joinWith('faturas')
+            ->where([
+                'faturas.user_id' => $userId,
+                'linhas_faturas.produtos_id' => $produtoId,
+            ])
+            ->exists();
+    }
+
+    public function getUltimaLinhaFatura($produtoId)
+    {
+        $userId = Yii::$app->user->id;
+
+        $linhaFatura = LinhasFaturas::find()
+            ->joinWith('faturas')
+            ->where([
+                'faturas.user_id' => $userId,
+                'linhas_faturas.produtos_id' => $produtoId,
+            ])
+            ->orderBy(['linhas_faturas.id' => SORT_DESC]) // Ordena pela última criada
+            ->one();
+
+        return $linhaFatura ? $linhaFatura->id : null;
     }
 }

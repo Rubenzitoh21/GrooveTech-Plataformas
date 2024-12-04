@@ -26,19 +26,26 @@ $this->title = 'Produtos';
             <h1 class="h2 pb-4">Categorias:</h1>
             <ul class="list-unstyled">
                 <li class="pb-3">
-                    <a class="d-flex justify-content-between text-decoration-none"
+                    <?php
+                    $isActive = Yii::$app->request->get('categorias_id') === null ? 'text-primary font-weight-bold' : '';
+                    ?>
+                    <a class="d-flex justify-content-between text-decoration-none <?= $isActive ?>"
                        href="<?= Url::to(['/produtos/index']) ?>">
                         (<?= Produtos::find()->count() ?>) Mostrar Todos
                     </a>
                 </li>
                 <?php foreach ($categorias as $categoria): ?>
+                    <?php
+                    $isActive = (Yii::$app->request->get('categorias_id') == $categoria->id) ? 'text-primary font-weight-bold' : '';
+                    ?>
                     <li class="pb-3">
-                        <a class="d-flex justify-content-between text-decoration-none"
+                        <a class="d-flex justify-content-between text-decoration-none <?= $isActive ?>"
                            href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
                             (<?= $categoria->getProdutos()->count() ?>) <?= Html::encode($categoria->nome) ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
+
             </ul>
         </div>
 

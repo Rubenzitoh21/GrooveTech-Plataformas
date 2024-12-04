@@ -86,17 +86,17 @@ class ProdutosCarrinhosController extends Controller
 
         }
         $model->carrinhos_id = $modelCarrinhos->id;
-        $produtoCarrinhosProdutos = ProdutosCarrinhos::find()->where(['carrinhos_id' => $modelCarrinhos->id, 'produtos_id' => $produtos_id])->one();
+        $linhaCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $modelCarrinhos->id, 'produtos_id' => $produtos_id])->one();
         // Set other attributes and validation as needed
         $model->produtos_id = $produtos_id;
 
-        if($produtoCarrinhosProdutos != null){
-            $produtoCarrinhosProdutos->quantidade = (intval($produtoCarrinhosProdutos->quantidade) + 1) . '';
-            $produtoCarrinhosProdutos->subtotal = $produtoCarrinhosProdutos->subtotal + $modelProdutos->preco;
-            $produtoCarrinhosProdutos->save();
+        if($linhaCarrinho != null){
+            $linhaCarrinho->quantidade = (intval($linhaCarrinho->quantidade) + 1) . '';
+            $linhaCarrinho->subtotal += $modelProdutos->preco;
+            $linhaCarrinho->save();
             $modelCarrinhos->valortotal = $modelCarrinhos->valortotal + $modelProdutos->preco;
             $modelCarrinhos->save();
-            $produtoCarrinhosProdutos->save();
+            $linhaCarrinho->save();
 
             return $this->redirect(['carrinhos/index']);
         }

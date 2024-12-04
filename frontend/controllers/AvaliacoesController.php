@@ -43,8 +43,15 @@ class AvaliacoesController extends Controller
         $userId = Yii::$app->user->id;
 
         $linhasFatura = LinhasFaturas::find()
+            ->select([
+                'produtos_id',
+                'MAX(linhas_faturas.id) as id',
+                'SUM(quantidade) as quantidade',
+                'SUM(subtotal) as subtotal',
+            ])
             ->joinWith('faturas')
             ->where(['faturas.user_id' => $userId])
+            ->groupBy('produtos_id')
             ->all();
 
         return $this->render('index', [
@@ -72,22 +79,23 @@ class AvaliacoesController extends Controller
      */
     public function actionCreate($linhaFaturaId)
     {
-        $model = new Avaliacoes();
+        $linhaFatura = LinhasFaturas::findOne($linhaFaturaId);
 
-        // Preenche os valores padrão para os campos ocultos
-        $model->linhas_faturas_id = $linhaFaturaId; // Associa a avaliação à linha de fatura
-        $model->user_id = Yii::$app->user->id; // Associa a avaliação ao usuário logado
-        $model->dtarating = date('Y-m-d H:i:s'); // Define a data e hora atual para a avaliação
+        $model = new Avaliacoes();
+        $model->linhas_faturas_id = $linhaFaturaId;
+        $model->user_id = Yii::$app->user->id;
+        $model->dtarating = date('Y-m-d H:i:s');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['produtos/view', 'id' => $linhaFatura->produtos_id]);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'linhaFaturaId' => $linhaFaturaId, // Passa o ID da linha de fatura para a view
+            'linhaFaturaId' => $linhaFaturaId,
         ]);
     }
+
 
     /**
      * Updates an existing Avaliacoes model.
@@ -118,9 +126,13 @@ class AvaliacoesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if ($model && $model->user_id == Yii::$app->user->id) {
+            $model->delete();
+        }
+
+        return $this->redirect(Yii::$app->request->referrer ?: ['index']);
     }
 
     /**

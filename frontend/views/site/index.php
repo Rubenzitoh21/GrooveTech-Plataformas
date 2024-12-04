@@ -95,7 +95,7 @@ $this->title = 'Groove Tech - Início';
         </div>
     </div>
     <div class="row">
-        <?php foreach ($categorias as $categoria): ?>
+        <?php foreach ($categoriasDestaque as $categoria): ?>
             <div class="col-12 col-md-4 p-5 mt-3">
                 <a href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
                     <img src="<?= Url::to('@web/images/category_img_0' . $categoria->id . '.jpg') ?>" class="rounded-circle img-fluid border">

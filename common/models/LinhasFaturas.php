@@ -89,4 +89,5 @@ class LinhasFaturas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Produtos::class, ['id' => 'produtos_id']);
     }
+
 }

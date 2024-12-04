@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use backend\models\Empresas;
 use common\models\CategoriasProdutos;
 use common\models\Produtos;
 use common\models\UserProfile;
@@ -90,7 +91,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $categorias = CategoriasProdutos::find()
+        $categoriasDestaque = CategoriasProdutos::find()
             ->where(['id' => [5, 6, 9]])
             ->all();
 
@@ -113,7 +114,7 @@ class SiteController extends Controller
             ->all();
 
         return $this->render('index', [
-            'categorias' => $categorias,
+            'categoriasDestaque' => $categoriasDestaque,
             'produtosDestaque' => $produtosDestaque,
         ]);
     }

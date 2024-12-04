@@ -2,6 +2,7 @@
 
 use common\models\Expedicoes;
 use common\models\Pagamentos;
+use yii\helpers\Url;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
@@ -15,8 +16,13 @@ $this->title = $model->id;
 <div class="faturas-view">
 
     <div class="container">
-        <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-success']) ?>
-        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <a class="btn btn-success" href="<?= Url::to(['faturas/index']) ?>">
+                    <i class="fa fa-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
         <br>
         <div class="row">
             <div class="col-lg-12">

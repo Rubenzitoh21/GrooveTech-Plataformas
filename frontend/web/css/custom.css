@@ -1,10 +1,21 @@
 /* Custom CSS */
 
 /* Main */
-main {
-    margin-top: 50px;
+html, body {
+    height: 100%;
 }
 
+body {
+    padding-top: 70px;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
 /* Navbar Principal */
 .navbar {
     position: fixed;
@@ -67,13 +78,11 @@ ul.list-unstyled a:hover {
     color: #5460f8;
 }
 
-.star-rating .star {
-    cursor: pointer;
-    font-size: 24px;
-    color: #ccc;
+.card-footer {
+    margin-top: auto !important;
+    padding: 1rem !important;
 }
 
-.star-rating .star.text-warning {
-    color: #ffc107;
-}
+
+
 

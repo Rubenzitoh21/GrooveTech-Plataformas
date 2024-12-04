@@ -4,11 +4,16 @@
 /** @var string $content */
 
 use common\models\Carrinhos;
+use backend\models\Empresas;
+use common\models\CategoriasProdutos;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+$empresa = Empresas::findOne(1);
+$categorias = CategoriasProdutos::find()->limit(6)->all();
 
 AppAsset::register($this);
 ?>
@@ -61,6 +66,17 @@ AppAsset::register($this);
                 </ul>
             </div>
             <div class="navbar-inner align-self-center d-flex">
+                <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="inputMobileSearch" placeholder="Pesquisar...">
+                        <div class="input-group-text">
+                            <i class="fa fa-fw fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+                <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
+                    <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                </a>
                 <a class="nav-icon position-relative text-decoration-none" href="<?= Url::to(['/carrinhos/index']) ?>">
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                     <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
@@ -83,8 +99,33 @@ AppAsset::register($this);
 
     </div>
 </nav>
+<!-- Modal -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <?php $form = \yii\widgets\ActiveForm::begin([
+            'action' => ['produtos/index'], // Altere para a rota correta
+            'method' => 'get',
+            'options' => ['class' => 'modal-content modal-body border-0 p-0']
+        ]); ?>
+        <div class="input-group mb-2">
+            <?= Html::input('text', 'search', '', [
+                'class' => 'form-control',
+                'id' => 'inputModalSearch',
+                'placeholder' => 'Pesquisar ...'
+            ]) ?>
+            <button type="submit" class="input-group-text bg-success text-light">
+                <i class="fa fa-fw fa-search text-white"></i>
+            </button>
+        </div>
+        <?php \yii\widgets\ActiveForm::end(); ?>
+    </div>
+</div>
 
-<!-- Close Header -->
+
+<!-- Main Content -->
 <main role="main" >
     <div class="container">
         <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
@@ -92,13 +133,76 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </main>
-
-<footer class="footer mt-auto py-3 text-muted">
+<!-- Start Footer -->
+<footer class="bg-dark" id="tempaltemo_footer">
     <div class="container">
-        <p>&copy; GrooveTech <?= date('Y') ?></p>
-        <p class="float-end"><?= Yii::powered() ?></p>
+        <div class="row">
+
+            <!-- Informações da Empresa -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-success border-bottom pb-3 border-light"><?= Html::encode($empresa->designacaoSocial ?? 'Groove Tech') ?></h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt fa-fw"></i>
+                        <?= Html::encode($empresa->rua . ' - ' . $empresa->localidade) ?>
+                    </li>
+                    <li>
+                        <i class="fa fa-phone fa-fw"></i>
+                        <a class="text-decoration-none" href="tel:<?= Html::encode($empresa->telefone ?? '') ?>">
+                            <?= Html::encode($empresa->telefone ?? 'Telefone não disponível') ?>
+                        </a>
+                    </li>
+                    <li>
+                        <i class="fa fa-envelope fa-fw"></i>
+                        <a class="text-decoration-none" href="mailto:<?= Html::encode($empresa->email ?? '') ?>">
+                            <?= Html::encode($empresa->email ?? 'Email não disponível') ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Categorias de Produtos -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-success border-bottom pb-3 border-light">Categorias</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <?php foreach ($categorias as $categoria): ?>
+                        <li>
+                            <a class="text-decoration-none" href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
+                                <?= Html::encode($categoria->nome) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+            <!-- Links Adicionais -->
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-success border-bottom pb-3 border-light">Navegação</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" href="<?= Url::to(['site/index']) ?>">Início</a></li>
+                    <li><a class="text-decoration-none" href="<?= Url::to(['site/about']) ?>">Sobre Nós</a></li>
+                    <li><a class="text-decoration-none" href="<?= Url::to(['produtos/index']) ?>">Produtos</a></li>
+                    <li><a class="text-decoration-none" href="<?= Url::to(['site/contact']) ?>">Contato</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Créditos -->
+    <div class="w-100 bg-black py-3">
+        <div class="container">
+            <div class="row pt-2">
+                <div class="col-12">
+                    <p class="text-left text-light">
+                        Copyright &copy; <?= date('Y') ?> <?= Html::encode($empresa->nome ?? 'Groove Tech') ?>
+                        | Design por <a href="https://templatemo.com" target="_blank">TemplateMo</a>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>
+
 
 <?php $this->endBody() ?>
 <!-- Scripts -->
