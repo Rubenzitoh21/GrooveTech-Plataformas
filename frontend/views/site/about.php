@@ -22,6 +22,16 @@ $this->title = 'Sobre';
         </div>
         <div class="row text-center pt-5 pb-3">
             <div class="col-lg-6 m-auto">
+                <h1 class="h1">A Nossa Missão</h1>
+                <p>
+                    A nossa missão é ajudar músicos a encontrar o seu som. Quer esteja a começar ou a aperfeiçoar o
+                    seu talento, estamos aqui para apoiá-lo em cada passo do caminho. Junte-se a nós e faça parte da
+                    comunidade GrooveTech!
+                </p>
+            </div>
+        </div>
+        <div class="row text-center pt-5 pb-3">
+            <div class="col-lg-6 m-auto">
                 <h1 class="h1">Os Nossos Serviços</h1>
                 <p>
                     Além de uma ampla seleção de instrumentos e acessórios, oferecemos serviços como manutenção de
@@ -30,6 +40,8 @@ $this->title = 'Sobre';
                 </p>
             </div>
         </div>
+        <br>
+
         <div class="row">
 
             <div class="col-md-6 col-lg-3 pb-5">
@@ -70,8 +82,7 @@ $this->title = 'Sobre';
                 <div class="col-lg-10 m-auto">
                     <h1 class="h1">As Nossas Marcas Parceiras</h1>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        Lorem ipsum dolor sit amet.
+                        Trabalhamos com as melhores marcas para garantir qualidade e excelência em cada produto.
                     </p>
                 </div>
                 <div class="col-lg-9 m-auto tempaltemo-carousel">
@@ -94,16 +105,16 @@ $this->title = 'Sobre';
                                     <div class="carousel-item active">
                                         <div class="row">
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_01.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_02.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_03.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_04.png') ?>" alt="Brand Logo">
                                             </div>
                                         </div>
                                     </div>
@@ -113,16 +124,16 @@ $this->title = 'Sobre';
                                     <div class="carousel-item">
                                         <div class="row">
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_05.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_06.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                               <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_07.png') ?>" alt="Brand Logo">
                                             </div>
                                             <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="<?= Url::to('@web/images/logo_gt.png') ?>" alt="Brand Logo"></a>
+                                                <img class="img-fluid brand-img" src="<?= Url::to('@web/images/brand_08.png') ?>" alt="Brand Logo">
                                             </div>
                                         </div>
                                     </div>

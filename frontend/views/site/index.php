@@ -20,18 +20,15 @@ $this->title = 'Groove Tech - Início';
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_img_01.jpg') ?>" alt="">
+                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_01.png') ?>" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left align-self-center">
-                            <h1 class="h1 text-success"><b>Zay</b> eCommerce</h1>
-                            <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
+                            <h1 class="h1 text-success"><b>Bem-vindo à Groove Tech</b></h1>
+                            <h3 class="h2">Viva o Som, Sinta a Paixão!</h3>
                             <p>
-                                Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta 1).
-                                This template is 100% free provided by <a rel="sponsored" class="text-success" href="https://templatemo.com" target="_blank">TemplateMo</a> website.
-                                Image credits go to <a rel="sponsored" class="text-success" href="https://stories.freepik.com/" target="_blank">Freepik Stories</a>,
-                                <a rel="sponsored" class="text-success" href="https://unsplash.com/" target="_blank">Unsplash</a> and
-                                <a rel="sponsored" class="text-success" href="https://icons8.com/" target="_blank">Icons 8</a>.
+                                Descubra tudo diretamente no site.
+                                Oferecemos uma experiência de compra simples, rápida e segura.
                             </p>
                         </div>
                     </div>
@@ -42,15 +39,17 @@ $this->title = 'Groove Tech - Início';
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_img_02.jpg') ?>" alt="">
+                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_02.png') ?>" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
-                            <h1 class="h1">Proident occaecat</h1>
-                            <h3 class="h2">Aliquip ex ea commodo consequat</h3>
+                            <h1 class="h1">Explore a Nossa Coleção</h1>
+                            <h3 class="h2">Temos todo o tipo de instrumentos musicais à sua espera</h3>
                             <p>
-                                You are permitted to use this Zay CSS template for your commercial websites.
-                                You are <strong>not permitted</strong> to re-distribute the template ZIP file in any kind of template collection websites.
+                                Instrumentos de Qualidade: Trabalhamos com marcas reconhecidas mundialmente e produtos testados para oferecer a melhor experiência sonora.
+                            </p>
+                            <p>
+                                Acessórios Essenciais: Capas, cordas, palhetas, suportes e muito mais para garantir que a sua performance seja impecável.
                             </p>
                         </div>
                     </div>
@@ -61,15 +60,14 @@ $this->title = 'Groove Tech - Início';
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_img_03.jpg') ?>" alt="">
+                        <img class="img-fluid" src="<?= Url::to('@web/images/banner_03.png') ?>" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
-                            <h1 class="h1">Repr in voluptate</h1>
-                            <h3 class="h2">Ullamco laboris nisi ut </h3>
+                            <h1 class="h1">Faça Parte da Nossa Comunidade</h1>
                             <p>
-                                We bring you 100% free CSS templates for your websites.
-                                If you wish to support TemplateMo, please make a small contribution via PayPal or tell your friends about our website. Thank you.
+                                Junte-se à comunidade GrooveTech e partilhe connosco sua paixão pela música.
+                                Queremos fazer parte da sua jornada musical.
                             </p>
                         </div>
                     </div>
@@ -90,122 +88,65 @@ $this->title = 'Groove Tech - Início';
 <section class="container py-5">
     <div class="row text-center pt-3">
         <div class="col-lg-6 m-auto">
-            <h1 class="h1">Categories of The Month</h1>
+            <h1 class="h1">Categorias em Destaque</h1>
             <p>
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Descubra as nossas categorias mais procuradas e encontre tudo o que precisa para elevar a sua paixão pela música!
             </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-md-4 p-5 mt-3">
-            <a href="#"><img src="<?= Url::to('@web/images/category_img_01.jpg') ?>" class="rounded-circle img-fluid border"></a>
-            <h5 class="text-center mt-3 mb-3">Watches</h5>
-            <p class="text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et ullamcorper purus. Nulla facilisi.
-            </p>
-        </div>
-        <div class="col-12 col-md-4 p-5 mt-3">
-            <a href="#"><img src="<?= Url::to('@web/images/category_img_02.jpg') ?>" class="rounded-circle img-fluid border"></a>
-            <h5 class="text-center mt-3 mb-3">Shoes</h5>
-            <p class="text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et ullamcorper purus. Nulla facilisi.
-            </p>
-        </div>
-        <div class="col-12 col-md-4 p-5 mt-3">
-            <a href="#"><img src="<?= Url::to('@web/images/category_img_03.jpg') ?>" class="rounded-circle img-fluid border"></a>
-            <h5 class="text-center mt-3 mb-3">Jewelery</h5>
-            <p class="text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et ullamcorper purus. Nulla facilisi.
-            </p>
-        </div>
+        <?php foreach ($categorias as $categoria): ?>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
+                    <img src="<?= Url::to('@web/images/category_img_0' . $categoria->id . '.jpg') ?>" class="rounded-circle img-fluid border">
+                </a>
+                <h5 class="text-center mt-3 mb-3"><?= $categoria->nome ?></h5>
+                <p class="text-center"><?= $categoria->obs ?></p>
+            </div>
+        <?php endforeach; ?>
     </div>
+
 </section>
 <!-- End Categories of The Month -->
 
 <section class="bg-light">
     <div class="container py-5">
+        <!-- Produtos em Destaque -->
         <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
-                <h1 class="h1">Featured Product</h1>
-                <p>
-                    Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    Excepteur sint occaecat cupidatat non proident.
-                </p>
+                <h1 class="h1">Produtos em Destaque</h1>
+                <p>Descubra os produtos mais bem avaliados e transforme sua experiência musical.</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-4 mb-4">
-                <div class="card h-100">
-                    <a href="shop-single.html">
-                        <img src="<?= Url::to('@web/images/feature_prod_01.jpg') ?>" class="card-img-top" alt="...">
-                    </a>
-                    <div class="card-body">
-                        <ul class="list-unstyled d-flex justify-content-between">
-                            <li>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-muted fa fa-star"></i>
-                                <i class="text-muted fa fa-star"></i>
-                            </li>
-                            <li class="text-muted text-right">$240.00</li>
-                        </ul>
-                        <a href="shop-single.html" class="h2 text-decoration-none text-dark">Gym Weight</a>
-                        <p class="card-text">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt in culpa qui officia deserunt.
-                        </p>
-                        <p class="text-muted">Reviews (24)</p>
+            <?php foreach ($produtosDestaque as $produto): ?>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="<?= Url::to(['produtos/view', 'id' => $produto['id']]) ?>">
+                            <img src="<?= Url::to('@web/images/' . ($produto['image_file'] ?? 'default.png')) ?>" class="card-img-top" alt="<?= $produto['nome'] ?>">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <?php
+                                    $rating = round($produto['avg_rating']);
+                                    for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="<?= $i <= $rating ? 'text-warning' : 'text-muted' ?> fa fa-star"></i>
+                                    <?php endfor; ?>
+                                </li>
+                                <li class="text-muted text-right"><?= number_format($produto['preco'],2, ',', '.') ?> €</li>
+                            </ul>
+                            <a href="<?= Url::to(['produtos/view', 'id' => $produto['id']]) ?>" class="h2 text-decoration-none text-dark">
+                                <?= $produto['nome'] ?>
+                            </a>
+                            <p class="card-text">
+                                <?= $produto['descricao'] ?>
+                            </p>
+                            <p class="text-muted">Comentários (<?= $produto['review_count'] ?>)</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-4 mb-4">
-                <div class="card h-100">
-                    <a href="shop-single.html">
-                        <img src="<?= Url::to('@web/images/feature_prod_02.jpg') ?>" class="card-img-top" alt="...">
-                    </a>
-                    <div class="card-body">
-                        <ul class="list-unstyled d-flex justify-content-between">
-                            <li>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-muted fa fa-star"></i>
-                                <i class="text-muted fa fa-star"></i>
-                            </li>
-                            <li class="text-muted text-right">$480.00</li>
-                        </ul>
-                        <a href="shop-single.html" class="h2 text-decoration-none text-dark">Cloud Nike Shoes</a>
-                        <p class="card-text">
-                            Aenean gravida dignissim finibus. Nullam ipsum diam, posuere vitae pharetra sed, commodo ullamcorper.
-                        </p>
-                        <p class="text-muted">Reviews (48)</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4 mb-4">
-                <div class="card h-100">
-                    <a href="shop-single.html">
-                        <img src="<?= Url::to('@web/images/feature_prod_03.jpg') ?>" class="card-img-top" alt="...">
-                    </a>
-                    <div class="card-body">
-                        <ul class="list-unstyled d-flex justify-content-between">
-                            <li>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                                <i class="text-warning fa fa-star"></i>
-                            </li>
-                            <li class="text-muted text-right">$360.00</li>
-                        </ul>
-                        <a href="shop-single.html" class="h2 text-decoration-none text-dark">Summer Addides Shoes</a>
-                        <p class="card-text">
-                            Curabitur ac mi sit amet diam luctus porta. Phasellus pulvinar sagittis diam, et scelerisque ipsum lobortis nec.
-                        </p>
-                        <p class="text-muted">Reviews (74)</p>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>

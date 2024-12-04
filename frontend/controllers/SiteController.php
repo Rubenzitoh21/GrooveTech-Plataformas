@@ -2,12 +2,15 @@
 
 namespace frontend\controllers;
 
+use common\models\CategoriasProdutos;
+use common\models\Produtos;
 use common\models\UserProfile;
 use common\models\User;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\db\Query;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -87,7 +90,32 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $categorias = CategoriasProdutos::find()
+            ->where(['id' => [5, 6, 9]])
+            ->all();
+
+        $produtosDestaque = (new Query())
+            ->select([
+                'produtos.id',
+                'produtos.nome',
+                'produtos.descricao',
+                'produtos.preco',
+                'AVG(avaliacoes.rating) AS avg_rating',
+                'COUNT(avaliacoes.id) AS review_count',
+                '(SELECT fileName FROM imagens WHERE imagens.produto_id = produtos.id LIMIT 1) AS image_file'
+            ])
+            ->from('produtos')
+            ->innerJoin('linhas_faturas', 'linhas_faturas.produtos_id = produtos.id')
+            ->innerJoin('avaliacoes', 'avaliacoes.linhas_faturas_id = linhas_faturas.id')
+            ->groupBy('produtos.id')
+            ->orderBy(['avg_rating' => SORT_DESC])
+            ->limit(3)
+            ->all();
+
+        return $this->render('index', [
+            'categorias' => $categorias,
+            'produtosDestaque' => $produtosDestaque,
+        ]);
     }
 
     /**
