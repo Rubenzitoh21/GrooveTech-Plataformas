@@ -119,9 +119,9 @@ $this->title = 'Checkout';
                                 </div>
 
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->produtos->nome) ?></td>
-                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco, 2, ',', '.') ?>€</td>
+                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco, 2, ',', '.') ?>€</td>
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->quantidade) ?></td>
-                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * ($produtoCarrinho->produtos->ivas->percentagem / 100) + $produtoCarrinho->produtos->preco*$produtoCarrinho->quantidade, 2, ',', '.') ?>€</td>
+                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * $produtoCarrinho->quantidade, 2, ',', '.') ?>€</td>
                             </tr>
                             <?php endforeach; ?>
 

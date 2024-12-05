@@ -176,7 +176,8 @@ use yii\helpers\Url;
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($model->linhasFaturas as $linha): ?>
+            <?php
+            foreach ($model->linhasFaturas as $linha): ?>
                 <tr>
                     <td><?= Html::encode($linha->produtos->nome) ?></td>
                     <td><?= number_format($linha->preco_venda, 2, ',', '.') ?>€</td>
@@ -208,7 +209,11 @@ use yii\helpers\Url;
             <table>
                 <tr>
                     <td>Subtotal:</td>
-                    <td><?= number_format($model->valortotal - $model->linhasFaturas[0]->valor_iva, 2, ',', '.') ?>€</td>
+                    <td>
+                        <?= number_format($model->valortotal - array_sum(array_map(function($linha) {
+                                return $linha->valor_iva * $linha->quantidade;
+                            }, $model->linhasFaturas)), 2, ',', '.') ?>€
+                    </td>
                 </tr>
                 <tr>
                     <td>Portes de Envio:</td>
@@ -216,13 +221,22 @@ use yii\helpers\Url;
                 </tr>
                 <tr>
                     <td>Iva:</td>
-                    <td><?= number_format($model->linhasFaturas[0]->valor_iva, 2, ',', '.') ?>€</td>
+                    <td>
+                        <?php
+                        $totalIva = 0;
+                        foreach ($model->linhasFaturas as $linha) {
+                            $totalIva += $linha->valor_iva * $linha->quantidade;
+                        }
+                        echo number_format($totalIva, 2, ',', '.');
+                        ?>€
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>Total:</strong></td>
                     <td><strong><?= number_format($model->valortotal, 2, ',', '.') ?>€</strong></td>
                 </tr>
             </table>
+
         </div>
     </div>
 </div>

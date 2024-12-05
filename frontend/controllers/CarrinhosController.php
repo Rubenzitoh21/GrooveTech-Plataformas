@@ -229,8 +229,8 @@ class CarrinhosController extends Controller
 
         if ($linha) {
             $linha->quantidade = (intval($linha->quantidade) + 1) . '';
-            $linha->subtotal = $linha->quantidade * ($linha->preco_venda + $linha->valor_iva);
-            $carrinho->valortotal = $carrinho->valortotal + ($linha->preco_venda + $linha->valor_iva);
+            $linha->subtotal = $linha->quantidade * $linha->preco_venda;
+            $carrinho->valortotal = $carrinho->valortotal + $linha->preco_venda;
 
             $linha->save();
             $carrinho->save();
@@ -245,8 +245,8 @@ class CarrinhosController extends Controller
         $carrinho = Carrinhos::findOne($linha->carrinhos_id);
         if ($linha && $linha->quantidade != '1') {
             $linha->quantidade = (intval($linha->quantidade) - 1) . '';
-            $linha->subtotal = $linha->quantidade * ($linha->preco_venda + $linha->valor_iva);
-            $carrinho->valortotal = $carrinho->valortotal - ($linha->preco_venda + $linha->valor_iva);
+            $linha->subtotal = $linha->quantidade * $linha->preco_venda;
+            $carrinho->valortotal = $carrinho->valortotal - $linha->preco_venda;
             $linha->save();
             $carrinho->save();
 

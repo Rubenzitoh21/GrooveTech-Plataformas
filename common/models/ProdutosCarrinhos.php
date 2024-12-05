@@ -51,7 +51,7 @@ class ProdutosCarrinhos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'quantidade' => 'Quantidade',
-            'preco_venda' => 'Preco Venda',
+            'preco_venda' => 'Preco Venda (c/ IVA)',
             'valor_iva' => 'Valor Iva',
             'subtotal' => 'Subtotal',
             'produtos_id' => 'Produtos ID',

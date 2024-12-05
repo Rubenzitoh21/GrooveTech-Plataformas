@@ -89,17 +89,18 @@ $this->title = $model->id;
                                         <th>Produto</th>
                                         <th>Preço</th>
                                         <th>Quantidade</th>
-                                        <th class="text-end" style="width: 120px;">Total</th>
+                                        <th class="text-end" style="width: 120px;">Sub-Total</th>
                                     </tr>
                                     </thead><!-- end thead -->
                                     <tbody>
                                     <?php
-                                    $subtotal = 0;
+                                    $linhaTotal = 0;
                                     $totalIva = 0;
+                                    $subTotal = 0;
                                     foreach ($model->linhasFaturas as $index => $linhaFatura):
-                                        $linhaTotal = $linhaFatura->subtotal * $linhaFatura->quantidade;
-                                        $subtotal += $linhaFatura->subtotal; // Soma do subtotal (sem IVA)
-                                        $totalIva += $linhaFatura->valor_iva * $linhaFatura->quantidade; // Soma do IVA
+                                        $linhaTotal = $linhaFatura->produtos->preco * $linhaFatura->quantidade;
+                                        $totalIva += $linhaFatura->valor_iva * $linhaFatura->quantidade;
+                                        $subTotal += $linhaTotal;
                                         ?>
                                         <tr>
                                             <th scope="row"><?= $index + 1 ?></th>
@@ -116,7 +117,7 @@ $this->title = $model->id;
                                     <?php endforeach; ?>
                                     <tr>
                                         <th scope="row" colspan="4" class="text-end">Sub-Total</th>
-                                        <td class="text-end"><?= number_format($model->id, 2, ',', '.') ?>€</td>
+                                        <td class="text-end"><?= number_format($subTotal- $totalIva, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
@@ -128,7 +129,7 @@ $this->title = $model->id;
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">
                                             Iva:</th>
-                                        <td class="border-0 text-end"><?= number_format($model->id, 2, ',', '.') ?>€</td>
+                                        <td class="border-0 text-end"><?= number_format($totalIva, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>

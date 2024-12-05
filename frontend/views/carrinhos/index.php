@@ -49,10 +49,10 @@ $this->title = 'Carrinhos';
                             <th scope="col">Produto</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Descrição</th>
-                            <th scope="col">Preço s/IVA</th>
-                            <th scope="col">IVA (%)</th>
+                            <th scope="col">Preço c/IVA</th>
+                            <th scope="col">IVA</th>
                             <th scope="col">Quantidade</th>
-                            <th scope="col">Total</th>
+                            <th scope="col">Sub-Total</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>

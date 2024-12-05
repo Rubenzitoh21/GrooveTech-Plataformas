@@ -102,8 +102,8 @@ class ProdutosCarrinhosController extends Controller
         }
 
         $model->quantidade = "1";
-        $model->valor_iva = $modelProdutos->preco * ($modelProdutos->ivas->percentagem / 100);
-        $model->subtotal = $model->valor_iva+$modelProdutos->preco * $model->quantidade;
+        $model->valor_iva = $modelProdutos->preco * ($modelProdutos->ivas->percentagem / 100) * $model->quantidade;
+        $model->subtotal = $modelProdutos->preco * $model->quantidade;
         $model->preco_venda = $modelProdutos->preco;
 
         $modelCarrinhos->valortotal = $modelCarrinhos->valortotal + $model->subtotal;

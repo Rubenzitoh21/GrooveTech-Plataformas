@@ -95,9 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td><a href="<?= Url::to(['/produtos/view', 'id' => $linhaFatura->produtos->id]); ?>"><?= $linhaFatura->produtos->nome ?></a></td>
                 <td><?= $linhaFatura->quantidade ?></td>
                 <td><?= number_format($linhaFatura->preco_venda, 2, ',', '.') ?> €</td>
-                <td><?= number_format($linhaFatura->valor_iva, 2, ',', '.') ?> €</td>
+                <td><?= number_format($linhaFatura->valor_iva * $linhaFatura->quantidade, 2, ',', '.') ?> €</td>
+                <td><?= number_format($linhaFatura->subtotal - ($linhaFatura->valor_iva * $linhaFatura->quantidade), 2, ',', '.') ?> €</td>
                 <td><?= number_format($linhaFatura->subtotal, 2, ',', '.') ?> €</td>
-                <td><?= number_format($linhaFatura->subtotal * $linhaFatura->quantidade, 2, ',', '.') ?> €</td>
             </tr>
         <?php endforeach; ?>
     </table>
