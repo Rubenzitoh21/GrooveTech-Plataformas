@@ -44,6 +44,7 @@ class PerfilController extends Controller
 
     public function actionIndex($mode = null)
     {
+
         $userId = Yii::$app->user->identity->id;
         $userData = User::findOne($userId);
         $userDataAdditional = UserProfile::findOne(['user_id' => $userId]);

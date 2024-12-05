@@ -180,9 +180,9 @@ AppAsset::register($this);
                 <h2 class="h2 text-success border-bottom pb-3 border-light">Navegação</h2>
                 <ul class="list-unstyled text-light footer-link-list">
                     <li><a class="text-decoration-none" href="<?= Url::to(['site/index']) ?>">Início</a></li>
-                    <li><a class="text-decoration-none" href="<?= Url::to(['site/about']) ?>">Sobre Nós</a></li>
+                    <li><a class="text-decoration-none" href="<?= Url::to(['site/about']) ?>">Sobre</a></li>
                     <li><a class="text-decoration-none" href="<?= Url::to(['produtos/index']) ?>">Produtos</a></li>
-                    <li><a class="text-decoration-none" href="<?= Url::to(['site/contact']) ?>">Contato</a></li>
+                    <li><a class="text-decoration-none" href="<?= Url::to(['site/contact']) ?>">Contactos</a></li>
                 </ul>
             </div>
         </div>

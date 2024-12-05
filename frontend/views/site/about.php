@@ -25,7 +25,7 @@ $this->title = 'Sobre';
                 <h1 class="h1">A Nossa Missão</h1>
                 <p>
                     A nossa missão é ajudar músicos a encontrar o seu som. Quer esteja a começar ou a aperfeiçoar o
-                    seu talento, estamos aqui para apoiá-lo em cada passo do caminho. Junte-se a nós e faça parte da
+                    seu talento, estamos aqui para o apoiar em cada passo do seu caminho. Junte-se a nós e faça parte da
                     comunidade GrooveTech!
                 </p>
             </div>

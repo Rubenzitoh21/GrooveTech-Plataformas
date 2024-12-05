@@ -103,19 +103,41 @@ $this->title = 'Produtos';
                 <?php
                 $pagination = $dataProvider->pagination;
 
-                // Verifica se há mais de uma página antes de renderizar a paginação
                 if ($pagination->pageCount > 1) {
                     echo '<ul class="pagination pagination-lg justify-content-end">';
-                    for ($page = 0; $page < $pagination->pageCount; $page++) {
-                        $activeClass = $pagination->page == $page ? 'active' : '';
-                        echo '<li class="page-item ' . $activeClass . '">';
-                        echo Html::a($page + 1, $pagination->createUrl($page), ['class' => 'page-link']);
-                        echo '</li>';
+
+                    $currentPage = $pagination->page;
+                    $pageCount = $pagination->pageCount;
+
+                    // Quantidade de páginas antes e depois da atual que serão exibidas
+                    $adjacent = 1;
+
+                    for ($page = 0; $page < $pageCount; $page++) {
+                        if (
+                            $page == 0 || // Primeira página
+                            $page == $pageCount - 1 || // Última página
+                            ($page >= $currentPage - $adjacent && $page <= $currentPage + $adjacent) // Páginas adjacentes
+                        )
+                        {
+                            $activeClass = $currentPage == $page ? 'active' : '';
+                            echo '<li class="page-item ' . $activeClass . '">';
+                            echo Html::a($page + 1, $pagination->createUrl($page), ['class' => 'page-link']);
+                            echo '</li>';
+                        }
+                        elseif (
+                            $page == 1 && $currentPage > $adjacent + 1 || // Adiciona "..." após a primeira página
+                            $page == $pageCount - 2 && $currentPage < $pageCount - $adjacent - 2 // Adiciona "..." antes da última página
+                        )
+                        {
+                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                        }
                     }
+
                     echo '</ul>';
                 }
                 ?>
             </div>
+
         </div>
     </div>
 </div>

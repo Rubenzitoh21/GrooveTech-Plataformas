@@ -34,7 +34,7 @@ $this->title = 'Contactos';
                 ])->label('Verificação (introduza a código abaixo)') ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+                    <?= Html::submitButton('Submeter', ['class' => 'btn btn-success', 'name' => 'contact-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

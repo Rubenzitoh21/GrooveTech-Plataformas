@@ -58,7 +58,7 @@ $this->title = 'Criar Conta';
             );
             ?>
                 <div class="form-group">
-                    <?= Html::submitButton('Criar Conta', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton('Criar Conta', ['class' => 'btn btn-success', 'name' => 'signup-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

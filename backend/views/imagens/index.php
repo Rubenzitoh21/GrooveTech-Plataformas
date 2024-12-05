@@ -53,8 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'nomeProduto',
                 'label' => 'Produto',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->produto->nome;
+                    $produto = $model->produto;
+                    if ($produto) {
+                        return Html::a(Html::encode($produto->nome), Url::to(['produtos/view', 'id' => $produto->id]));
+                    }
+                    return null;
                 },
             ],
             [

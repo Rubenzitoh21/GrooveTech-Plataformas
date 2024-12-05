@@ -41,7 +41,7 @@ class Produtos extends \yii\db\ActiveRecord
             [['categorias_produtos_id', 'ivas_id'], 'integer'],
             [['nome'], 'string', 'max' => 50],
             [['descricao'], 'string', 'max' => 200],
-            [['obs'], 'string', 'max' => 100],
+            [['obs'], 'string', 'max' => 200],
             [['nome'], 'unique'],
             [['categorias_produtos_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoriasProdutos::class, 'targetAttribute' => ['categorias_produtos_id' => 'id']],
             [['ivas_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ivas::class, 'targetAttribute' => ['ivas_id' => 'id']],

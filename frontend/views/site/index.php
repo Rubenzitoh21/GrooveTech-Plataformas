@@ -66,7 +66,7 @@ $this->title = 'Groove Tech - Início';
                         <div class="text-align-left">
                             <h1 class="h1">Faça Parte da Nossa Comunidade</h1>
                             <p>
-                                Junte-se à comunidade GrooveTech e partilhe connosco sua paixão pela música.
+                                Junte-se à comunidade GrooveTech e partilhe connosco a sua paixão pela música.
                                 Queremos fazer parte da sua jornada musical.
                             </p>
                         </div>
@@ -115,7 +115,7 @@ $this->title = 'Groove Tech - Início';
         <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
                 <h1 class="h1">Produtos em Destaque</h1>
-                <p>Descubra os produtos mais bem avaliados e transforme sua experiência musical.</p>
+                <p>Descubra os produtos mais bem avaliados e transforme a sua experiência musical.</p>
             </div>
         </div>
         <div class="row">

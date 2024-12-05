@@ -42,16 +42,31 @@ $this->params['breadcrumbs'][] = $this->title;
             //'ivas_id',
             [
                 'attribute' => 'categorias_produtos_id',
+                'format' => 'raw', // Permite usar HTML
                 'value' => function ($model) {
-                    return $model->categoriasProdutos->nome;
+                    if ($model->categoriasProdutos) {
+                        return Html::a(
+                            Html::encode($model->categoriasProdutos->nome),
+                            ['categorias-produtos/view', 'id' => $model->categoriasProdutos->id],
+                        );
+                    }
+                    return 'Categoria não disponível';
                 },
             ],
             [
                 'attribute' => 'ivas_id',
+                'format' => 'raw', // Permite usar HTML
                 'value' => function ($model) {
-                    return $model->ivas->percentagem;
+                    if ($model->ivas) {
+                        return Html::a(
+                            Html::encode($model->ivas->percentagem . '%'),
+                            ['ivas/view', 'id' => $model->ivas->id],
+                        );
+                    }
+                    return 'IVA não disponível';
                 },
             ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Produtos $model, $key, $index, $column) {

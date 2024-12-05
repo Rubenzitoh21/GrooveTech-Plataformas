@@ -46,18 +46,10 @@ class FaturasController extends Controller
      */
     public function actionIndex()
     {
+        $userId = Yii::$app->user->id;
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Faturas::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
+            'query' => Faturas::find()->where(['user_id' => $userId]),
         ]);
 
         return $this->render('index', [
@@ -75,7 +67,6 @@ class FaturasController extends Controller
     {
         $empresa = Empresas::find()->one();
         $profile = UserProfile::find()->where(['user_id' => Yii::$app->user->id])->one();
-
         return $this->render('view', [
             'empresa' => $empresa,
             'profile' => $profile,

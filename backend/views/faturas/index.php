@@ -40,8 +40,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'status',
             [
                 'attribute' => 'user_id',
+                'label' => 'Utilizador',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->user->userProfile->primeironome . ' ' . $model->user->userProfile->apelido;
+                    $user = $model->user;
+                    if ($user) {
+                        return Html::a(
+                            Html::encode($user->userProfile->primeironome . ' ' . $user->userProfile->apelido),
+                            ['user-profile/view', 'id' => $user->userProfile->id, 'user_id' => $user->id],
+                        );
+                    }
+                    return 'Utilizador não disponível';
                 },
             ],
             [

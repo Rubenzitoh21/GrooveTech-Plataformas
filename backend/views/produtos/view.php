@@ -23,7 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Adicionar Imagem', ['imagens/create', 'produto_id' => $model->id, 'urlCallback' => 'produto'], ['class' => 'btn btn-success']) ?>
+        <?php if (empty($model->imagens)): // Verifica se não há imagens ?>
+            <?= Html::a('Adicionar Imagem', ['imagens/create', 'produto_id' => $model->id, 'urlCallback' => 'produto'], ['class' => 'btn btn-success']) ?>
+        <?php endif; ?>
     </p>
 
     <?= DetailView::widget([
@@ -43,16 +45,28 @@ $this->params['breadcrumbs'][] = $this->title;
             //'ivas_id',
             [
                 'attribute' => 'categorias_produtos_id',
-                'label' => 'Categoria',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->categoriasProdutos->nome;
+                    if ($model->categoriasProdutos) {
+                        return Html::a(
+                            Html::encode($model->categoriasProdutos->nome),
+                            ['categorias-produtos/view', 'id' => $model->categoriasProdutos->id],
+                        );
+                    }
+                    return 'Categoria não disponível';
                 },
             ],
             [
                 'attribute' => 'ivas_id',
-                'label' => 'IVA (%)',
+                'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->ivas->percentagem;
+                    if ($model->ivas) {
+                        return Html::a(
+                            Html::encode($model->ivas->percentagem . '%'),
+                            ['ivas/view', 'id' => $model->ivas->id],
+                        );
+                    }
+                    return 'IVA não disponível';
                 },
             ],
             [
@@ -63,13 +77,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (!empty($model->imagens)) {
                         $images = '';
                         foreach ($model->imagens as $imagem) {
-                            $images .= Html::img('@web/images/' . $imagem->fileName, ['class' => 'img-thumbnail', 'style' => 'max-width: 150px; margin-right: 5px;']);
+                            $images .= Html::a(
+                                Html::img('@web/images/' . $imagem->fileName, ['class' => 'img-thumbnail', 'style' => 'max-width: 150px; margin-right: 5px;']),
+                                ['imagens/view', 'id' => $imagem->id]
+                            );
                         }
                         return $images;
                     }
                     return 'Sem imagem disponível';
                 },
             ],
+
         ],
     ]) ?>
 </div>

@@ -79,14 +79,14 @@ class User extends ActiveRecord implements IdentityInterface
             [['currentPassword'], 'validateCurrentPassword', 'on' => self::SCENARIO_PASSWORD],
             [['newPassword', 'confirmPassword'], 'string', 'min' => 6, 'on' => self::SCENARIO_PASSWORD],
             [['newPassword', 'confirmPassword'], 'filter', 'filter' => 'trim', 'on' => self::SCENARIO_PASSWORD],
-            [['confirmPassword'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'Passwords do not match', 'on' => self::SCENARIO_PASSWORD],
+            [['confirmPassword'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'As palavras-passe são diferentes', 'on' => self::SCENARIO_PASSWORD],
         ];
     }
 
     public function validateCurrentPassword()
     {
         if (!$this->verifyPassword($this->currentPassword)) {
-            $this->addError("currentPassword", 'Current password is incorrect');
+            $this->addError("currentPassword", 'Palavra-passe atual incorreta');
         }
     }
 
@@ -98,7 +98,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        // Define a scenario for the password-related actions
         $scenarios[self::SCENARIO_PASSWORD] = ['newPassword', 'currentPassword', 'confirmPassword'];
         return $scenarios;
     }
@@ -132,7 +131,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-//        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
         {
             return static::findOne(['auth_key' => $token, 'status' =>
                 self::STATUS_ACTIVE]);

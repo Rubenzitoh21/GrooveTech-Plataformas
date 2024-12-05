@@ -30,8 +30,8 @@ class CategoriasProdutos extends \yii\db\ActiveRecord
     {
         return [
             [['nome'], 'required'],
-            [['nome'], 'string', 'max' => 30],
-            [['obs'], 'string', 'max' => 100],
+            [['nome'], 'string', 'max' => 50],
+            [['obs'], 'string', 'max' => 200],
         ];
     }
 

@@ -77,7 +77,7 @@ $this->title = $model->nome;
                         <!-- Verifica se o produto foi comprado -->
                         <div class="card-footer mt-auto bg-white border-0">
                             <a class="btn btn-success btn-lg w-100"
-                               href="<?= Url::to(['produtos-carrinhos/create', 'produtos_id' => $linhaFaturaId]) ?>">
+                               href="<?= Url::to(['produtos-carrinhos/create', 'produtos_id' => $model->id]) ?>">
                                 Adicionar ao Carrinho
                             </a>
                         </div>

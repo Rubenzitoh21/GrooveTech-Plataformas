@@ -95,7 +95,7 @@ class SiteController extends Controller
             ->where(['id' => [5, 6, 9]])
             ->all();
 
-        $produtosDestaque = (new Query())
+        $produtosAvaliados = (new Query())
             ->select([
                 'produtos.id',
                 'produtos.nome',
@@ -113,6 +113,32 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
+        $produtosAvaliadosIds = array_column($produtosAvaliados, 'id');
+        $quantidadeRestante = 3 - count($produtosAvaliados);
+
+        // Adiciona produtos aleatórios, excluindo os que já estão na lista de avaliados
+        if ($quantidadeRestante > 0) {
+            $produtosAleatorios = (new Query())
+                ->select([
+                    'produtos.id',
+                    'produtos.nome',
+                    'produtos.descricao',
+                    'produtos.preco',
+                    new \yii\db\Expression('0 AS avg_rating'),
+                    new \yii\db\Expression('0 AS review_count'),
+                    '(SELECT fileName FROM imagens WHERE imagens.produto_id = produtos.id LIMIT 1) AS image_file'
+                ])
+                ->from('produtos')
+                ->where(['NOT IN', 'produtos.id', $produtosAvaliadosIds])
+                ->orderBy(new \yii\db\Expression('RAND()'))
+                ->limit($quantidadeRestante)
+                ->all();
+
+            // Combina os produtos avaliados com os aleatórios
+            $produtosDestaque = array_merge($produtosAvaliados, $produtosAleatorios);
+        } else {
+            $produtosDestaque = $produtosAvaliados;
+        }
         return $this->render('index', [
             'categoriasDestaque' => $categoriasDestaque,
             'produtosDestaque' => $produtosDestaque,
@@ -173,9 +199,9 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success', 'Obriagdo por nos contactar. Responderemos o mais breve possível.');
             } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao enviar a sua mensagem.');
             }
 
             return $this->refresh();
@@ -206,8 +232,10 @@ class SiteController extends Controller
         $model = new SignupForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Registo com sucesso. Obrigado pelo registo!');
-            return $this->goHome();
+            Yii::$app->session->setFlash('success', 'Conta criada com sucesso. Obrigado pelo seu registo!');
+            return $this->render('login', [
+                'model' => new LoginForm(),
+            ]);
         }
 
         return $this->render('signup', [

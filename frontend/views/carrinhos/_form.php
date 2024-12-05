@@ -12,6 +12,7 @@ use yii\widgets\ActiveForm;
 
 <div class="carrinhos-form">
 
+
     <?php $form = ActiveForm::begin(); ?>
 
     <ul class="list-unstyled templatemo-accordion">

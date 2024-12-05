@@ -30,7 +30,7 @@ $this->title = 'Iniciar Sessão';
                 </div>
                 <br>
                 <div class="form-group">
-                    <?= Html::submitButton('Iniciar Sessão', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Iniciar Sessão', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>
@@ -39,7 +39,7 @@ $this->title = 'Iniciar Sessão';
             <div>
                 <h3>Ainda não tem uma conta?</h3>
                 <p>Crie já uma conta para aproveitar todos os nossos serviços!</p>
-                <?= Html::a('Criar Conta', ['site/signup'], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Criar Conta', ['site/signup'], ['class' => 'btn btn-success']) ?>
             </div>
         </div>
     </div>

@@ -13,9 +13,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'data')->textInput() ?>
-
-    <?= $form->field($model, 'valortotal')->textInput() ?>
+<!--    --><?php //= $form->field($model, 'data')->textInput() ?>
+<!---->
+<!--    --><?php //= $form->field($model, 'valortotal')->textInput() ?>
 
     <?= $form->field($model, 'status')->label('Status')->dropDownList(
         [
