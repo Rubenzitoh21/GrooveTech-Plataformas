@@ -28,20 +28,20 @@ class UserForm extends Model
         return [
             //rules user
             ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'required' , 'message' => 'Este campo não pode ficar em branco.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nome de utilizador já está a ser utilizado.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
-            ['email', 'required'],
+            ['email', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este email já está a ser utilizado.'],
 
-            ['password', 'required'],
+            ['password', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
 
-            ['role', 'required'],
+            ['role', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['role', 'string', 'max' => 255],
         ];
     }

@@ -35,11 +35,12 @@ class Imagens extends \yii\db\ActiveRecord
     {
         return [
             [['id'], 'safe'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10],
-            [['produto_id'], 'required', 'message' => 'Tem de selecionar um produto para ser associado à imagem'],
+            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 10, 'message' => 'Ficheiro inválido. Apenas são aceites imagens nos formatos png, jpg ou jpeg.'],
+            [['produto_id'], 'required', 'message' => 'Tem de selecionar um produto para ser associado à imagem.'],
             [['produto_id'], 'integer'],
-            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id'], 'message' => 'O produto selecionado não existe.'],
         ];
+
     }
 
     public function upload()

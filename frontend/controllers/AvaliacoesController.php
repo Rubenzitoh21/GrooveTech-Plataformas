@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * AvaliacoesController implements the CRUD actions for Avaliacoes model.
@@ -79,7 +80,14 @@ class AvaliacoesController extends Controller
      */
     public function actionCreate($linhaFaturaId)
     {
-        $linhaFatura = LinhasFaturas::findOne($linhaFaturaId);
+        $referrer = Yii::$app->request->referrer;
+
+        $currentUrl = Yii::$app->request->absoluteUrl;
+        $productUrl = Url::to(['produtos/view', 'id' => $linhaFaturaId], true);
+
+        if ($referrer && $referrer !== $currentUrl && $referrer !== $productUrl) {
+            Yii::$app->session->set('previousUrl', $referrer);
+        }
 
         $model = new Avaliacoes();
         $model->linhas_faturas_id = $linhaFaturaId;
@@ -87,7 +95,7 @@ class AvaliacoesController extends Controller
         $model->dtarating = date('Y-m-d H:i:s');
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['produtos/view', 'id' => $linhaFatura->produtos_id]);
+            return $this->redirect(['produtos/view', 'id' => $model->linhasFaturas->produtos_id]);
         }
 
         return $this->render('create', [
@@ -95,6 +103,8 @@ class AvaliacoesController extends Controller
             'linhaFaturaId' => $linhaFaturaId,
         ]);
     }
+
+
 
 
     /**

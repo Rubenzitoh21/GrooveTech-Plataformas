@@ -36,14 +36,14 @@ class Faturas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'valortotal', 'status', 'user_id', 'pagamentos_id', 'expedicoes_id'], 'required'],
+            [['data', 'valortotal', 'status', 'user_id', 'pagamentos_id', 'expedicoes_id'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['data'], 'safe'],
-            [['valortotal'], 'number'],
+            [['valortotal'], 'number', 'message' => 'O valor total deve ser um número válido.'],
             [['user_id', 'pagamentos_id', 'expedicoes_id'], 'integer'],
-            [['status'], 'string', 'max' => 50],
-            [['expedicoes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expedicoes::class, 'targetAttribute' => ['expedicoes_id' => 'id']],
-            [['pagamentos_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pagamentos::class, 'targetAttribute' => ['pagamentos_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['status'], 'string', 'max' => 50, 'message' => 'O status não pode exceder 50 caracteres.'],
+            [['expedicoes_id'], 'exist', 'skipOnError' => true, 'targetClass' => Expedicoes::class, 'targetAttribute' => ['expedicoes_id' => 'id'], 'message' => 'A expedição selecionada não existe.'],
+            [['pagamentos_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pagamentos::class, 'targetAttribute' => ['pagamentos_id' => 'id'], 'message' => 'O método de pagamento selecionado não existe.'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id'], 'message' => 'O utilizador selecionado não existe.'],
         ];
     }
 

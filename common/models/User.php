@@ -67,7 +67,7 @@ class User extends ActiveRecord implements IdentityInterface
 //            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-            [['username', 'auth_key', 'password_hash', 'email', 'status', 'created_at', 'updated_at'], 'required', 'message' => 'Este campo é obrigatório.'],
+            [['username', 'auth_key', 'password_hash', 'email', 'status', 'created_at', 'updated_at'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             /*[['status', 'created_at', 'updated_at'], 'integer'],*/
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -75,7 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
 
-            [['newPassword', 'currentPassword', 'confirmPassword'], 'required','on' => self::SCENARIO_PASSWORD, 'message' => 'Este campo é obrigatório.'],
+            [['newPassword', 'currentPassword', 'confirmPassword'], 'required','on' => self::SCENARIO_PASSWORD, 'message' => 'Este campo não pode ficar em branco.'],
             [['currentPassword'], 'validateCurrentPassword', 'on' => self::SCENARIO_PASSWORD],
             [['newPassword', 'confirmPassword'], 'string', 'min' => 6, 'on' => self::SCENARIO_PASSWORD],
             [['newPassword', 'confirmPassword'], 'filter', 'filter' => 'trim', 'on' => self::SCENARIO_PASSWORD],

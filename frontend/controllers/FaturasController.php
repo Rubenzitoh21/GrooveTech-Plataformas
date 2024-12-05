@@ -2,9 +2,7 @@
 
 namespace frontend\controllers;
 
-use backend\models\Empresa;
 use backend\models\Empresas;
-use common\models\ClientesForm;
 use common\models\Faturas;
 use common\models\LinhasFaturas;
 use common\models\Pagamentos;
@@ -145,4 +143,12 @@ class FaturasController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionPrint($id)
+    {
+        $model = $this->findModel($id);
+        $this->layout = false;
+        return $this->render('print-template', ['model' => $model]);
+    }
+
 }

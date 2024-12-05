@@ -18,7 +18,7 @@ $this->title = $model->id;
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="<?= Url::to(['faturas/index']) ?>">
+                <a class="btn btn-success" href="javascript:window.history.back();">
                     <i class="fa fa-arrow-left"></i> Voltar
                 </a>
             </div>
@@ -141,7 +141,11 @@ $this->title = $model->id;
                             </div><!-- end table responsive -->
                             <div class="d-print-none mt-4">
                                 <div class="float-end">
-                                    <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-print"></i></a>
+                                    <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id], [
+                                        'class' => 'btn btn-success',
+                                        'target' => '_blank', // Abre em uma nova aba
+                                        'rel' => 'noopener noreferrer', // Melhora a segurança ao abrir em nova aba
+                                    ]) ?>
                                 </div>
                             </div>
                         </div>

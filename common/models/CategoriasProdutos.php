@@ -29,7 +29,7 @@ class CategoriasProdutos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome'], 'required'],
+            [['nome', 'obs'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['nome'], 'string', 'max' => 50],
             [['obs'], 'string', 'max' => 200],
         ];

@@ -28,9 +28,10 @@ class Pagamentos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['metodopag'], 'required'],
+            [['metodopag'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['metodopag'], 'string', 'max' => 45],
         ];
+
     }
 
     /**

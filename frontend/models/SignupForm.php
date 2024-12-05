@@ -37,39 +37,28 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-//            ['username', 'trim'],
-//            ['username', 'required'],
-//            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-//            ['username', 'string', 'min' => 2, 'max' => 255],
-//
-//            ['email', 'trim'],
-//            ['email', 'required'],
-//            ['email', 'email'],
-//            ['email', 'string', 'max' => 255],
-//            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
-//
-//            ['password', 'required'],
-//            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
             ['username', 'trim'],
-            ['username', 'required', 'message' => 'O nome de utilizador é obrigatório.'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'required', 'message' => 'Este campo não pode ficar em branco.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nome de utilizador já está a ser utilizado.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
-            ['email', 'required', 'message' => 'O email é obrigatório.'],
+            ['email', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este email já está a ser utilizado.'],
 
-            ['password', 'required', 'message' => 'A password é obrigatória.'],
+            ['password', 'trim'],
+
+            ['password', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
 
             ['primeironome', 'trim'],
-            ['primeironome', 'required', 'message' => 'O primeiro nome é obrigatório.'],
+            ['primeironome', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['primeironome', 'string', 'max' => 50],
 
             ['apelido', 'trim'],
-            ['apelido', 'required', 'message' => 'O apelido é obrigatório.'],
+            ['apelido', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['apelido', 'string', 'max' => 50],
 
 
@@ -77,15 +66,15 @@ class SignupForm extends Model
 
 
             ['genero', 'trim'],
-            ['genero', 'required', 'message' => 'O género é obrigatório.'],
+            ['genero', 'required', 'message' => 'Este campo não pode ficar em branco.'],
             ['genero', 'string'],
 
             ['role', 'required'],
             ['role', 'string', 'max' => 255],
 
             ['dtanasc', 'safe'],
-            ['dtanasc', 'required', 'message' => 'A data de nascimento é obrigatória.'],
-            ['dtanasc', 'match', 'pattern' => '/^\d{4}-\d{2}-\d{2}$/', 'message' => 'Data de nascimento inválida, precisa ser no formato (yyyy-mm-dd)'],
+            ['dtanasc', 'required', 'message' => 'Este campo não pode ficar em branco.'],
+            ['dtanasc', 'match', 'pattern' => '/^\d{4}-\d{2}-\d{2}$/', 'message' => 'Data de nascimento inválida.'],
 
             ['user_id', 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],

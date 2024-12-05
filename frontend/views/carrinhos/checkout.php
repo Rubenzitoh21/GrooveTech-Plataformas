@@ -16,8 +16,10 @@ use yii\widgets\ActiveForm;
 $this->title = 'Checkout';
 ?>
 <div class="carrinhos-update container-fluid">
-
     <div class="container-fluid py-5">
+        <a class="btn btn-success" href="javascript:window.history.back();">
+            <i class="fa fa-arrow-left"></i> Voltar
+        </a>
         <div class="container py-5">
             <?php if (Yii::$app->session->hasFlash('success')): ?>
             <?php elseif (Yii::$app->session->hasFlash('error')): ?>
@@ -76,7 +78,7 @@ $this->title = 'Checkout';
                     </div>
                     <br>
                     <div class="form-item mt-3">
-                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Atualizar', ['class' => 'btn btn-success']) ?>
                     </div>
                     <?php ActiveForm::end(); ?>
                 </div>

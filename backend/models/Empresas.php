@@ -33,7 +33,7 @@ class Empresas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['designacaosocial', 'email', 'telefone', 'nif', 'rua', 'codigopostal', 'localidade', 'capitalsocial'], 'required'],
+            [['designacaosocial', 'email', 'telefone', 'nif', 'rua', 'codigopostal', 'localidade', 'capitalsocial'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['capitalsocial'], 'number'],
             [['designacaosocial', 'email'], 'string', 'max' => 45],
             [['telefone'], 'string', 'max' => 12],

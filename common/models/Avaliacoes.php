@@ -33,7 +33,7 @@ class Avaliacoes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['comentario', 'dtarating', 'rating', 'user_id', 'linhas_faturas_id'], 'required'],
+            [['comentario', 'dtarating', 'rating', 'user_id', 'linhas_faturas_id'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['dtarating'], 'safe'],
             [['rating', 'user_id', 'linhas_faturas_id'], 'integer'],
             [['comentario'], 'string', 'max' => 200],

@@ -28,7 +28,7 @@ class Expedicoes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['metodoexp'], 'required'],
+            [['metodoexp'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['metodoexp'], 'string', 'max' => 45],
         ];
     }

@@ -30,10 +30,11 @@ class Ivas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['percentagem', 'descricao', 'vigor'], 'required'],
-            [['percentagem', 'vigor'], 'integer'],
-            [['descricao'], 'string', 'max' => 80],
+            [['percentagem', 'descricao', 'vigor'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
+            [['percentagem', 'vigor'], 'integer', 'message' => 'Este campo deve conter um número inteiro.'],
+            [['descricao'], 'string', 'max' => 80, 'message' => 'Este campo deve ter no máximo 80 caracteres.'],
         ];
+
     }
 
     /**
@@ -43,7 +44,7 @@ class Ivas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'percentagem' => 'Percentagem',
+            'percentagem' => 'Percentagem (%)',
             'descricao' => 'Descrição',
             'vigor' => 'Vigor',
         ];

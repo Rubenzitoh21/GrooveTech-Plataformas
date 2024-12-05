@@ -42,22 +42,22 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['primeironome', 'apelido','dtanasc', 'dtaregisto','genero', 'user_id'], 'required'
-                ,'message'=>'Este campo é obrigatório'],
+            [['primeironome', 'apelido', 'dtanasc', 'dtaregisto', 'genero', 'user_id'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['primeironome', 'apelido'], 'string', 'max' => 50],
             [['dtanasc', 'dtaregisto'], 'safe'],
             [['genero'], 'string'],
             [['codigopostal'], 'string', 'max' => 8],
             [['localidade', 'rua'], 'string', 'max' => 100],
-            [['nif'], 'string', 'max' => 10, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 digitos', 'tooLong' => 'Não pode ter mais de 9 digitos'],
-            [['nif'], 'unique'],
+            [['nif'], 'string', 'max' => 10, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 dígitos.', 'tooLong' => 'Não pode ter mais de 9 dígitos.'],
+            [['nif'], 'unique', 'message' => 'Este NIF já está em uso.'],
             [['nif'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'Só são aceites números.'],
-            [['telefone'], 'string', 'max' => 9, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 digitos', 'tooLong' => 'Não pode ter mais de 9 digitos'],
-            [['telefone'], 'unique'],
-            [['telefone'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'Só são aceites números .'],
+            [['telefone'], 'string', 'max' => 9, 'min' => 9, 'tooShort' => 'Precisa no mínimo 9 dígitos.', 'tooLong' => 'Não pode ter mais de 9 dígitos.'],
+            [['telefone'], 'unique', 'message' => 'Este telefone já está em uso.'],
+            [['telefone'], 'match', 'pattern' => '/^\d+$/i', 'message' => 'Só são aceites números.'],
             [['user_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['rua', 'codigopostal', 'localidade', 'telefone', 'nif','primeironome','apelido'], 'required','on' => self::SCENARIO_USERPROFILE],
+            [['rua', 'codigopostal', 'localidade', 'telefone', 'nif', 'primeironome', 'apelido'], 'required', 'on' => self::SCENARIO_USERPROFILE,
+                'message' => 'Este campo não pode ficar em branco.'],
         ];
     }
 

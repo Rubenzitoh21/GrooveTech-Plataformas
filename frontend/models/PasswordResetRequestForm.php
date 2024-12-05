@@ -21,7 +21,7 @@ class PasswordResetRequestForm extends Model
     {
         return [
             ['email', 'trim'],
-            ['email', 'required'],
+            ['email', 'required' , 'message' => 'Este campo não pode ficar em branco.'],
             ['email', 'email'],
             ['email', 'exist',
                 'targetClass' => '\common\models\User',
