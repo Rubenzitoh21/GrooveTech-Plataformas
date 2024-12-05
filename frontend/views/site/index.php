@@ -121,10 +121,20 @@ $this->title = 'Groove Tech - Início';
         <div class="row">
             <?php foreach ($produtosDestaque as $produto): ?>
                 <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="<?= Url::to(['produtos/view', 'id' => $produto['id']]) ?>">
+                    <div class="card h-100 mb-4 product-wap rounded-0">
+                        <div class="card rounded-0">
                             <img src="<?= Url::to('@web/images/' . ($produto['image_file'] ?? 'default.png')) ?>" class="card-img-top" alt="<?= $produto['nome'] ?>">
-                        </a>
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li><a class="btn btn-success text-white mt-2"
+                                           href="<?= Url::to(['produtos/view', 'id' => $produto['id']]) ?>"><i
+                                                    class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2"
+                                           href="<?= Url::to(['produtos-carrinhos/create', 'produtos_id' => $produto['id']]) ?>"><i
+                                                    class="fas fa-cart-plus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <ul class="list-unstyled d-flex justify-content-between">
                                 <li>

@@ -24,7 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'confirm' => 'Tem a certeza que pretende anular esta fatura?',
                 'method' => 'post',
             ],
+
         ])?>
+        <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id], [
+            'class' => 'btn btn-secondary',
+            'target' => '_blank',
+            'rel' => 'noopener noreferrer',
+        ]) ?>
 
         <?php //echo Html::a('Imprimir', ['imprimir'], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
     </p>

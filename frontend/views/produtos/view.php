@@ -12,9 +12,6 @@ use yii\helpers\Url;
 $linhaFaturaId = Yii::$app->controller->getUltimaLinhaFatura($model->id);
 $this->title = $model->nome;
 
-$backUrl = Yii::$app->session->get('previousUrl');
-$currentUrl = Yii::$app->request->absoluteUrl;
-$referer = Yii::$app->request->referrer;
 
 \yii\web\YiiAsset::register($this);
 ?>
@@ -22,18 +19,9 @@ $referer = Yii::$app->request->referrer;
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <?php
-                if ($backUrl && $backUrl !== $currentUrl): ?>
-                    <a class="btn btn-success" href="<?= $backUrl ?>">
-                        <i class="fa fa-arrow-left"></i> Voltar
-                    </a>
-                    <?php Yii::$app->session->remove('previousUrl');?>
-                <?php else: ?>
-                    <a class="btn btn-success" href="<?= $referer ?: Url::to(['site/index']) ?>">
-                        <i class="fa fa-arrow-left"></i> Voltar
-                    </a>
-                <?php endif; ?>
-
+                <a class="btn btn-success" href="javascript:window.history.back();">
+                    <i class="fa fa-arrow-left"></i> Voltar
+                </a>
             </div>
         </div>
         <br>

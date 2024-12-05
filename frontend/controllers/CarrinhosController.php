@@ -192,7 +192,6 @@ class CarrinhosController extends Controller
                 ]);
             }
 
-
             foreach ($produtoCarrinhoProduto as $produtoCarrinho) {
                 $linhaFatura = new LinhasFaturas();
                 $linhaFatura->quantidade = $produtoCarrinho->quantidade;
@@ -204,9 +203,13 @@ class CarrinhosController extends Controller
                 $linhaFatura->save();
             }
 
-            $model->status = 'Pago';
-            $model->dtapedido = Carbon::now();
-            $model->save();
+            // Apagar as linhas do carrinho
+            foreach ($produtoCarrinhoProduto as $produtoCarrinho) {
+                $produtoCarrinho->delete();
+            }
+
+            // Apagar o carrinho
+            $model->delete();
 
             return $this->redirect(['faturas/view', 'id' => $fatura->id]);
         }
@@ -217,6 +220,7 @@ class CarrinhosController extends Controller
             'fatura' => $fatura,
         ]);
     }
+
 
     public function actionAumentar($id)
     {

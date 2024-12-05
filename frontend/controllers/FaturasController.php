@@ -146,9 +146,14 @@ class FaturasController extends Controller
 
     public function actionPrint($id)
     {
+        $empresa = Empresas::find()->one();
         $model = $this->findModel($id);
         $this->layout = false;
-        return $this->render('print-template', ['model' => $model]);
+        return $this->render('print-template',
+            [
+                'model' => $model,
+                'empresa' => $empresa,
+            ]);
     }
 
 }

@@ -80,15 +80,6 @@ class AvaliacoesController extends Controller
      */
     public function actionCreate($linhaFaturaId)
     {
-        $referrer = Yii::$app->request->referrer;
-
-        $currentUrl = Yii::$app->request->absoluteUrl;
-        $productUrl = Url::to(['produtos/view', 'id' => $linhaFaturaId], true);
-
-        if ($referrer && $referrer !== $currentUrl && $referrer !== $productUrl) {
-            Yii::$app->session->set('previousUrl', $referrer);
-        }
-
         $model = new Avaliacoes();
         $model->linhas_faturas_id = $linhaFaturaId;
         $model->user_id = Yii::$app->user->id;

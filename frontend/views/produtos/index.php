@@ -19,7 +19,7 @@ $this->title = 'Produtos';
 ?>
 <!-- Start Content -->
 <div class="container py-5">
-    <h1 class="h1 mb-4">Produtos</h1>
+    <h1 class="h1 mb-4">Conheça já todos os nossos produtos!</h1>
     <div class="row">
         <!-- Sidebar: Categorias -->
         <div class="col-lg-3">
@@ -88,14 +88,26 @@ $this->title = 'Produtos';
                                 </div>
                             </div>
                             <div class="card-body">
-                                <a href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>"
-                                   class="h3 text-decoration-none"><?= Html::encode($produto->nome) ?></a>
-                                <p class="text-center mb-0"><?= number_format($produto->preco, 2, ',', '.') ?> €</p>
+                                <ul class="list-unstyled d-flex justify-content-between">
+                                    <li>
+                                        <?php
+                                        $rating = round($produto->getAvaliacoes()->average('rating') ?: 0);
+                                        for ($i = 1; $i <= 5; $i++): ?>
+                                            <i class="<?= $i <= $rating ? 'text-warning' : 'text-muted' ?> fa fa-star"></i>
+                                        <?php endfor; ?>
+                                    </li>
+                                    <li class="text-muted text-right"><?= number_format($produto->preco, 2, ',', '.') ?> €</li>
+                                </ul>
+                                <a href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>" class="h3 text-decoration-none text-dark">
+                                    <?= Html::encode($produto->nome) ?>
+                                </a>
+                                <p class="text-muted">Comentários (<?= $produto->getAvaliacoes()->count() ?>)</p>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
+
 
 
             <!-- Paginação -->

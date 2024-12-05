@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Empresas;
 use common\models\Faturas;
 use backend\models\FaturasSearch;
 use common\models\LinhasFaturas;
@@ -137,5 +138,17 @@ class FaturasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionPrint($id)
+    {
+        $empresa = Empresas::find()->one();
+        $model = $this->findModel($id);
+        $this->layout = false;
+        return $this->render('print-template',
+            [
+                'model' => $model,
+                'empresa' => $empresa,
+            ]);
     }
 }

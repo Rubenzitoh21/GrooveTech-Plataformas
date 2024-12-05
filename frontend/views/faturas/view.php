@@ -18,7 +18,7 @@ $this->title = $model->id;
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="javascript:window.history.back();">
+                <a class="btn btn-success" href="<?= Url::to(['faturas/index']) ?>">
                     <i class="fa fa-arrow-left"></i> Voltar
                 </a>
             </div>
@@ -109,14 +109,14 @@ $this->title = $model->id;
                                                     <p class="text-muted mb-0"><?= Html::encode($linhaFatura->produtos->descricao ?? '') ?></p>
                                                 </div>
                                             </td>
-                                            <td><?= number_format($linhaFatura->preco_venda, 2, ',', '.') ?> €</td>
+                                            <td><?= number_format($linhaFatura->preco_venda, 2, ',', '.') ?>€</td>
                                             <td><?= Html::encode($linhaFatura->quantidade) ?></td>
-                                            <td class="text-end"><?= number_format($linhaTotal, 2, ',', '.') ?> €</td>
+                                            <td class="text-end"><?= number_format($linhaTotal, 2, ',', '.') ?>€</td>
                                         </tr>
                                     <?php endforeach; ?>
                                     <tr>
                                         <th scope="row" colspan="4" class="text-end">Sub-Total</th>
-                                        <td class="text-end"><?= number_format($model->id, 2, ',', '.') ?> €</td>
+                                        <td class="text-end"><?= number_format($model->id, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
@@ -128,26 +128,29 @@ $this->title = $model->id;
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">
                                             Iva:</th>
-                                        <td class="border-0 text-end"><?= number_format($model->id, 2, ',', '.') ?> €</td>
+                                        <td class="border-0 text-end"><?= number_format($model->id, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">Total:</th>
-                                        <td class="border-0 text-end"><h4 class="m-0 fw-semibold"><?= number_format($model->valortotal, 2, ',', '.') ?> €</h4></td>
+                                        <td class="border-0 text-end"><h4 class="m-0 fw-semibold"><?= number_format($model->valortotal, 2, ',', '.') ?>€</h4></td>
                                     </tr>
                                     <!-- end tr -->
                                     </tbody><!-- end tbody -->
                                 </table><!-- end table -->
                             </div><!-- end table responsive -->
-                            <div class="d-print-none mt-4">
-                                <div class="float-end">
-                                    <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id], [
-                                        'class' => 'btn btn-success',
-                                        'target' => '_blank', // Abre em uma nova aba
-                                        'rel' => 'noopener noreferrer', // Melhora a segurança ao abrir em nova aba
-                                    ]) ?>
+                            <?php if ($model->status === 'Pago'): ?>
+                                <div class="d-print-none mt-4">
+                                    <div class="float-end">
+                                        <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id], [
+                                            'class' => 'btn btn-success',
+                                            'target' => '_blank',
+                                            'rel' => 'noopener noreferrer',
+                                        ]) ?>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div>
