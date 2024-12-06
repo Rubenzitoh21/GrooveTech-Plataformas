@@ -36,7 +36,7 @@ class Produtos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'descricao', 'preco', 'categorias_produtos_id', 'ivas_id'], 'required'],
+            [['nome', 'descricao', 'preco', 'categorias_produtos_id', 'ivas_id'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['preco'], 'number'],
             [['categorias_produtos_id', 'ivas_id'], 'integer'],
             [['nome'], 'string', 'max' => 50],
