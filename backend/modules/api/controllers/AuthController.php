@@ -56,5 +56,71 @@ class AuthController extends ActiveController
         ];
     }
 
+    public function actionSignup()
+    {
+        $request = Yii::$app->request;
+        $username = $request->post('username');
+        $password = $request->post('password');
+        $email = $request->post('email');
+
+        if ($this->modelClass::findOne(['username' => $username])) {
+            throw new BadRequestHttpException("Utilizador já existe");
+        }
+
+        if ($this->modelClass::findOne(['email' => $email])) {
+            throw new BadRequestHttpException("Email já existe");
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+
+            // Create user
+            $user = new $this->modelClass;
+            $user->username = $username;
+            $user->email = $email;
+            $user->updated_at = Carbon::now();
+            $user->created_at = Carbon::now();
+            $user->setPassword($password);
+            $user->generateAuthKey();
+            $user->generateEmailVerificationToken();
+
+            if (!$user->save()) {
+                Yii::error($user->errors, 'debug');
+                throw new ServerErrorHttpException("Erro ao salvar o utilizador.");
+            }
+
+            // Assign role
+            $auth = Yii::$app->authManager;
+            $userRole = $auth->getRole('cliente');
+            $auth->assign($userRole, $user->id);
+
+            // Create user profile
+            $userProfile = new $this->userProfileModelClass;
+            $userProfile->user_id = $user->id;
+
+            if (!$userProfile->save()) {
+                Yii::error($userProfile->errors, 'debug');
+                throw new ServerErrorHttpException("Erro ao salvar o perfil do utilizador.");
+            }
+
+            // Create initial cart
+            $carrinhoNovo = new $this->carrinhosModelClass;
+            $carrinhoNovo->user_id = $user->id;
+            $carrinhoNovo->dtapedido = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
+            $carrinhoNovo->status = 'Ativo';
+            $carrinhoNovo->valortotal = 0;
+
+            if (!$carrinhoNovo->save()) {
+                throw new ServerErrorHttpException("Erro ao salvar o carrinho.");
+            }
+
+            $transaction->commit();
+            return $user;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
 
 }
