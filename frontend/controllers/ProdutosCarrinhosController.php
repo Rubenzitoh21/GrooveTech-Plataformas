@@ -112,7 +112,7 @@ class ProdutosCarrinhosController extends Controller
             return $this->redirect(['carrinhos/index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error adding the product to the cart.');
+            Yii::$app->session->setFlash('error', 'Para realizar compras, tem que iniciar sessão!');
         }
 
         return $this->redirect(['carrinhos/index']);

@@ -55,7 +55,7 @@ class SiteController extends Controller
                         Yii::$app->end();
                     } else {
                         // Show an access denied message for authenticated users
-                        throw new ForbiddenHttpException('You are not allowed to perform this action.');
+                        throw new ForbiddenHttpException('Acesso negado.');
                     }
                 },
             ],
