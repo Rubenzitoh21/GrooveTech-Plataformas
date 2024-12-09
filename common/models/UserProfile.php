@@ -42,7 +42,7 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['primeironome', 'apelido', 'dtanasc', 'dtaregisto', 'genero', 'user_id'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
+            [['user_id'], 'required', 'message' => 'Este campo é obrigatório'],
             [['primeironome', 'apelido'], 'string', 'max' => 50],
             [['dtanasc', 'dtaregisto'], 'safe'],
             [['genero'], 'string'],
@@ -87,7 +87,7 @@ class UserProfile extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         // Define a scenario for the password-related actions
-        $scenarios[self::SCENARIO_USERPROFILE] = ['rua', 'codigopostal', 'localidade', 'telefone', 'nif','primeironome','apelido'];
+        $scenarios[self::SCENARIO_USERPROFILE] = ['rua', 'codigopostal', 'localidade', 'telefone', 'nif', 'primeironome', 'apelido'];
         return $scenarios;
     }
 
