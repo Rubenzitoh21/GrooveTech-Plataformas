@@ -35,8 +35,8 @@ class PerfilController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'changepassword', 'update'],
-                            'roles' => ['@'],
+                            'actions' => ['index', 'view', 'changepassword', 'update'],
+                            'roles' => ['gestor'],
                         ],
                     ],
                 ],
@@ -51,9 +51,11 @@ class PerfilController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('editarDadosPessoais')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $user = Yii::$app->user->identity;
-
-
 
         if ($user->load(Yii::$app->request->post()) && $user->save()) {
             Yii::$app->session->setFlash('success', 'Profile updated successfully');
@@ -71,6 +73,10 @@ class PerfilController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('editarDadosPessoais')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -78,6 +84,10 @@ class PerfilController extends Controller
 
     public function actionChangepassword()
     {
+        if (!Yii::$app->user->can('editarDadosPessoais')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $user = Yii::$app->user->identity;
         $user->setScenario(User::SCENARIO_PASSWORD);
         $loadedPost = $user->load(Yii::$app->request->post());
@@ -85,7 +95,7 @@ class PerfilController extends Controller
         if ($loadedPost && $user->validate()) {
             $user->password = $user->newPassword;
             $user->save(false);
-            Yii::$app->session->setFlash('success', 'You have sucessfuly changed your password');
+            Yii::$app->session->setFlash('success', 'Palavr-passe alterada com sucesso');
             return $this->redirect(['index']);
         }
 

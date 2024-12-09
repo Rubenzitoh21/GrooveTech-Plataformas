@@ -6,6 +6,8 @@ use backend\models\Empresas;
 use common\models\Faturas;
 use backend\models\FaturasSearch;
 use common\models\LinhasFaturas;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -29,6 +31,16 @@ class FaturasController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'delete', 'update', 'print'],
+                            'roles' => ['gestor'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -40,6 +52,10 @@ class FaturasController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verFaturas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new FaturasSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -57,30 +73,12 @@ class FaturasController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Faturas model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Faturas();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if (!Yii::$app->user->can('verFaturas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        return $this->render('create', [
-            'model' => $model,
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -93,6 +91,10 @@ class FaturasController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('editarFaturas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -113,6 +115,10 @@ class FaturasController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('editarFaturas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $fatura = $this->findModel($id);
 
         $fatura->status = 'Anulada';
@@ -142,6 +148,10 @@ class FaturasController extends Controller
 
     public function actionPrint($id)
     {
+        if (!Yii::$app->user->can('verFaturas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $empresa = Empresas::find()->one();
         $model = $this->findModel($id);
         $this->layout = false;

@@ -37,7 +37,7 @@ class ImagensController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['index', 'view', 'update', 'create', 'delete'],
-                            'roles' => ['admin', 'gestor'],
+                            'roles' => ['gestor'],
                         ],
                     ],
                 ],
@@ -52,6 +52,10 @@ class ImagensController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('editarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new ImagensSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -70,6 +74,10 @@ class ImagensController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('editarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -82,6 +90,10 @@ class ImagensController extends Controller
      */
     public function actionCreate($produto_id = null, $urlCallback = null)
     {
+        if (!Yii::$app->user->can('editarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new Imagens();
 
         if ($produto_id != null) {
@@ -135,6 +147,10 @@ class ImagensController extends Controller
      */
     public function actionUpdate($id, $urlCallback = null)
     {
+        if (!Yii::$app->user->can('editarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
@@ -175,6 +191,10 @@ class ImagensController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('editarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

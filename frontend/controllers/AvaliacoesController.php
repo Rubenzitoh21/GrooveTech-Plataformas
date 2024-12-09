@@ -24,8 +24,27 @@ class AvaliacoesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index', 'create', 'delete'],
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'create', 'delete'],
+                            'allow' => true,
+                            'roles' => ['cliente'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            Yii::$app->getResponse()->redirect(['site/login'])->send();
+                            Yii::$app->end();
+                        } else {
+                            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+                        }
+                    },
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -34,6 +53,7 @@ class AvaliacoesController extends Controller
         );
     }
 
+
     /**
      * Lists all Avaliacoes models.
      *
@@ -41,6 +61,10 @@ class AvaliacoesController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verAvaliacoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $userId = Yii::$app->user->id;
 
         $linhasFatura = LinhasFaturas::find()
@@ -60,18 +84,22 @@ class AvaliacoesController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Avaliacoes model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    /**
+//     * Displays a single Avaliacoes model.
+//     * @param int $id ID
+//     * @return string
+//     * @throws NotFoundHttpException if the model cannot be found
+//     */
+//    public function actionView($id)
+//    {
+//        if (!Yii::$app->user->can('verAvaliacoes')) {
+//            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+//        }
+//
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
      * Creates a new Avaliacoes model.
@@ -80,6 +108,10 @@ class AvaliacoesController extends Controller
      */
     public function actionCreate($linhaFaturaId)
     {
+        if (!Yii::$app->user->can('criarAvaliacoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new Avaliacoes();
         $model->linhas_faturas_id = $linhaFaturaId;
         $model->user_id = Yii::$app->user->id;
@@ -97,26 +129,26 @@ class AvaliacoesController extends Controller
 
 
 
-
-    /**
-     * Updates an existing Avaliacoes model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
+//
+//    /**
+//     * Updates an existing Avaliacoes model.
+//     * If update is successful, the browser will be redirected to the 'view' page.
+//     * @param int $id ID
+//     * @return string|\yii\web\Response
+//     * @throws NotFoundHttpException if the model cannot be found
+//     */
+//    public function actionUpdate($id)
+//    {
+//        $model = $this->findModel($id);
+//
+//        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        }
+//
+//        return $this->render('update', [
+//            'model' => $model,
+//        ]);
+//    }
 
     /**
      * Deletes an existing Avaliacoes model.
@@ -127,6 +159,10 @@ class AvaliacoesController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarAvaliacoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($model && $model->user_id == Yii::$app->user->id) {

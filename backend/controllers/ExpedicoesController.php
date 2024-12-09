@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Expedicoes;
 use backend\models\ExpedicoesSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +29,16 @@ class ExpedicoesController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'delete', 'create', 'update'],
+                            'roles' => ['gestor'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -38,6 +50,10 @@ class ExpedicoesController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verExpedicoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new ExpedicoesSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -55,6 +71,10 @@ class ExpedicoesController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('verExpedicoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,6 +87,10 @@ class ExpedicoesController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('criarExpedicoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new Expedicoes();
 
         if ($this->request->isPost) {
@@ -91,6 +115,10 @@ class ExpedicoesController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('editarExpedicoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -111,6 +139,10 @@ class ExpedicoesController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarExpedicoes')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

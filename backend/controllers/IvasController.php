@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Ivas;
 use backend\models\IvasSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -34,7 +35,7 @@ class IvasController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['index', 'view', 'delete', 'create', 'update'],
-                            'roles' => ['admin', 'gestor'],
+                            'roles' => ['gestor'],
                         ],
                     ],
                 ],
@@ -49,6 +50,10 @@ class IvasController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new IvasSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -66,6 +71,10 @@ class IvasController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('verIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -78,6 +87,10 @@ class IvasController extends Controller
      */
     public function actionCreate($urlCallback = null)
     {
+        if (!Yii::$app->user->can('criarIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new Ivas();
 
         if ($this->request->isPost) {
@@ -106,6 +119,10 @@ class IvasController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('editarIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -126,6 +143,10 @@ class IvasController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

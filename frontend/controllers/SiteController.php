@@ -36,17 +36,17 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup', 'perfil'],
+                'only' => ['index', 'logout', 'contact', 'about', 'login', 'signup', 'request-password-reset', 'reset-password', 'verify-email', 'resend-verification-email'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['logout', 'contact'],
                         'allow' => true,
-                        'roles' => ['?'], // allow guests (unauthenticated users)
+                        'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['perfil', 'logout'],
+                        'actions' => ['index', 'about', 'login', 'signup', 'request-password-reset', 'reset-password', 'verify-email', 'resend-verification-email'],
                         'allow' => true,
-                        'roles' => ['@'], // allow only authenticated users
+                        'roles' => ['?', '@'],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
@@ -54,7 +54,6 @@ class SiteController extends Controller
                         Yii::$app->getResponse()->redirect(['site/login'])->send();
                         Yii::$app->end();
                     } else {
-                        // Show an access denied message for authenticated users
                         throw new ForbiddenHttpException('Acesso negado.');
                     }
                 },
@@ -67,6 +66,8 @@ class SiteController extends Controller
             ],
         ];
     }
+
+
 
     /**
      * {@inheritdoc}
@@ -164,7 +165,7 @@ class SiteController extends Controller
             else {
 
                 Yii::$app->user->logout();
-                Yii::$app->session->setFlash('error', 'Somente clientes pode dar login!');
+                Yii::$app->session->setFlash('error', 'Acesso negado, apenas cliente podem iniciar sessão.');
 
                 return $this->refresh();
             }
@@ -253,12 +254,12 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'Verifique o seu email para obter mais instruções.');
 
                 return $this->goHome();
             }
 
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+            Yii::$app->session->setFlash('error', 'Desculpe, não conseguimos repor a sua palavra-passe para o email fornecido.');
         }
 
         return $this->render('requestPasswordResetToken', [
@@ -282,7 +283,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', 'Nova palavra-passe guardada.');
 
             return $this->goHome();
         }

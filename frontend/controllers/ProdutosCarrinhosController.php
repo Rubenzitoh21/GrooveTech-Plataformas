@@ -25,8 +25,27 @@ class ProdutosCarrinhosController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'actions' => ['create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['cliente'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            Yii::$app->getResponse()->redirect(['site/login'])->send();
+                            Yii::$app->end();
+                        } else {
+                            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+                        }
+                    },
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -35,36 +54,45 @@ class ProdutosCarrinhosController extends Controller
         );
     }
 
-    /**
-     * Lists all ProdutosCarrinhos models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ProdutosCarrinhosSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single ProdutosCarrinhos model.
-     * @param int $id ID
-     * @param int $carrinhos_id Carrinhos ID
-     * @param int $produtos_id Produtoss ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id, $carrinhos_id, $produtos_id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id, $carrinhos_id, $produtos_id),
-        ]);
-    }
+//    /**
+//     * Lists all ProdutosCarrinhos models.
+//     *
+//     * @return string
+//     */
+//    public function actionIndex()
+//    {
+//        if (!Yii::$app->user->can('verCompras')) {
+//            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+//        }
+//
+//        $searchModel = new ProdutosCarrinhosSearch();
+//        $dataProvider = $searchModel->search($this->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
+//
+//    /**
+//     * Displays a single ProdutosCarrinhos model.
+//     * @param int $id ID
+//     * @param int $carrinhos_id Carrinhos ID
+//     * @param int $produtos_id Produtoss ID
+//     * @return string
+//     * @throws NotFoundHttpException if the model cannot be found
+//     */
+//    public function actionView($id, $carrinhos_id, $produtos_id)
+//    {
+//        if (!Yii::$app->user->can('verCompras')) {
+//            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+//        }
+//
+//        return $this->render('view', [
+//            'model' => $this->findModel($id, $carrinhos_id, $produtos_id),
+//        ]);
+//    }
 
     /**
      * Creates a new ProdutosCarrinhos model.
@@ -73,6 +101,10 @@ class ProdutosCarrinhosController extends Controller
      */
     public function actionCreate($produtos_id)
     {
+        if (!Yii::$app->user->can('fazerCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new ProdutosCarrinhos();
         $modelProdutos = Produtos::findOne(['id' => $produtos_id]);
         $modelCarrinhos = Carrinhos::find()->where(['user_id' => Yii::$app->user->id, 'status' => 'Ativo'])->one();
@@ -131,6 +163,10 @@ class ProdutosCarrinhosController extends Controller
      */
     public function actionUpdate($id, $carrinhos_id, $produtos_id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id, $carrinhos_id, $produtos_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -153,6 +189,9 @@ class ProdutosCarrinhosController extends Controller
      */
     public function actionDelete($id, $carrinhos_id, $produtos_id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
 
         $modelCarrinhos = Carrinhos::find()->where(['id' => $carrinhos_id])->one();
         $model = $this->findModel($id, $carrinhos_id, $produtos_id);

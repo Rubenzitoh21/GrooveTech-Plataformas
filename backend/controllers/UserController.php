@@ -51,6 +51,10 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams, ['cliente']);
 
@@ -68,6 +72,10 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('verUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -80,6 +88,10 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('criarUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new UserForm();
 
         if ($this->request->isPost) {
@@ -100,6 +112,10 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('verUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new UserForm();
 
         $user = User::findOne(['id' => $id]);
@@ -135,6 +151,10 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

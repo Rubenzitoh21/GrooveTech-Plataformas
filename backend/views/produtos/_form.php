@@ -55,10 +55,11 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <?php if (!$model->isNewRecord): ?>
+    <?php if (!$model->isNewRecord && empty($model->imagens)): ?>
         <?= Html::a('Adicionar Imagem', ['imagens/create', 'produto_id' => $model->id, 'urlCallback' => 'produto'], ['class' => 'btn btn-success']) ?>
         <br><br>
     <?php endif; ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

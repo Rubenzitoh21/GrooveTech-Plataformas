@@ -56,7 +56,7 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_apagarAvaliacoes = $auth->createPermission('apagarAvaliacoes');
         $auth->add($permission_apagarAvaliacoes);
 
-        // Permissão para editar faturas
+        // Faturas
         $permission_verFaturas = $auth->createPermission('verFaturas');
         $auth->add($permission_verFaturas);
         $permission_editarFaturas = $auth->createPermission('editarFaturas');
@@ -64,7 +64,7 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_anularFaturas = $auth->createPermission('anularFaturas');
         $auth->add($permission_anularFaturas);
 
-        // Permissões para editar dados de ivas
+        // Ivas
         $permission_verIvas = $auth->createPermission('verIvas');
         $auth->add($permission_verIvas);
         $permission_editarIvas = $auth->createPermission('editarIvas');
@@ -74,7 +74,27 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $permission_apagarIvas = $auth->createPermission('apagarIvas');
         $auth->add($permission_apagarIvas);
 
-        // Dados da empresa
+        // Expedições
+        $permission_verExpedicoes = $auth->createPermission('verExpedicoes');
+        $auth->add($permission_verExpedicoes);
+        $permission_editarExpedicoes = $auth->createPermission('editarExpedicoes');
+        $auth->add($permission_editarExpedicoes);
+        $permission_criarExpedicoes = $auth->createPermission('criarExpedicoes');
+        $auth->add($permission_criarExpedicoes);
+        $permission_apagarExpedicoes = $auth->createPermission('apagarExpedicoes');
+        $auth->add($permission_apagarExpedicoes);
+
+        // Pagamentos
+        $permission_verPagamentos = $auth->createPermission('verPagamentos');
+        $auth->add($permission_verPagamentos);
+        $permission_editarPagamentos = $auth->createPermission('editarPagamentos');
+        $auth->add($permission_editarPagamentos);
+        $permission_criarPagamentos = $auth->createPermission('criarPagamentos');
+        $auth->add($permission_criarPagamentos);
+        $permission_apagarPagamentos = $auth->createPermission('apagarPagamentos');
+        $auth->add($permission_apagarPagamentos);
+
+        // Empresa
         $permission_verEmpresa = $auth->createPermission('verEmpresa');
         $auth->add($permission_verEmpresa);
         $permission_editarEmpresa = $auth->createPermission('editarEmpresa');
@@ -122,6 +142,16 @@ class m241114_204210_init_rbac_roles_permissions extends Migration
         $auth->addChild($role_gestor, $permission_editarIvas);
         $auth->addChild($role_gestor, $permission_criarIvas);
         $auth->addChild($role_gestor, $permission_apagarIvas);
+
+        $auth->addChild($role_gestor, $permission_verExpedicoes);
+        $auth->addChild($role_gestor, $permission_editarExpedicoes);
+        $auth->addChild($role_gestor, $permission_criarExpedicoes);
+        $auth->addChild($role_gestor, $permission_apagarExpedicoes);
+
+        $auth->addChild($role_gestor, $permission_verPagamentos);
+        $auth->addChild($role_gestor, $permission_editarPagamentos);
+        $auth->addChild($role_gestor, $permission_criarPagamentos);
+        $auth->addChild($role_gestor, $permission_apagarPagamentos);
 
 
         // Role Admin

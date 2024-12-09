@@ -41,7 +41,7 @@ class SiteController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => ['admin', 'gestor'],
+                        'roles' => ['gestor'],
                     ],
                 ],
             ],
@@ -73,6 +73,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('backendAccess')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('index');
     }
 
@@ -117,6 +121,10 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        if (!Yii::$app->user->can('backendAccess')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         Yii::$app->user->logout();
 
         return $this->goHome();

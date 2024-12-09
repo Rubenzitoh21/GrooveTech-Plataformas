@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Pagamentos;
 use backend\models\PagamentosSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +29,16 @@ class PagamentosController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'delete', 'create', 'update'],
+                            'roles' => ['gestor'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -38,6 +50,10 @@ class PagamentosController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verPagamentos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new PagamentosSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -55,6 +71,10 @@ class PagamentosController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('verPagamentos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -67,6 +87,10 @@ class PagamentosController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('criarPagamentos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new Pagamentos();
 
         if ($this->request->isPost) {
@@ -91,6 +115,10 @@ class PagamentosController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('editarPagamentos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -111,6 +139,10 @@ class PagamentosController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarPagamentos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

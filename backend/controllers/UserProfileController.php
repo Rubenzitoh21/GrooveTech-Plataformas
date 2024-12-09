@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\UserProfile;
 use backend\models\UserProfileSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,7 +36,7 @@ class UserProfileController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['index', 'view', 'update', 'delete'],
-                            'roles' => ['admin', 'gestor'],
+                            'roles' => ['admin'],
                         ],
                     ],
                 ],
@@ -50,6 +51,10 @@ class UserProfileController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $searchModel = new UserProfileSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
@@ -67,6 +72,10 @@ class UserProfileController extends Controller
      */
     public function actionView($id)
     {
+        if (!Yii::$app->user->can('verUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -79,6 +88,10 @@ class UserProfileController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('criarUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = new UserProfile();
 
         if ($this->request->isPost) {
@@ -103,6 +116,10 @@ class UserProfileController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (!Yii::$app->user->can('editarUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
@@ -123,6 +140,10 @@ class UserProfileController extends Controller
      */
     public function actionDelete($id)
     {
+        if (!Yii::$app->user->can('apagarUsers')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

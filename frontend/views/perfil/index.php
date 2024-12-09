@@ -58,7 +58,7 @@ $this->title = 'Perfil';
                                         ],
                                         ['prompt' => 'Selecione o seu género']
                                     )->label('Género') ?>
-
+                                        <br>
                                         <?= $form->field($userDataAdditional, 'dtanasc')->label('Data de Nascimento')->textInput([
                                             'id' => 'datepicker',
                                             'placeholder' => 'Selecione a sua data de nascimento'

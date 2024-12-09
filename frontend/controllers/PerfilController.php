@@ -22,20 +22,24 @@ class PerfilController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
                 'access' => [
-                    'class' => AccessControl::class,
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index'],
                     'rules' => [
                         [
                             'actions' => ['index'],
                             'allow' => true,
-                            'roles' => ['@'],
+                            'roles' => ['cliente'],
                         ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+                    },
+                ],
+                'verbs' => [
+                    'class' => \yii\filters\VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
                     ],
                 ],
             ]
@@ -44,6 +48,9 @@ class PerfilController extends Controller
 
     public function actionIndex($mode = null)
     {
+        if (!Yii::$app->user->can('editarDadosPessoais')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
 
         $userId = Yii::$app->user->identity->id;
         $userData = User::findOne($userId);

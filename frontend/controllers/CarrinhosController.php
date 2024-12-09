@@ -48,7 +48,7 @@ class CarrinhosController extends Controller
                             Yii::$app->getResponse()->redirect(['site/login'])->send();
                             Yii::$app->end();
                         } else {
-                            throw new ForbiddenHttpException('You are not allowed to perform this action.');
+                            throw new ForbiddenHttpException('Acesso negado.');
                         }
                     },
                 ],
@@ -70,6 +70,10 @@ class CarrinhosController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->can('verCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $searchModel = new CarrinhosSearch();
         $searchModel->user_id = Yii::$app->user->id;
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -95,6 +99,10 @@ class CarrinhosController extends Controller
      */
     public function actionView($id, $user_id)
     {
+        if (!Yii::$app->user->can('verCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id, $user_id),
         ]);
@@ -107,6 +115,10 @@ class CarrinhosController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('fazerCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $model = new Carrinhos();
 
         $model->user_id = Yii::$app->user->id;
@@ -130,6 +142,10 @@ class CarrinhosController extends Controller
 
     public function actionUpdate($id, $user_id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $model = $this->findModel($id, $user_id);
         $userData = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
 
@@ -146,6 +162,10 @@ class CarrinhosController extends Controller
 
     public function actionCheckout($id, $user_id)
     {
+        if (!Yii::$app->user->can('fazerCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $model = $this->findModel($id, $user_id);
         $userData = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
         $userData?->setScenario(UserProfile::SCENARIO_USERPROFILE);
@@ -224,6 +244,10 @@ class CarrinhosController extends Controller
 
     public function actionAumentar($id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $linha = ProdutosCarrinhos::findOne($id);
         $carrinho = Carrinhos::findOne($linha->carrinhos_id);
 
@@ -241,6 +265,10 @@ class CarrinhosController extends Controller
 
     public function actionDiminuir($id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $linha = ProdutosCarrinhos::findOne($id);
         $carrinho = Carrinhos::findOne($linha->carrinhos_id);
         if ($linha && $linha->quantidade != '1') {
@@ -257,6 +285,10 @@ class CarrinhosController extends Controller
 
     public function actionUserdataupdate($id, $user_id)
     {
+        if (!Yii::$app->user->can('editarDadosPessoais')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $userDataAdditional = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
         $model = $this->findModel($id, $user_id);
         if ($this->request->isPost) {
@@ -294,6 +326,10 @@ class CarrinhosController extends Controller
      */
     public function actionDelete($id, $user_id)
     {
+        if (!Yii::$app->user->can('editarCompras')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado');
+        }
+
         $this->findModel($id, $user_id)->delete();
 
         return $this->redirect(['index']);
