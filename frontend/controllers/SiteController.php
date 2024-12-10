@@ -159,14 +159,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (!Yii::$app->user->can('backendAccess'))
+            if (!Yii::$app->user->can('backendAccess')) {
                 return $this->goHome();
-
-            else {
-
+            } else {
                 Yii::$app->user->logout();
                 Yii::$app->session->setFlash('error', 'Acesso negado, apenas cliente podem iniciar sessão.');
-
                 return $this->refresh();
             }
         }
@@ -234,9 +231,9 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Conta criada com sucesso. Obrigado pelo seu registo!');
-            return $this->render('login', [
-                'model' => new LoginForm(),
-            ]);
+
+            // Redirecionar para a página inicial após o cadastro
+            return $this->redirect(['site/login']);
         }
 
         return $this->render('signup', [

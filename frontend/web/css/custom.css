@@ -23,7 +23,6 @@ footer {
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 100px !important;
     background-image: radial-gradient(#5460f8, #04093b) !important;
 }
 /* Links da Navbar Principal */

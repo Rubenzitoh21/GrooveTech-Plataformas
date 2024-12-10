@@ -47,7 +47,7 @@ class UserForm extends Model
     }
 
     /**
-     * Signs user up.
+     * Create user up.
      *
      * @return bool whether the creating new account was successful and email was sent
      */

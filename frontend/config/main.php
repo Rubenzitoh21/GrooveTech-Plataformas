@@ -19,6 +19,11 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'loginUrl' => ['site/login'],
+            'on afterLogin' => function ($event) {
+                Yii::$app->response->redirect(['site/index'])->send();
+                Yii::$app->end();
+            },
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend

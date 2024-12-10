@@ -152,7 +152,7 @@ $this->title = 'Groove Tech - Início';
                             <p class="card-text">
                                 <?= $produto['descricao'] ?>
                             </p>
-                            <p class="text-muted">Comentários (<?= $produto['review_count'] ?>)</p>
+                            <p class="text-muted">Comentários <sup>(<?= $produto['review_count'] ?>)</sup></p>
                         </div>
                     </div>
                 </div>
