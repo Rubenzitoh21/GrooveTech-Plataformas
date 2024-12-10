@@ -35,18 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'vigor',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return Html::tag(
-                        'div',
+                    return Html::beginForm(['toggle-vigor', 'id' => $model->id], 'post', [
+                            'style' => 'display:inline-block'
+                        ]) .
                         Html::checkbox('vigor', $model->vigor == 1, [
+                            'onchange' => 'if(confirm("Tem a certeza que deseja alterar o vigor deste Iva?")) { this.form.submit(); } else { location.reload(); }',
                             'data-toggle' => 'toggle',
                             'data-on' => 'Em Vigor',
                             'data-off' => 'Inativo',
                             'data-onstyle' => 'primary',
                             'data-offstyle' => 'danger',
-                            'disabled' => true,
-                        ]),
-                        ['class' => 'form-check']
-                    );
+                        ]) .
+                        Html::endForm();
                 },
             ],
             [

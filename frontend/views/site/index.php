@@ -96,15 +96,27 @@ $this->title = 'Groove Tech - Início';
     </div>
     <div class="row">
         <?php foreach ($categoriasDestaque as $categoria): ?>
-            <div class="col-12 col-md-4 p-5 mt-3">
+            <?php
+            $produtos = $categoria->produtos;
+            if (!empty($produtos)) {
+                $produtoAleatorio = $produtos[array_rand($produtos)];
+                $produtoImagem = $produtoAleatorio->imagens[0]->fileName ?? 'default.png';
+            } else {
+                $produtoImagem = 'default.png';
+            }
+            ?>
+            <div class="col-12 col-md-4 p-5 mt-3 text-center">
                 <a href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
-                    <img src="<?= Url::to('@web/images/category_img_0' . $categoria->id . '.jpg') ?>" class="rounded-circle img-fluid border">
+                    <img src="<?= Url::to('@web/images/' . $produtoImagem) ?>" class="category-circle img-fluid">
                 </a>
                 <h5 class="text-center mt-3 mb-3"><?= $categoria->nome ?></h5>
                 <p class="text-center"><?= $categoria->obs ?></p>
             </div>
         <?php endforeach; ?>
     </div>
+
+
+
 
 </section>
 <!-- End Categories of The Month -->

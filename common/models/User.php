@@ -27,6 +27,7 @@ use yii\web\IdentityInterface;
  * @property Avaliacoes[] $avaliacoes
  * @property Carrinhos[] $carrinhos
  * @property UserProfile[] $userProfiles
+ * @property Faturas[] $faturas
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -301,5 +302,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuth()
     {
         return $this->hasOne(AuthAssignment::class, ['user_id' => 'id']);
+    }
+
+    public function getFaturas()
+    {
+        return $this->hasMany(Faturas::class, ['user_id' => 'id']);
     }
 }

@@ -19,7 +19,7 @@ $this->title = $model->nome;
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <a class="btn btn-success" href="javascript:window.history.back();">
+                <a class="btn btn-success" href="<?= Url::to('@web/produtos/index') ?>">
                     <i class="fa fa-arrow-left"></i> Voltar
                 </a>
             </div>

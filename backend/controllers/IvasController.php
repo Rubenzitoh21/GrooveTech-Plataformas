@@ -34,7 +34,7 @@ class IvasController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'delete', 'create', 'update'],
+                            'actions' => ['index', 'view', 'delete', 'create', 'update', 'toggle-vigor'],
                             'roles' => ['gestor'],
                         ],
                     ],
@@ -166,5 +166,27 @@ class IvasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionToggleVigor($id)
+    {
+        if (!Yii::$app->user->can('editarIvas')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+        }
+
+        $model = $this->findModel($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException("IVA não encontrado.");
+        }
+
+        $model->vigor = $model->vigor ? 0 : 1;
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Em vigor atualizado com sucesso!');
+        } else {
+            Yii::$app->session->setFlash('error', 'Erro ao atualizar o vigor.');
+        }
+
+        return $this->redirect(['index']);
     }
 }

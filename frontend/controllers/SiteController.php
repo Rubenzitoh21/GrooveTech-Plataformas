@@ -22,6 +22,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\ForbiddenHttpException;
+use yii\db\Expression;
 
 /**
  * Site controller
@@ -93,7 +94,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $categoriasDestaque = CategoriasProdutos::find()
-            ->where(['id' => [5, 6, 9]])
+            ->orderBy(new Expression('RAND()'))
+            ->limit(3)
             ->all();
 
         $produtosAvaliados = (new Query())
@@ -125,13 +127,13 @@ class SiteController extends Controller
                     'produtos.nome',
                     'produtos.descricao',
                     'produtos.preco',
-                    new \yii\db\Expression('0 AS avg_rating'),
-                    new \yii\db\Expression('0 AS review_count'),
+                    new Expression('0 AS avg_rating'),
+                    new Expression('0 AS review_count'),
                     '(SELECT fileName FROM imagens WHERE imagens.produto_id = produtos.id LIMIT 1) AS image_file'
                 ])
                 ->from('produtos')
                 ->where(['NOT IN', 'produtos.id', $produtosAvaliadosIds])
-                ->orderBy(new \yii\db\Expression('RAND()'))
+                ->orderBy(new Expression('RAND()'))
                 ->limit($quantidadeRestante)
                 ->all();
 
