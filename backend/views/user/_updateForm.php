@@ -9,6 +9,9 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
+<?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+<br>
+<br>
 <div class="user-form">
 
     <?php $form = ActiveForm::begin(); ?>

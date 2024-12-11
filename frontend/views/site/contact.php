@@ -21,24 +21,24 @@ $this->title = 'Contactos';
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
-                <?= $form->field($model, 'name')->textInput(['autofocus' => true])->label('Nome') ?>
+            <?= $form->field($model, 'name')->textInput(['autofocus' => true])->label('Nome') ?>
 
-                <?= $form->field($model, 'email')->label('E-Mail') ?>
+            <?= $form->field($model, 'email')->label('E-Mail') ?>
 
-                <?= $form->field($model, 'subject')->label('Assunto') ?>
+            <?= $form->field($model, 'subject')->label('Assunto') ?>
 
-                <?= $form->field($model, 'body')->textarea(['rows' => 6])->label('Mensagem') ?>
+            <?= $form->field($model, 'body')->textarea(['rows' => 6])->label('Mensagem') ?>
 
-                <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
-                    'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
-                ])->label('Verificação (introduza a código abaixo)') ?>
+            <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
+                'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
+            ])->label('Verificação (introduza a código abaixo)') ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Submeter', ['class' => 'btn btn-success', 'name' => 'contact-button']) ?>
-                </div>
+            <div class="form-group">
+                <?= Html::submitButton('Submeter', ['class' => 'btn btn-success', 'name' => 'contact-button']) ?>
+            </div>
 
             <?php ActiveForm::end(); ?>
         </div>
     </div>
-
 </div>
+

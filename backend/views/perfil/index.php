@@ -14,7 +14,6 @@ use yii\grid\GridView;
 $this->title = 'Perfil';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="perfil-index">
     <?= $this->render('_form', [
         'model' => $model,

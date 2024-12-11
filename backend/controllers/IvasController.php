@@ -181,11 +181,7 @@ class IvasController extends Controller
         }
 
         $model->vigor = $model->vigor ? 0 : 1;
-        if ($model->save()) {
-            Yii::$app->session->setFlash('success', 'Em vigor atualizado com sucesso!');
-        } else {
-            Yii::$app->session->setFlash('error', 'Erro ao atualizar o vigor.');
-        }
+        $model->save();
 
         return $this->redirect(['index']);
     }

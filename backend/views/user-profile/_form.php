@@ -7,7 +7,9 @@ use yii\widgets\ActiveForm;
 /** @var common\models\UserProfile $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
-
+<?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
+<br>
+<br>
 <div class="user-profile-form">
 
     <?php $form = ActiveForm::begin(); ?>

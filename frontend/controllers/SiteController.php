@@ -196,6 +196,7 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        $empresa = Empresas::find()->one();
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
@@ -203,12 +204,12 @@ class SiteController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', 'Ocorreu um erro ao enviar a sua mensagem.');
             }
-
             return $this->refresh();
         }
 
         return $this->render('contact', [
             'model' => $model,
+            'empresa' => $empresa,
         ]);
     }
 

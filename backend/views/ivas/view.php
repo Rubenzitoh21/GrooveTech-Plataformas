@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="ivas-view">
 
     <p>
+        <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
         <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
