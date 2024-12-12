@@ -2,10 +2,14 @@
 
 namespace backend\controllers;
 
+use common\models\Faturas;
 use common\models\LoginForm;
+use common\models\User;
+use common\models\UserProfile;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -77,7 +81,50 @@ class SiteController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        return $this->render('index');
+        $totalFaturado = Faturas::find()
+            ->where(['status' => 'Pago'])
+            ->sum('valortotal');
+
+        $totalFaturas = Faturas::find()->count();
+
+        $totalClientes = UserProfile::find()->count();
+
+
+        $meses = array_fill(1, 12, 0);
+
+        $vendasPorMes = Faturas::find()
+            ->select(['COUNT(*) as quantidade', 'MONTH(data) as mes'])
+            ->where(['status' => 'Pago'])
+            ->groupBy(['mes'])
+            ->indexBy('mes')
+            ->asArray()
+            ->all();
+
+        foreach ($vendasPorMes as $mes => $venda) {
+            $meses[$mes] = (int)$venda['quantidade'];
+        }
+
+
+        $faturado = array_fill(1, 12, 0);
+
+        $faturas = Faturas::find()
+            ->select(['MONTH(data) as mes', 'SUM(valortotal) as total'])
+            ->groupBy('mes')
+            ->asArray()
+            ->all();
+
+        foreach ($faturas as $fatura) {
+            $faturado[(int)$fatura['mes']] = (float)$fatura['total'];
+        }
+
+
+        return $this->render('index', [
+            'totalFaturado' => $totalFaturado ?? 0,
+            'totalFaturas' => $totalFaturas ?? 0,
+            'totalClientes' => $totalClientes ?? 0,
+            'meses' => $meses,
+            'faturado' => $faturado,
+        ]);
     }
 
     /**

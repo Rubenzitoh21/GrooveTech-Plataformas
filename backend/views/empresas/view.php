@@ -12,31 +12,35 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="empresas-view">
-
-
+    <div class="row">
+        <div class="col-12 col-sm-1 col-md-1">
+            <?= Html::img('@web/images/logo_gt.png', [
+                'alt' => 'Groove Tech Logo',
+                'class' => 'img-thumbnail'
+            ]) ?>
+        </div>
+    </div>
+    <br>
     <p>
-        <?= Html::a('Voltar', ['index'], ['class' => 'btn btn-secondary']) ?>
         <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-<!--        --><?php //= Html::a('Delete', ['delete', 'id' => $model->id], [
-//            'class' => 'btn btn-danger',
-//            'data' => [
-//                'confirm' => 'Are you sure you want to delete this item?',
-//                'method' => 'post',
-//            ],
-//        ]) ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'designacaosocial',
-            'email:email',
+            'email',
             'telefone',
             'nif',
             'rua',
             'codigopostal',
             'localidade',
-            'capitalsocial',
+            [
+                'attribute' => 'capitalsocial',
+                'value' => function ($model) {
+                    return number_format($model->capitalsocial, 2, ',', '.') . ' €';
+                },
+            ],
         ],
     ]) ?>
 

@@ -52,27 +52,7 @@ class EmpresasController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->user->can('verEmpresa')) {
-            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
-        }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => Empresas::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->redirect(['view']);
     }
 
     /**
@@ -81,14 +61,16 @@ class EmpresasController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView()
     {
         if (!Yii::$app->user->can('verEmpresa')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
+        $empresa = $this->findModel();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $empresa,
         ]);
     }
 
@@ -99,20 +81,20 @@ class EmpresasController extends Controller
      * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
         if (!Yii::$app->user->can('editarEmpresa')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $model = $this->findModel($id);
+        $empresa = $this->findModel();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $empresa->load($this->request->post()) && $empresa->save()) {
+            return $this->redirect(['view']);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $empresa,
         ]);
     }
 
@@ -123,12 +105,13 @@ class EmpresasController extends Controller
      * @return Empresas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel()
     {
-        if (($model = Empresas::findOne(['id' => $id])) !== null) {
-            return $model;
+        $empresa = Empresas::find()->one();
+        if ($empresa !== null) {
+            return $empresa;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Nenhuma empresa foi encontrada.');
     }
 }
