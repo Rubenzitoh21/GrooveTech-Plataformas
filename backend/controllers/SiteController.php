@@ -80,7 +80,7 @@ class SiteController extends Controller
         if (!Yii::$app->user->can('backendAccess')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
-
+        //estatisitcas do dashboard
         $totalFaturado = Faturas::find()
             ->where(['status' => 'Pago'])
             ->sum('valortotal');
@@ -89,7 +89,7 @@ class SiteController extends Controller
 
         $totalClientes = UserProfile::find()->count();
 
-
+        //vendas por mes
         $meses = array_fill(1, 12, 0);
 
         $vendasPorMes = Faturas::find()
@@ -104,7 +104,7 @@ class SiteController extends Controller
             $meses[$mes] = (int)$venda['quantidade'];
         }
 
-
+        //faturado por mes
         $faturado = array_fill(1, 12, 0);
 
         $faturas = Faturas::find()
@@ -117,6 +117,29 @@ class SiteController extends Controller
             $faturado[(int)$fatura['mes']] = (float)$fatura['total'];
         }
 
+        //notificação de novos clientes
+        $session = Yii::$app->session;
+        $lastCheckedUserId = $session->get('lastCheckedUserId', 0);
+
+        $novosClientes = UserProfile::find()
+            ->where(['>', 'id', $lastCheckedUserId])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        if (!empty($novosClientes)) {
+            $session->set('lastCheckedUserId', $novosClientes[0]->id);
+        }
+
+        //notificação de novas compras
+        $lastCheckedFaturaId = $session->get('lastCheckedFaturaId', 0);
+        $novasCompras = Faturas::find()
+            ->where(['>', 'id', $lastCheckedFaturaId])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        if (!empty($novasCompras)) {
+            $session->set('lastCheckedFaturaId', $novasCompras[0]->id);
+        }
 
         return $this->render('index', [
             'totalFaturado' => $totalFaturado ?? 0,
@@ -124,6 +147,8 @@ class SiteController extends Controller
             'totalClientes' => $totalClientes ?? 0,
             'meses' => $meses,
             'faturado' => $faturado,
+            'novosClientes' => $novosClientes,
+            'novasCompras' => $novasCompras
         ]);
     }
 

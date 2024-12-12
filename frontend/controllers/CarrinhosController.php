@@ -179,7 +179,6 @@ class CarrinhosController extends Controller
             $fatura->valortotal = $model->valortotal;
             $fatura->status = 'Pago';
             $fatura->user_id = Yii::$app->user->id;
-            $fatura->save();
 
             if (empty($fatura->pagamentos_id) || empty($fatura->expedicoes_id)) {
                 Yii::$app->session->setFlash('error', 'Por favor, selecione um método de pagamento e um método de envio.');
@@ -203,7 +202,7 @@ class CarrinhosController extends Controller
                     }
                 }
 
-                Yii::$app->session->setFlash('error', 'Erro nos dados do fornecidos: <br>' . $errorMessages);
+                Yii::$app->session->setFlash('error', 'Detalhes de Faturação inválidos');
 
                 return $this->render('checkout', [
                     'model' => $model,
@@ -211,6 +210,7 @@ class CarrinhosController extends Controller
                     'fatura' => $fatura,
                 ]);
             }
+            $fatura->save();
 
             foreach ($produtoCarrinhoProduto as $produtoCarrinho) {
                 $linhaFatura = new LinhasFaturas();

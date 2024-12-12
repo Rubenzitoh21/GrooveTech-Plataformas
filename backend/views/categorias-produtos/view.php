@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <?php if (!empty($model->produtos)): ?>
     <br>
     <h3>Produtos</h3>
     <table class="table table-bordered table-striped">
@@ -54,4 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         <?php endforeach; ?>
     </table>
+    <?php else: ?>
+        <p class="text-muted">Esta categoria ainda não tem produtos associados.</p>
+    <?php endif; ?>
 </div>

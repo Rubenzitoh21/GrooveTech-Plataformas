@@ -66,6 +66,34 @@ $this->params['breadcrumbs'] = [['label' => "$this->title"]];
         </div>
     </div>
 </div>
+<?php if (!empty($novosClientes)): ?>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <?php foreach ($novosClientes as $user): ?>
+            <div class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Novo cliente registado: <?= Html::encode("{$user['primeironome']} {$user['apelido']}") ?>
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+<?php if (!empty($novasCompras)): ?>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <?php foreach ($novasCompras as $compra): ?>
+            <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Nova compra no valor de: <?= number_format($compra->valortotal, 2, ',', '.') ?> €.
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
 <?php
 $this->registerJs(<<<JS
     // Gráfico de Quantidade de Vendas por Mês
@@ -98,7 +126,7 @@ $this->registerJs(<<<JS
             }
         }
     });
-
+ 
     // Gráfico de Total Faturado por Mês
     var ctx2 = document.getElementById('faturamento').getContext('2d');
     var revenueChart = new Chart(ctx2, {
@@ -128,5 +156,9 @@ $this->registerJs(<<<JS
             }
         }
     });
+     // Novo cliente registado
+    var toastEl = document.querySelector('.toast');
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
 JS);
 ?>

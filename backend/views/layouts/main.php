@@ -12,12 +12,8 @@ $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 
 $publishedRes = Yii::$app->assetManager->publish('@vendor/hail812/yii2-adminlte3/src/web/js');
-$this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\hail812\adminlte3\assets\AdminLteAsset']);
-$this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', [
-    'position' => \yii\web\View::POS_END,
-    'depends' => [\yii\web\JqueryAsset::class],
-]);
-
+$this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css');
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', ['position' => \yii\web\View::POS_END, 'depends' => [\yii\web\JqueryAsset::class],]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -34,7 +30,6 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', [
 </head>
 <body class="hold-transition sidebar-mini">
 <?php $this->beginBody() ?>
-
 <div class="wrapper">
     <!-- Navbar -->
     <?= $this->render('navbar', ['assetDir' => $assetDir]) ?>
@@ -58,6 +53,9 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', [
 <?php $this->endBody() ?>
 </body>
 </html>
+<?php
+$this->registerJsFile($publishedRes[1].'/control_sidebar.js', ['depends' => '\hail812\adminlte3\assets\AdminLteAsset']);
+?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <?php $this->endPage() ?>
