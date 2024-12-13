@@ -85,7 +85,9 @@ class SiteController extends Controller
             ->where(['status' => 'Pago'])
             ->sum('valortotal');
 
-        $totalFaturas = Faturas::find()->count();
+        $totalFaturas = Faturas::find()
+            ->where(['status' => 'Pago'])
+            ->count();
 
         $totalClientes = UserProfile::find()->count();
 
@@ -109,6 +111,7 @@ class SiteController extends Controller
 
         $faturas = Faturas::find()
             ->select(['MONTH(data) as mes', 'SUM(valortotal) as total'])
+            ->where(['status' => 'Pago'])
             ->groupBy('mes')
             ->asArray()
             ->all();
