@@ -50,35 +50,67 @@ class ProdutosController extends Controller
     }
 
 
-    public function actionIndex($categorias_id = null, $search = null)
+    public function actionIndex($categorias_id = null, $search = null, $sort = null)
     {
+        // Cria a consulta base
         $query = Produtos::find();
 
-
-        if ($categorias_id !== null) {
+        // Filtrar por categoria (somente se existir uma categoria válida)
+        if (!empty($categorias_id)) {
             $query->andWhere(['categorias_produtos_id' => $categorias_id]);
         }
 
-        if ($search !== null) {
+        // Filtrar por pesquisa (somente se o valor de pesquisa for preenchido)
+        if (!empty($search)) {
             $query->andWhere(['like', 'nome', $search]);
         }
 
+        // Aplicar ordenação com base na seleção do dropdown
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy(['preco' => SORT_ASC]);
+                break;
+            case 'price_desc':
+                $query->orderBy(['preco' => SORT_DESC]);
+                break;
+            case 'name_asc':
+                $query->orderBy(['nome' => SORT_ASC]);
+                break;
+            case 'name_desc':
+                $query->orderBy(['nome' => SORT_DESC]);
+                break;
+            case 'date_oldest':
+                $query->orderBy(['id' => SORT_ASC]);
+                break;
+            case 'date_newest':
+                $query->orderBy(['id' => SORT_DESC]);
+                break;
+            default:
+                // Ordenação padrão
+                $query->orderBy(['id' => SORT_DESC]);
+        }
+
+        // Configurar o DataProvider para paginação e consulta
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 12,
+                'pageSize' => 12, // Número de produtos por página
             ],
         ]);
 
+        // Buscar todas as categorias
         $categorias = CategoriasProdutos::find()->all();
 
+        // Renderizar a view com os dados necessários
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'categorias' => $categorias,
             'categorias_id' => $categorias_id,
             'search' => $search,
+            'sort' => $sort,
         ]);
     }
+
 
 
 

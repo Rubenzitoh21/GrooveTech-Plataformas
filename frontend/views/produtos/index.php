@@ -30,7 +30,11 @@ $this->title = 'Produtos';
                     $isActive = Yii::$app->request->get('categorias_id') === null ? 'text-primary font-weight-bold' : '';
                     ?>
                     <a class="d-flex justify-content-between text-decoration-none <?= $isActive ?>"
-                       href="<?= Url::to(['/produtos/index']) ?>">
+                       href="<?= Url::to([
+                           'produtos/index',
+                           'search' => $search,
+                           'sort' => $sort
+                       ]) ?>">
                         (<?= Produtos::find()->count() ?>) Mostrar Todos
                     </a>
                 </li>
@@ -40,23 +44,29 @@ $this->title = 'Produtos';
                     ?>
                     <li class="pb-3">
                         <a class="d-flex justify-content-between text-decoration-none <?= $isActive ?>"
-                           href="<?= Url::to(['produtos/index', 'categorias_id' => $categoria->id]) ?>">
+                           href="<?= Url::to([
+                               'produtos/index',
+                               'categorias_id' => $categoria->id,
+                               'search' => $search,
+                               'sort' => $sort
+                           ]) ?>">
                             (<?= $categoria->getProdutos()->count() ?>) <?= Html::encode($categoria->nome) ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
-
             </ul>
         </div>
 
-        <!-- Produtos -->
         <div class="col-lg-9">
             <div class="row">
+                <!-- Barra de Pesquisa -->
                 <div class="col-md-6 pb-4">
                     <div class="d-flex">
                         <?php $form = ActiveForm::begin(['action' => ['produtos/index'], 'method' => 'get']); ?>
                         <div class="input-group mb-3">
+                            <?= Html::hiddenInput('categorias_id', $categorias_id ?: '') ?>
                             <?= Html::input('text', 'search', $search, ['class' => 'form-control', 'placeholder' => 'Pesquisar produtos...']) ?>
+                            <?= Html::hiddenInput('sort', $sort) ?>
                             <?= Html::submitButton(
                                 '<i class="fa fa-fw fa-search text-light mr-3"></i>',
                                 ['class' => 'btn btn-success']
@@ -65,7 +75,33 @@ $this->title = 'Produtos';
                         <?php ActiveForm::end(); ?>
                     </div>
                 </div>
+
+                <!-- Dropdown de Ordenação -->
+                <div class="col-md-6 pb-4 text-right">
+                    <div class="d-flex justify-content-end">
+                        <?php $form = ActiveForm::begin(['action' => ['produtos/index'], 'method' => 'get']); ?>
+                        <?= Html::hiddenInput('categorias_id', $categorias_id ?: '') ?>
+                        <?= Html::hiddenInput('search', $search) ?>
+                        <?= Html::dropDownList(
+                            'sort',
+                            $sort,
+                            [
+                                '' => 'Ordenar por',
+                                'price_asc' => 'Preço (Crescente)',
+                                'price_desc' => 'Preço (Decrescente)',
+                                'name_asc' => 'Nome (A-Z)',
+                                'name_desc' => 'Nome (Z-A)',
+                                'date_oldest' => 'Mais Antigos',
+                                'date_newest' => 'Recentes',
+                            ],
+                            ['class' => 'form-select', 'onchange' => 'this.form.submit()']
+                        ) ?>
+                        <?php ActiveForm::end(); ?>
+                    </div>
+                </div>
             </div>
+
+            <!-- Produtos -->
             <div class="row">
                 <?php foreach ($dataProvider->getModels() as $produto): ?>
                     <div class="col-md-4">
@@ -101,7 +137,7 @@ $this->title = 'Produtos';
                                 <a href="<?= Url::to(['produtos/view', 'id' => $produto->id]) ?>" class="h3 text-decoration-none text-dark">
                                     <?= Html::encode($produto->nome) ?>
                                 </a>
-                                <p class="text-muted">Comentários (<?= $produto->getAvaliacoes()->count() ?>)</p>
+                                <p class="text-muted">Comentários <sup>(<?= $produto->getAvaliacoes()->count() ?>)</sup></p>
                             </div>
                         </div>
                     </div>

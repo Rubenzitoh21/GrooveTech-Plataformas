@@ -106,7 +106,7 @@ AppAsset::register($this);
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <?php $form = \yii\widgets\ActiveForm::begin([
-            'action' => ['produtos/index'], // Altere para a rota correta
+            'action' => ['produtos/index'],
             'method' => 'get',
             'options' => ['class' => 'modal-content modal-body border-0 p-0']
         ]); ?>
