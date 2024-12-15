@@ -122,19 +122,38 @@ class SiteController extends Controller
 
         //notificação de novos clientes
         $session = Yii::$app->session;
-        $lastCheckedUserId = $session->get('lastCheckedUserId', 0);
 
+        if (!$session->has('lastCheckedUserId')) {
+            $ultimoCliente = UserProfile::find()
+                ->select(['id'])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            $session->set('lastCheckedUserId', $ultimoCliente);
+        }
+        
+        $lastCheckedUserId = $session->get('lastCheckedUserId');
+        
         $novosClientes = UserProfile::find()
             ->where(['>', 'id', $lastCheckedUserId])
             ->orderBy(['id' => SORT_DESC])
             ->all();
-
+        
         if (!empty($novosClientes)) {
             $session->set('lastCheckedUserId', $novosClientes[0]->id);
         }
 
+
         //notificação de novas compras
-        $lastCheckedFaturaId = $session->get('lastCheckedFaturaId', 0);
+        if (!$session->has('lastCheckedFaturaId')) {
+            $ultimaFatura = Faturas::find()
+                ->select(['id'])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            $session->set('lastCheckedFaturaId', $ultimaFatura);
+        }
+
+        $lastCheckedFaturaId = $session->get('lastCheckedFaturaId');
+
         $novasCompras = Faturas::find()
             ->where(['>', 'id', $lastCheckedFaturaId])
             ->orderBy(['id' => SORT_DESC])

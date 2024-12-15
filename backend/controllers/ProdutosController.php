@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Produtos;
 use common\models\ProdutosSearch;
+use common\models\Imagens;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -138,15 +139,29 @@ class ProdutosController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-    {
-        if (!Yii::$app->user->can('apagarProdutos')) {
-            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+{
+    if (!Yii::$app->user->can('apagarProdutos')) {
+        throw new \yii\web\ForbiddenHttpException('Acesso negado.');
+    }
+
+    $model = $this->findModel($id);
+
+    $imagens = Imagens::find()->where(['produto_id' => $model->id])->all();
+
+    foreach ($imagens as $imagem) {
+        $filePath = Yii::getAlias('@webroot/images/' . $imagem->fileName);
+        
+        if (file_exists($filePath)) {
+            unlink($filePath);
         }
 
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $imagem->delete();
     }
+
+    $model->delete();
+
+    return $this->redirect(['index']);
+}
 
     /**
      * Finds the Produtos model based on its primary key value.
