@@ -24,6 +24,9 @@ return [
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -31,17 +34,17 @@ return [
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
+            'cookieParams' => ['httpOnly' => true],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
-                    'class'=> FileTarget::class,
-                    'levels'=>['error','warning','info'],
-                    'logVars' =>[],
-                    'categories'=>['debug'],
+                    'class' => FileTarget::class,
+                    'levels' => ['error', 'warning', 'info'],
+                    'logVars' => [],
+                    'categories' => ['debug'],
                     'logFile' => '@runtime/logs/app.log',
                 ],
             ],
@@ -51,6 +54,7 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
                 //USER
@@ -63,7 +67,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'POST login' => 'login',
-
+                        'POST signup' => 'signup',
                     ],
                 ],
             ],
