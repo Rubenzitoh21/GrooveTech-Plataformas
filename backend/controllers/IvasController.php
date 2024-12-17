@@ -147,10 +147,20 @@ class IvasController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        try {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'IVA excluído com sucesso.');
+        } catch (\yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('error', 'Não é possível excluir este IVA porque está associado a outros registos.');
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o IVA.');
+        }
 
         return $this->redirect(['index']);
     }
+
 
     /**
      * Finds the Ivas model based on its primary key value.

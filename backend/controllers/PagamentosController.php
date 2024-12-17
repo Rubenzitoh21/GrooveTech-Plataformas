@@ -143,7 +143,16 @@ class PagamentosController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        try {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Pagamento excluído com sucesso.');
+        } catch (\yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('error', 'Não é possível excluir este Pagamento porque está associado a outros registos.');
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o Pagamento.');
+        }
 
         return $this->redirect(['index']);
     }

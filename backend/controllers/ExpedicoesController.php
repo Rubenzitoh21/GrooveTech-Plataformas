@@ -143,7 +143,15 @@ class ExpedicoesController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        try {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Expedição excluída com sucesso.');
+        } catch (\yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('error', 'Não é possível excluir esta Expedição porque está associado a outros registos.');
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir a Expedição.');
+        }
 
         return $this->redirect(['index']);
     }

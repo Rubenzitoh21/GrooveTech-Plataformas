@@ -68,16 +68,16 @@ class UserProfile extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'primeironome' => 'Primeironome',
+            'primeironome' => 'Primeiro Nome',
             'apelido' => 'Apelido',
-            'codigopostal' => 'Codigopostal',
+            'codigopostal' => 'Código Postal',
             'localidade' => 'Localidade',
             'rua' => 'Rua',
             'nif' => 'Nif',
-            'dtanasc' => 'Dtanasc',
-            'dtaregisto' => 'Dtaregisto',
+            'dtanasc' => 'Data de Nascimento',
+            'dtaregisto' => 'Data de Registo',
             'telefone' => 'Telefone',
-            'genero' => 'Genero',
+            'genero' => 'Género',
             'user_id' => 'User ID',
             'email' => 'Email',
         ];

@@ -158,7 +158,14 @@ class ProdutosController extends Controller
         $imagem->delete();
     }
 
-    $model->delete();
+    try {
+        $model->delete();
+        Yii::$app->session->setFlash('success', 'Produto excluído com sucesso.');
+    } catch (\yii\db\IntegrityException $e) {
+        Yii::$app->session->setFlash('error', 'Não é possível excluir este Produto porque está associado a outros registos.');
+    } catch (\Exception $e) {
+        Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o Produto.');
+    }
 
     return $this->redirect(['index']);
 }
