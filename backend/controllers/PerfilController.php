@@ -95,7 +95,7 @@ class PerfilController extends Controller
         if ($loadedPost && $user->validate()) {
             $user->password = $user->newPassword;
             $user->save(false);
-            Yii::$app->session->setFlash('success', 'Palavr-passe alterada com sucesso');
+            Yii::$app->session->setFlash('success', 'Palavra-passe alterada com sucesso');
             return $this->redirect(['index']);
         }
 

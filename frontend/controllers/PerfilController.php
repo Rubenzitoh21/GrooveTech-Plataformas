@@ -55,24 +55,28 @@ class PerfilController extends Controller
         $userId = Yii::$app->user->identity->id;
         $userData = User::findOne($userId);
         $userDataAdditional = UserProfile::findOne(['user_id' => $userId]);
-
-        $passwordModel = new User(['scenario' => User::SCENARIO_PASSWORD]);
+        $user = Yii::$app->user->identity;
 
         if (Yii::$app->request->isPost) {
             switch ($mode) {
                 case 'password':
-                    if ($passwordModel->load(Yii::$app->request->post()) && $passwordModel->validate()) {
-                        $userData->setPassword($passwordModel->newPassword);
-                        $userData->generateAuthKey();
+                    $user->scenario = User::SCENARIO_PASSWORD;
+                    if ($user->load(Yii::$app->request->post())) {
+                        if ($user->validate()) {
+                            if (empty($user->newPassword)) {
+                                Yii::$app->session->setFlash('error', 'A nova senha não pode estar vazia.');
+                                break;
+                            }
+                            $userData->setPassword($user->newPassword);
 
-                        if ($userData->save()) {
-                            Yii::$app->user->identity = User::findOne($userId);
-                            Yii::$app->user->login($userData);
-
-                            Yii::$app->session->setFlash('success', 'Password alterada com sucesso!');
-                            return $this->refresh();
+                            if ($userData->save(false)) {
+                                Yii::$app->session->setFlash('success', 'Password alterada com sucesso!');
+                                return $this->redirect(['perfil/index']);
+                            } else {
+                                Yii::$app->session->setFlash('error', 'Erro ao alterar a password.');
+                            }
                         } else {
-                            Yii::$app->session->setFlash('error', 'Erro ao alterar a password.');
+                            Yii::$app->session->setFlash('error', 'Dados inválidos. Verifique os campos.');
                         }
                     }
                     break;
@@ -109,7 +113,7 @@ class PerfilController extends Controller
             'userData' => $userData,
             'userDataAdditional' => $userDataAdditional,
             'mode' => $mode,
-            'passwordModel' => $passwordModel,
+            'passwordModel' => $user,
         ]);
     }
 }

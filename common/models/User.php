@@ -8,6 +8,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\InvalidArgumentException;
 
 /**
  * User model
@@ -78,9 +79,10 @@ class User extends ActiveRecord implements IdentityInterface
 
             [['newPassword', 'currentPassword', 'confirmPassword'], 'required','on' => self::SCENARIO_PASSWORD, 'message' => 'Este campo não pode ficar em branco.'],
             [['currentPassword'], 'validateCurrentPassword', 'on' => self::SCENARIO_PASSWORD],
+            [['newPassword', 'confirmPassword'], 'required', 'on' => self::SCENARIO_PASSWORD, 'message' => 'Este campo não pode ficar em branco.'],
             [['newPassword', 'confirmPassword'], 'string', 'min' => 6, 'on' => self::SCENARIO_PASSWORD],
-            [['newPassword', 'confirmPassword'], 'filter', 'filter' => 'trim', 'on' => self::SCENARIO_PASSWORD],
             [['confirmPassword'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'As palavras-passe são diferentes', 'on' => self::SCENARIO_PASSWORD],
+
         ];
     }
 
@@ -93,7 +95,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function verifyPassword($password)
     {
-        return Yii::$app->security->validatePassword($password,$this->password_hash);
+        if (empty($this->password_hash)) {
+            throw new \RuntimeException('O hash da senha está ausente.');
+        }
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
     public function scenarios()
@@ -239,6 +244,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function setPassword($password)
     {
+        if (empty($password)) {
+            throw new InvalidArgumentException('A senha não pode estar vazia.');
+        }
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
@@ -273,6 +281,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+
 
     public function getAvaliacoes()
     {
