@@ -4,8 +4,9 @@
 namespace common\fixtures;
 
 use yii\test\ActiveFixture;
+use common\models\CategoriasProdutos;
 
 class CategoriasFixture extends ActiveFixture
 {
-    public $modelClass = \common\models\CategoriasProdutos::class;
+    public $modelClass = CategoriasProdutos::class;
 }
