@@ -1,0 +1,8 @@
+suite_namespace: frontend\tests\acceptance
+actor: AcceptanceTester
+modules:
+  enabled:
+    - WebDriver:
+        url: 'http://localhost'
+        browser: chrome
+        window_size: 1920x1080

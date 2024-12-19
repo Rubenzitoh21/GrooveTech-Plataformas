@@ -1,10 +1,10 @@
 <?php
 
-namespace common\tests\unit\models;
+namespace common\tests\unit;
 
-use Yii;
-use common\models\LoginForm;
 use common\fixtures\UserFixture;
+use common\models\LoginForm;
+use Yii;
 
 /**
  * Login form test
@@ -44,7 +44,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginWrongPassword()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
+            'username' => 'wrong_username',
             'password' => 'wrong_password',
         ]);
 
@@ -56,7 +56,7 @@ class LoginFormTest extends \Codeception\Test\Unit
     public function testLoginCorrect()
     {
         $model = new LoginForm([
-            'username' => 'bayer.hudson',
+            'username' => 'user',
             'password' => 'password_0',
         ]);
 
