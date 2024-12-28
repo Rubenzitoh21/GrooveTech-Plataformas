@@ -76,6 +76,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET all' => 'allprodutos',
+                        'GET search/{query}' => 'search',
                     ],
                 ],
             ],

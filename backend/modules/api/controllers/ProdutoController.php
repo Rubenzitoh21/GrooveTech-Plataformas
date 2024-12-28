@@ -42,4 +42,30 @@ class ProdutoController extends ActiveController
 
         return $produtosArray;
     }
+    public function actionSearch($query)
+    {
+        $produtos = $this->modelClass::find()
+            ->joinWith(['categoriasProdutos', 'ivas', 'imagens'])
+            ->where(['like', 'produtos.nome', $query])
+            ->all();
+
+        if (empty($produtos)) {
+            throw new NotFoundHttpException("Não foram encontrados produtos para o termo '$query'");
+        }
+
+        return array_map(function ($produto) {
+            return [
+                'id' => $produto->id,
+                'nome' => $produto->nome,
+                'preco' => $produto->preco,
+                'descricao' => $produto->descricao,
+                'obs' => $produto->obs,
+                'iva' => $produto->ivas ? $produto->ivas->percentagem : 0,
+                'categoria' => $produto->categoriasProdutos ? $produto->categoriasProdutos->nome : 'Desconhecida',
+                'imagem' => $produto->imagens ? $produto->imagens[0]->fileName : 'sem imagem',
+            ];
+        }, $produtos);
+    }
+
+
 }
