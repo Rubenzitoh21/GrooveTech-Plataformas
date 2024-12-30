@@ -70,6 +70,15 @@ return [
                         'POST signup' => 'signup',
                     ],
                 ],
+                //PRODUTOS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/produto',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET all' => 'allprodutos',
+                        'GET search/{query}' => 'search',
+                    ],
+                ],
             ],
         ],
     ],
