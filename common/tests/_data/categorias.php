@@ -3,12 +3,12 @@
 return [
     'categoria1' => [
         'id' => 1,
-        'nome' => 'categoria exemplo',
+        'nome' => 'categoria 1',
         'obs' => 'sem obs',
     ],
     'categoria2' => [
         'id' => 2,
-        'nome' => 'categoria exemplo',
+        'nome' => 'categoria 2',
         'obs' => 'sem obs',
     ],
 ];

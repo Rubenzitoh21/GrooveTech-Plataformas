@@ -30,10 +30,11 @@ class CategoriasProdutos extends \yii\db\ActiveRecord
     {
         return [
             [['nome', 'obs'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
-            [['nome'], 'string', 'max' => 50],
-            [['obs'], 'string', 'max' => 200],
+            [['nome'], 'string', 'max' => 50, 'tooLong' => 'Nome deve conter no máximo 50 caracteres.'],
+            [['obs'], 'string', 'max' => 200, 'tooLong' => 'Observações deve conter no máximo 200 caracteres.'],
         ];
     }
+
 
     /**
      * {@inheritdoc}
