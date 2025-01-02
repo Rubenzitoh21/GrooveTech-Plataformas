@@ -57,6 +57,14 @@ return [
             'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+                //USER PROFILE
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/user-profile',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET profile/{id}' => 'get-profile',
+                    ]
+                ],
                 //USER
                 ['class' => 'yii\rest\UrlRule',
                     'controller' => 'api/user',

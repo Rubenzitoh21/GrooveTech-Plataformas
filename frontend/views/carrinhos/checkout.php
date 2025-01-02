@@ -32,7 +32,8 @@ $this->title = 'Checkout';
                     $form = ActiveForm::begin([
                         'id' => 'profile-form-user-data',
                         'options' => ['class' => 'form'],
-                        'action' => ['carrinhos/userdataupdate', 'id' => $model->id, 'user_id' => $model->user_id], // Update the action attribute
+                        'action' => ['carrinhos/userdataupdate', 'id' => $model->id, 'user_id' => $model->user_id],
+                        // Update the action attribute
                         'method' => 'post', // Set the method to post
                     ]);
                     ?>
@@ -40,13 +41,19 @@ $this->title = 'Checkout';
                     <div class="row">
                         <div class="col-md-12 col-lg-6">
                             <div class="form-item w-100">
-                                <?= $form->field($userData, 'primeironome')->textInput(['value' => $userData->primeironome, 'placeholder' => 'Insira o seu nome'])->label('Nome') ?>
+                                <?= $form->field($userData,
+                                    'primeironome')->textInput(['value' => $userData->primeironome,
+                                    'placeholder' => 'Insira o seu nome'])
+                                    ->label('Nome') ?>
                             </div>
                         </div>
 
                         <div class="col-md-12 col-lg-6">
                             <div class="form-item w-100">
-                                <?= $form->field($userData, 'apelido')->textInput(['value' => $userData->apelido, 'placeholder' => 'Insira o seu apelido'])->label('Apelido') ?>
+                                <?= $form->field($userData,
+                                    'apelido')->textInput(['value' => $userData->apelido,
+                                    'placeholder' => 'Insira o seu apelido'])
+                                    ->label('Apelido') ?>
 
                             </div>
                         </div>
@@ -54,27 +61,40 @@ $this->title = 'Checkout';
                     </div>
                     <br>
                     <div class="form-item">
-                        <?= $form->field($userData, 'rua')->textInput(['value' => $userData->rua, 'placeholder' => 'Insira a sua Morada'])->label('Morada') ?>
+                        <?= $form->field($userData,
+                            'rua')->textInput(['value' => $userData->rua, 'placeholder' => 'Insira a sua Morada'])
+                            ->label('Morada') ?>
 
                     </div>
                     <br>
                     <div class="form-item">
-                        <?= $form->field($userData, 'codigopostal')->textInput(['value' => $userData->codigopostal, 'placeholder' => 'Insira o Código Postal'])->label('Código Postal') ?>
+                        <?= $form->field($userData,
+                            'codigopostal')->textInput(['value' => $userData->codigopostal,
+                            'placeholder' => 'Insira o Código Postal'])
+                            ->label('Código Postal') ?>
 
                     </div>
                     <br>
                     <div class="form-item">
-                        <?= $form->field($userData, 'localidade')->textInput(['value' => $userData->localidade, 'placeholder' => 'Insira o sua Localidade'])->label('Localidade') ?>
+                        <?= $form->field($userData,
+                            'localidade')->textInput(['value' => $userData->localidade,
+                            'placeholder' => 'Insira o sua Localidade'])
+                            ->label('Localidade') ?>
 
                     </div>
                     <br>
                     <div class="form-item">
-                        <?= $form->field($userData, 'telefone')->textInput(['value' => $userData->telefone, 'placeholder' => 'Insira o seu número de telemóvel'])->label('Telemóvel') ?>
+                        <?= $form->field($userData,
+                            'telefone')->textInput(['value' => $userData->telefone,
+                            'placeholder' => 'Insira o seu número de telemóvel'])
+                            ->label('Telemóvel') ?>
 
                     </div>
                     <br>
                     <div class="form-item">
-                        <?= $form->field($userData, 'nif')->textInput(['value' => $userData->nif, 'placeholder' => 'Insira o seu NIF'])->label('NIF') ?>
+                        <?= $form->field($userData,
+                            'nif')->textInput(['value' => $userData->nif, 'placeholder' => 'Insira o seu NIF'])
+                            ->label('NIF') ?>
                     </div>
                     <br>
                     <div class="form-item mt-3">
@@ -121,7 +141,12 @@ $this->title = 'Checkout';
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->produtos->nome) ?></td>
                                 <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco, 2, ',', '.') ?>€</td>
                                 <td class="py-5"><?= Html::encode($produtoCarrinho->quantidade) ?></td>
-                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco * $produtoCarrinho->quantidade, 2, ',', '.') ?>€</td>
+                                <td class="py-5"><?= number_format($produtoCarrinho->produtos->preco *
+                                        $produtoCarrinho->quantidade,
+                                        2,
+                                        ',',
+                                        '.') ?>€
+                                </td>
                             </tr>
                             <?php endforeach; ?>
 
@@ -137,7 +162,10 @@ $this->title = 'Checkout';
 
                                 <td class="py-5">
                                     <div class=" border-bottom border-top py-3">
-                                        <p class="mb-0 text-dark"><?= number_format($model->valortotal - $iva, 2, ',', '.') ?>€</p>
+                                        <p class="mb-0 text-dark"><?= number_format($model->valortotal - $iva,
+                                                2,
+                                                ',',
+                                                '.') ?>€</p>
                                         <p class="mb-0 text-dark py-3"><?= number_format($iva, 2, ',', '.') ?>€</p>
                                     </div>
                                 </td>
