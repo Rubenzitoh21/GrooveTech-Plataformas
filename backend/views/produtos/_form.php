@@ -52,7 +52,7 @@ use yii\widgets\ActiveForm;
                         ['prompt' => 'Selecione o IVA do produto']
                     )->label(false) ?>
             </div>
-            <?= Html::a('Criar Iva', ['iva/create', 'urlCallback' => 'produto'], [
+            <?= Html::a('Criar Iva', ['ivas/create', 'urlCallback' => 'produto'], [
                 'class' => 'btn btn-primary ms-2',
             ]) ?>
         </div>

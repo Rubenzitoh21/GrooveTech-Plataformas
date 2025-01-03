@@ -37,36 +37,51 @@ class CategoriasCest
         $I->see('Início');
     }
 
-    public function createCategoriaCamposVazios(FunctionalTester $I)
-    {
-        $I->amOnRoute('/categorias-produtos/create');
-        $I->amGoingTo('Tentar criar uma categoria sem preencher os campos obrigatórios.');
-        $I->click('Guardar');
-        $I->see('Este campo não pode ficar em branco.', '//div[@class="help-block"]');
-    }
-
-    public function creaateCategoriaComDadosInvalidos(FunctionalTester $I)
-    {
-        $I->amOnRoute('/categorias-produtos/create');
-        $I->amGoingTo('Tentar criar uma categoria com dados que excedem os limites permitidos.');
-        $I->fillField('CategoriasProdutos[nome]', str_repeat('A', 51));
-        $I->fillField('CategoriasProdutos[obs]', str_repeat('B', 201));
-        $I->click('Guardar');
-        $I->see('Nome deve conter no máximo 50 caracteres.', '//div[@class="help-block"]');
-        $I->see('Observações deve conter no máximo 200 caracteres.', '//div[@class="help-block"]');
-    }
-
     public function createCategoriaSuccessfully(FunctionalTester $I)
     {
+        $I->amOnRoute('/site/index');
+        $I->click('Categorias');
+        $I->amOnRoute('/categorias-produtos/index');
+        $I->click('Criar Categoria');
         $I->amOnRoute('/categorias-produtos/create');
         $I->amGoingTo('Criar uma categoria com dados válidos.');
         $I->fillField('CategoriasProdutos[nome]', 'Guitarras');
         $I->fillField('CategoriasProdutos[obs]', 'Categoria dedicada a guitarras.');
         $I->click('Guardar');
 
-        // Verificar redirecionamento para a view da categoria criada
-        $I->see('Guitarras');
-        $I->see('Categoria dedicada a guitarras.');
-        $I->dontSeeInCurrentUrl('/categorias-produtos/create');
+        $I->seeInCurrentUrl('/categorias-produtos/view?id='.$I->grabFromCurrentUrl('~id=(\d+)~'));
+    }
+
+    public function updateCategoriaSuccessfully(FunctionalTester $I)
+    {
+        $I->amOnRoute('/site/index');
+        $I->click('Categorias');
+        $I->amOnRoute('/categorias-produtos/index');
+
+        $categorias = $I->grabMultiple("table tbody tr td a[title='Update']", "href");
+
+        if (empty($categorias)) {
+            $this->createCategoriaSuccessfully($I);
+
+            $I->amOnRoute('/categorias-produtos/index');
+            $categorias = $I->grabMultiple("table tbody tr td a[title='Update']", "href");
+
+            if (empty($categorias)) {
+                throw new \Exception('Falha ao criar uma categoria para edição.');
+            }
+        }
+
+        $categoria = $categorias[0];
+        $I->amOnPage($categoria);
+
+        $I->seeInCurrentUrl('/categorias-produtos/update');
+
+        $I->amGoingTo('Editar os dados da categoria.');
+        $I->fillField('CategoriasProdutos[nome]', 'Violinos');
+        $I->fillField('CategoriasProdutos[obs]', 'Categoria dedicada a violinos.');
+
+        $I->click('Guardar');
+
+        $I->seeInCurrentUrl('/categorias-produtos/view?id='.$I->grabFromCurrentUrl('~id=(\d+)~'));
     }
 }

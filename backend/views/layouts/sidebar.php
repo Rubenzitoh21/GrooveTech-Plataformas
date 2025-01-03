@@ -53,7 +53,7 @@ AppAsset::register($this);
                     ['label' => 'Clientes', 'icon' => 'users', 'url' => ['/user-profile/index'], 'visible' => ($userRole == 'admin')],
                     ['label' => 'Gestão de Dados', 'header' => true],
                     ['label' => 'Faturas', 'icon' => 'fas fa-file-invoice', 'url' => ['/faturas/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
-                    ['label' => 'Expediçoes', 'icon' => 'fa-solid fa-dolly', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
+                    ['label' => 'Expedições', 'icon' => 'fa-solid fa-dolly', 'url' => ['/expedicoes/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Pagamentos', 'icon' => 'fa-solid fa-credit-card', 'url' => ['/pagamentos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],
                     ['label' => 'Gestão de Produtos', 'header' => true],
                     ['label' => 'Categorias', 'icon' => 'fa-solid fa-box', 'url' => ['/categorias-produtos/index'], 'visible' => ($userRole == 'admin' || $userRole == 'gestor')],

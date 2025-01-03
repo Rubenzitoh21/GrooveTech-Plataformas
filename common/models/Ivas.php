@@ -32,7 +32,7 @@ class Ivas extends \yii\db\ActiveRecord
         return [
             [['percentagem', 'descricao', 'vigor'], 'required', 'message' => 'Este campo não pode ficar em branco.'],
             [['percentagem', 'vigor'], 'integer', 'message' => 'Este campo deve conter um número inteiro.'],
-            [['descricao'], 'string', 'max' => 80, 'message' => 'Este campo deve ter no máximo 80 caracteres.'],
+            [['descricao'], 'string', 'max' => 80, 'tooLong' => 'Este campo deve conter no máximo 80 caracteres.'],
         ];
 
     }
