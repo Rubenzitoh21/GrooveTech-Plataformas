@@ -7,15 +7,14 @@ use common\models\Carrinhos;
 use common\models\CarrinhosSearch;
 use common\models\Faturas;
 use common\models\LinhasFaturas;
-use common\models\Pagamentos;
 use common\models\ProdutosCarrinhos;
 use common\models\UserProfile;
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * CarrinhosController implements the CRUD actions for Carrinhos model.
@@ -28,38 +27,38 @@ class CarrinhosController extends Controller
     public function behaviors()
     {
         return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'only' => ['index', 'create', 'update', 'delete', 'view', 'checkout', 'aumentar', 'diminuir'],
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'create', 'update', 'delete', 'view', 'checkout', 'aumentar', 'diminuir'],
-                            'allow' => true,
-                            'roles' => ['cliente'],
+                parent::behaviors(),
+                [
+                        'access' => [
+                                'class' => AccessControl::class,
+                                'only' => ['index', 'create', 'update', 'delete', 'view', 'checkout', 'aumentar', 'diminuir'],
+                                'rules' => [
+                                        [
+                                                'actions' => ['index', 'create', 'update', 'delete', 'view', 'checkout', 'aumentar', 'diminuir'],
+                                                'allow' => true,
+                                                'roles' => ['cliente'],
+                                        ],
+
+
+                                ],
+                                'denyCallback' => function ($rule, $action) {
+                                    if (Yii::$app->user->isGuest) {
+                                        // Redirect unauthenticated users to the login page
+                                        Yii::$app->getResponse()->redirect(['site/login'])->send();
+                                        Yii::$app->end();
+                                    } else {
+                                        throw new ForbiddenHttpException('Acesso negado.');
+                                    }
+                                },
                         ],
+                        'verbs' => [
+                                'class' => VerbFilter::className(),
+                                'actions' => [
+                                        'logout' => ['post'],
+                                ],
 
-
-                    ],
-                    'denyCallback' => function ($rule, $action) {
-                        if (Yii::$app->user->isGuest) {
-                            // Redirect unauthenticated users to the login page
-                            Yii::$app->getResponse()->redirect(['site/login'])->send();
-                            Yii::$app->end();
-                        } else {
-                            throw new ForbiddenHttpException('Acesso negado.');
-                        }
-                    },
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'logout' => ['post'],
-                    ],
-
-                ],
-            ]
+                        ],
+                ]
         );
     }
 
@@ -85,8 +84,8 @@ class CarrinhosController extends Controller
             $dataProvider = $searchModel->search($this->request->queryParams);
         }
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -104,7 +103,7 @@ class CarrinhosController extends Controller
         }
 
         return $this->render('view', [
-            'model' => $this->findModel($id, $user_id),
+                'model' => $this->findModel($id, $user_id),
         ]);
     }
 
@@ -155,8 +154,8 @@ class CarrinhosController extends Controller
         }
 
         return $this->render('update', [
-            'model' => $model,
-            'userData' => $userData,
+                'model' => $model,
+                'userData' => $userData,
         ]);
     }
 
@@ -183,9 +182,9 @@ class CarrinhosController extends Controller
             if (empty($fatura->pagamentos_id) || empty($fatura->expedicoes_id)) {
                 Yii::$app->session->setFlash('error', 'Por favor, selecione um método de pagamento e um método de envio.');
                 return $this->render('checkout', [
-                    'model' => $model,
-                    'userData' => $userData,
-                    'fatura' => $fatura,
+                        'model' => $model,
+                        'userData' => $userData,
+                        'fatura' => $fatura,
                 ]);
             }
 
@@ -205,9 +204,9 @@ class CarrinhosController extends Controller
                 Yii::$app->session->setFlash('error', 'Detalhes de Faturação inválidos');
 
                 return $this->render('checkout', [
-                    'model' => $model,
-                    'userData' => $userData,
-                    'fatura' => $fatura,
+                        'model' => $model,
+                        'userData' => $userData,
+                        'fatura' => $fatura,
                 ]);
             }
             $fatura->save();
@@ -235,9 +234,9 @@ class CarrinhosController extends Controller
         }
 
         return $this->render('checkout', [
-            'model' => $model,
-            'userData' => $userData,
-            'fatura' => $fatura,
+                'model' => $model,
+                'userData' => $userData,
+                'fatura' => $fatura,
         ]);
     }
 
@@ -302,8 +301,8 @@ class CarrinhosController extends Controller
                 Yii::$app->session->setFlash('success', 'Dados atualizados com sucesso!');
 
                 return $this->redirect(['checkout',
-                        'id' => $model->id,
-                        'user_id' => $model->user_id,]
+                                'id' => $model->id,
+                                'user_id' => $model->user_id,]
                 );
             } else {
                 Yii::$app->session->setFlash('error', 'Erro ao atualizar os dados.');

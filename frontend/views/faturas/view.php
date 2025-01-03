@@ -1,9 +1,7 @@
 <?php
 
-use common\models\Expedicoes;
-use common\models\Pagamentos;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var common\models\Faturas $model */
@@ -29,7 +27,8 @@ $this->title = $model->id;
                 <div class="card">
                     <div class="card-body">
                         <div class="invoice-title">
-                            <h4 class="float-end font-size-15">Fatura #<?= $model->id ?><span class="badge bg-success font-size-12 ms-2"><?= $model->status ?></span></h4>
+                            <h4 class="float-end font-size-15">Fatura #<?= $model->id ?>
+                                <span class="badge bg-success font-size-12 ms-2"><?= $model->status ?></span></h4>
                             <div class="mb-4">
                                 <h2 class="mb-1 text-muted">GrooveTech</h2>
                             </div>
@@ -37,8 +36,8 @@ $this->title = $model->id;
                                 <h5 class="font-size-16 mb-3">De:</h5>
                                 <h5 class="font-size-15 mb-2"><?= $empresa->designacaosocial ?></h5>
                                 <p class="mb-1"><?= $empresa->email ?></p>
-                                <p class="mb-1"><?= $empresa->rua?></p>
-                                <p class="mb-1"><?= $empresa->codigopostal . ' ' . $empresa->localidade?> </p>
+                                <p class="mb-1"><?= $empresa->rua ?></p>
+                                <p class="mb-1"><?= $empresa->codigopostal . ' ' . $empresa->localidade ?> </p>
                                 <p class="mb-1"><?= $empresa->telefone ?></p>
                             </div>
                         </div>
@@ -51,7 +50,7 @@ $this->title = $model->id;
                                     <h5 class="font-size-16 mb-3">Para:</h5>
                                     <h5 class="font-size-15 mb-2"><?= $profile->primeironome . ' ' . $profile->apelido ?></h5>
                                     <p class="mb-1"><?= $profile->rua ?></p>
-                                    <p class="mb-1"><?= $profile->codigopostal. ' ' . $profile->localidade ?></p>
+                                    <p class="mb-1"><?= $profile->codigopostal . ' ' . $profile->localidade ?></p>
                                     <p class="mb-1"><?= Yii::$app->user->identity->email ?></p>
                                     <p><?= $profile->telefone ?></p>
                                 </div>
@@ -117,24 +116,27 @@ $this->title = $model->id;
                                     <?php endforeach; ?>
                                     <tr>
                                         <th scope="row" colspan="4" class="text-end">Sub-Total</th>
-                                        <td class="text-end"><?= number_format($subTotal- $totalIva, 2, ',', '.') ?>€</td>
+                                        <td class="text-end"><?= number_format($subTotal - $totalIva, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">
-                                            Portes de Envio :</th>
+                                            Portes de Envio :
+                                        </th>
                                         <td class="border-0 text-end">0,00€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">
-                                            Iva:</th>
+                                            Iva:
+                                        </th>
                                         <td class="border-0 text-end"><?= number_format($totalIva, 2, ',', '.') ?>€</td>
                                     </tr>
                                     <!-- end tr -->
                                     <tr>
                                         <th scope="row" colspan="4" class="border-0 text-end">Total:</th>
-                                        <td class="border-0 text-end"><h4 class="m-0 fw-semibold"><?= number_format($model->valortotal, 2, ',', '.') ?>€</h4></td>
+                                        <td class="border-0 text-end"><h4 class="m-0 fw-semibold"><?= number_format($model->valortotal, 2, ',', '.') ?>€</h4>
+                                        </td>
                                     </tr>
                                     <!-- end tr -->
                                     </tbody><!-- end tbody -->
@@ -143,11 +145,8 @@ $this->title = $model->id;
                             <?php if ($model->status === 'Pago'): ?>
                                 <div class="d-print-none mt-4">
                                     <div class="float-end">
-                                        <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id], [
-                                            'class' => 'btn btn-success',
-                                            'target' => '_blank',
-                                            'rel' => 'noopener noreferrer',
-                                        ]) ?>
+                                        <?= Html::a('<i class="fa fa-print"></i> Imprimir Fatura', ['faturas/print', 'id' => $model->id],
+                                            ['class' => 'btn btn-success', 'target' => '_blank', 'rel' => 'noopener noreferrer',]) ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
