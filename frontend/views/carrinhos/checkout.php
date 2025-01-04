@@ -32,7 +32,7 @@ $this->title = 'Checkout';
                     $form = ActiveForm::begin([
                         'id' => 'profile-form-user-data',
                         'options' => ['class' => 'form'],
-                        'action' => ['carrinhos/userdataupdate', 'id' => $model->id, 'user_id' => $model->user_id],
+                        'action' => ['carrinhos/userdataupdate', 'id' => $model->id],
                         // Update the action attribute
                         'method' => 'post', // Set the method to post
                     ]);

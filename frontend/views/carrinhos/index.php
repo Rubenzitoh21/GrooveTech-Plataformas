@@ -98,7 +98,7 @@ $this->title = 'Carrinhos';
 
 
                             <td><?= Html::encode(number_format($produtoCarrinho->subtotal, 2, ',', '.')) . ' €' ?></td>
-                            <td><?= Html::a('<span class="fas fa-trash"></span>', ['produtos-carrinhos/delete', 'id' => $produtoCarrinho->id, 'carrinhos_id' => $carrinho->id, 'produtos_id' => $produtoCarrinho->produtos->id], ['data' => ['confirm' => 'Tem a certeza que pretende remover este produto do carrinho?', 'method' => 'post',]]); ?></td>
+                            <td><?= Html::a('<span class="fas fa-trash"></span>', ['produtos-carrinhos/delete', 'id' => $produtoCarrinho->id], ['data' => ['confirm' => 'Tem a certeza que pretende remover este produto do carrinho?', 'method' => 'post',]]); ?></td>
                             <!-- Add more cells for other columns -->
                         </tr>
                         <?php endforeach; ?>
@@ -131,11 +131,6 @@ $this->title = 'Carrinhos';
                                     <p class="mb-0 pe-4"><?= Html::encode(number_format($carrinho->valortotal, 2, ',', '.')) . '€' ?></p>
                                 </div>
                                 <?php if (empty($carrinho->produtosCarrinhos)) { ?>
-                                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4 disabled"
-                                            type="button">
-                                        <?= Html::a(' Finalizar compra', ['carrinhos/checkout', 'id' => $carrinho->id, 'user_id' => $carrinho->user_id], ['class' => 'disabled text-decoration-none']) ?>
-                                    </button>
-
                                     <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4 "
                                             type="button">
                                         <?= Html::a('Voltar para a loja', ['produtos/index'], ['class' => 'text-decoration-none']) ?>
@@ -143,7 +138,7 @@ $this->title = 'Carrinhos';
                                 <?php } else { ?>
                                     <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4 "
                                             type="button">
-                                        <?= Html::a(' Finalizar compra', ['carrinhos/checkout', 'id' => $carrinho->id, 'user_id' => $carrinho->user_id], ['class' => 'text-decoration-none']) ?>
+                                        <?= Html::a(' Finalizar compra', ['carrinhos/checkout', 'id' => $carrinho->id], ['class' => 'text-decoration-none']) ?>
                                     </button>
 
                                     <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4 "

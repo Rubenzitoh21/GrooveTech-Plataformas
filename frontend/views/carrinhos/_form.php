@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <ul class="list-unstyled templatemo-accordion">
-        <!-- Método de Pagamento -->
+        <!-- Pagamento -->
         <li class="pb-3">
             <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                 Método de Pagamento
@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
             </ul>
         </li>
 
-        <!-- Método de Envio -->
+        <!-- Envio -->
         <li class="pb-3">
             <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                 Método de Envio

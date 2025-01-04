@@ -156,21 +156,19 @@ class ProdutosCarrinhosController extends Controller
      * Updates an existing ProdutosCarrinhos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @param int $carrinhos_id Carrinhos ID
-     * @param int $produtos_id Produtos ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $carrinhos_id, $produtos_id)
+    public function actionUpdate($id)
     {
         if (!Yii::$app->user->can('editarCompras')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $model = $this->findModel($id, $carrinhos_id, $produtos_id);
+        $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'carrinhos_id' => $model->carrinhos_id, 'produtos_id' => $model->produtos_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -182,19 +180,16 @@ class ProdutosCarrinhosController extends Controller
      * Deletes an existing ProdutosCarrinhos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @param int $carrinhos_id Carrinhos ID
-     * @param int $produtos_id Produtos ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $carrinhos_id, $produtos_id)
+    public function actionDelete($id)
     {
         if (!Yii::$app->user->can('editarCompras')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
-
-        $modelCarrinhos = Carrinhos::find()->where(['id' => $carrinhos_id])->one();
-        $model = $this->findModel($id, $carrinhos_id, $produtos_id);
+        $model = $this->findModel($id);
+        $modelCarrinhos = Carrinhos::find()->where(['id' => $model->carrinhos_id])->one();
         $modelCarrinhos->valortotal = $modelCarrinhos->valortotal - $model->subtotal;
         $modelCarrinhos->save();
 
@@ -207,14 +202,12 @@ class ProdutosCarrinhosController extends Controller
      * Finds the ProdutosCarrinhos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @param int $carrinhos_id Carrinhos ID
-     * @param int $produtos_id Produtoss ID
      * @return ProdutosCarrinhos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, $carrinhos_id, $produtos_id)
+    protected function findModel($id)
     {
-        if (($model = ProdutosCarrinhos::findOne(['id' => $id, 'carrinhos_id' => $carrinhos_id, 'produtos_id' => $produtos_id])) !== null) {
+        if (($model = ProdutosCarrinhos::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

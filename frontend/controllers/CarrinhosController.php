@@ -133,24 +133,23 @@ class CarrinhosController extends Controller
      * Updates an existing Carrinhos model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @param int $user_id User ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
 
 
-    public function actionUpdate($id, $user_id)
+    public function actionUpdate($id)
     {
         if (!Yii::$app->user->can('editarCompras')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado');
         }
 
-        $model = $this->findModel($id, $user_id);
+        $model = $this->findModel($id);
         $userData = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             var_dump($model->errors);
-            return $this->redirect(['carrinhos/index', 'id' => $model->id, 'user_id' => $model->user_id]);
+            return $this->redirect(['carrinhos/index', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -159,13 +158,13 @@ class CarrinhosController extends Controller
         ]);
     }
 
-    public function actionCheckout($id, $user_id)
+    public function actionCheckout($id)
     {
         if (!Yii::$app->user->can('fazerCompras')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado');
         }
 
-        $model = $this->findModel($id, $user_id);
+        $model = $this->findModel($id);
         $userData = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
         $userData?->setScenario(UserProfile::SCENARIO_USERPROFILE);
         $fatura = new Faturas();
@@ -282,14 +281,14 @@ class CarrinhosController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionUserdataupdate($id, $user_id)
+    public function actionUserdataupdate($id)
     {
         if (!Yii::$app->user->can('editarDadosPessoais')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado');
         }
 
         $userDataAdditional = UserProfile::findOne(['user_id' => Yii::$app->user->id]);
-        $model = $this->findModel($id, $user_id);
+        $model = $this->findModel($id);
         if ($this->request->isPost) {
             // Load data from the post request
 
@@ -302,7 +301,7 @@ class CarrinhosController extends Controller
 
                 return $this->redirect(['checkout',
                                 'id' => $model->id,
-                                'user_id' => $model->user_id,]
+                        ]
                 );
             } else {
                 Yii::$app->session->setFlash('error', 'Erro ao atualizar os dados.');
@@ -319,17 +318,16 @@ class CarrinhosController extends Controller
      * Deletes an existing Carrinhos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @param int $user_id User ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $user_id)
+    public function actionDelete($id)
     {
         if (!Yii::$app->user->can('editarCompras')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado');
         }
 
-        $this->findModel($id, $user_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -338,13 +336,12 @@ class CarrinhosController extends Controller
      * Finds the Carrinhos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @param int $user_id User ID
      * @return Carrinhos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, $user_id)
+    protected function findModel($id)
     {
-        if (($model = Carrinhos::findOne(['id' => $id, 'user_id' => $user_id])) !== null) {
+        if (($model = Carrinhos::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
