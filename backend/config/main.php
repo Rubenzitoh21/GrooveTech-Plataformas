@@ -63,6 +63,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET profile/{id}' => 'get-profile',
+                        'PATCH update/{id}' => 'update-profile',
                     ]
                 ],
                 //USER
