@@ -8,7 +8,7 @@ $this->params['breadcrumbs'] = [['label' => "$this->title"]];
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h1 class="display-4">Estatísticas</h1>
+            <h1 class="display-4">Estatísticas Gerais</h1>
         </div>
     </div>
     <div class="row">
@@ -44,6 +44,11 @@ $this->params['breadcrumbs'] = [['label' => "$this->title"]];
         </div>
     </div>
     <div class="row">
+        <div class="col-12">
+            <h1 class="display-4">Estatísticas Anuais</h1>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header">
@@ -65,6 +70,18 @@ $this->params['breadcrumbs'] = [['label' => "$this->title"]];
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="<?= \yii\helpers\Url::to(['index', 'year' => $prevYear]) ?>" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> <?= $prevYear ?>
+            </a>
+            <span class="mx-3 h4"><?= $currentYear ?></span>
+            <a href="<?= \yii\helpers\Url::to(['index', 'year' => $nextYear]) ?>" class="btn btn-primary">
+                <?= $nextYear ?> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
 </div>
 <?php if (!empty($novosClientes)): ?>
     <div class="toast-container position-fixed top-0 end-0 p-3">
@@ -160,5 +177,51 @@ $this->registerJs(<<<JS
     var toastEl = document.querySelector('.toast');
         var toast = new bootstrap.Toast(toastEl);
         toast.show();
+        
+        document.addEventListener('DOMContentLoaded', function () {
+    const updateCharts = (url, chartId, yearSpanId) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const chart = Chart.getChart(chartId);
+                chart.data.datasets[0].data = data.values;
+                chart.update();
+
+                // Atualizar o ano no elemento visual
+                document.getElementById(yearSpanId).textContent = data.year;
+            })
+            .catch(error => console.error('Erro ao atualizar gráfico:', error));
+    };
+    
+    // Atualizar gráficos segundo o ano selecionado
+    document.getElementById('prev-year-faturamento').addEventListener('click', () => {
+        const currentYear = parseInt(document.getElementById('current-year-faturamento').textContent, 10);
+        const prevYear = currentYear - 1;
+        const url = `/index.php?r=site&year=${prevYear}`;
+        updateCharts(url, 'faturamento', 'current-year-faturamento');
+    });
+
+    document.getElementById('next-year-faturamento').addEventListener('click', () => {
+        const currentYear = parseInt(document.getElementById('current-year-faturamento').textContent, 10);
+        const nextYear = currentYear + 1;
+        const url = `/index.php?r=site&year=${nextYear}`;
+        updateCharts(url, 'faturamento', 'current-year-faturamento');
+    });
+
+    document.getElementById('prev-year-vendas').addEventListener('click', () => {
+        const currentYear = parseInt(document.getElementById('current-year-vendas').textContent, 10);
+        const prevYear = currentYear - 1;
+        const url = `/index.php?r=site&year=${prevYear}`;
+        updateCharts(url, 'vendas', 'current-year-vendas');
+    });
+
+    document.getElementById('next-year-vendas').addEventListener('click', () => {
+        const currentYear = parseInt(document.getElementById('current-year-vendas').textContent, 10);
+        const nextYear = currentYear + 1;
+        const url = `/index.php?r=site&year=${nextYear}`;
+        updateCharts(url, 'vendas', 'current-year-vendas');
+    });
+});
+
 JS);
 ?>

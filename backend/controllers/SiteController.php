@@ -75,12 +75,18 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($year = null)
     {
         if (!Yii::$app->user->can('backendAccess')) {
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
-        //estatisitcas do dashboard
+
+        // Determina o ano atual
+        $currentYear = $year ?? date('Y');
+        $prevYear = $currentYear - 1;
+        $nextYear = $currentYear + 1;
+
+        // Estatísticas do dashboard
         $totalFaturado = Faturas::find()
             ->where(['status' => 'Pago'])
             ->sum('valortotal');
@@ -91,12 +97,13 @@ class SiteController extends Controller
 
         $totalClientes = UserProfile::find()->count();
 
-        //vendas por mes
+        // Vendas por mês no ano selecionado
         $meses = array_fill(1, 12, 0);
 
         $vendasPorMes = Faturas::find()
             ->select(['COUNT(*) as quantidade', 'MONTH(data) as mes'])
             ->where(['status' => 'Pago'])
+            ->andWhere(['YEAR(data)' => $currentYear])
             ->groupBy(['mes'])
             ->indexBy('mes')
             ->asArray()
@@ -106,12 +113,13 @@ class SiteController extends Controller
             $meses[$mes] = (int)$venda['quantidade'];
         }
 
-        //faturado por mes
+        // Faturado por mês no ano selecionado
         $faturado = array_fill(1, 12, 0);
 
         $faturas = Faturas::find()
             ->select(['MONTH(data) as mes', 'SUM(valortotal) as total'])
             ->where(['status' => 'Pago'])
+            ->andWhere(['YEAR(data)' => $currentYear])
             ->groupBy('mes')
             ->asArray()
             ->all();
@@ -120,59 +128,18 @@ class SiteController extends Controller
             $faturado[(int)$fatura['mes']] = (float)$fatura['total'];
         }
 
-        //notificação de novos clientes
-        $session = Yii::$app->session;
-
-        if (!$session->has('lastCheckedUserId')) {
-            $ultimoCliente = UserProfile::find()
-                ->select(['id'])
-                ->orderBy(['id' => SORT_DESC])
-                ->scalar();
-            $session->set('lastCheckedUserId', $ultimoCliente);
-        }
-        
-        $lastCheckedUserId = $session->get('lastCheckedUserId');
-        
-        $novosClientes = UserProfile::find()
-            ->where(['>', 'id', $lastCheckedUserId])
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
-        
-        if (!empty($novosClientes)) {
-            $session->set('lastCheckedUserId', $novosClientes[0]->id);
-        }
-
-
-        //notificação de novas compras
-        if (!$session->has('lastCheckedFaturaId')) {
-            $ultimaFatura = Faturas::find()
-                ->select(['id'])
-                ->orderBy(['id' => SORT_DESC])
-                ->scalar();
-            $session->set('lastCheckedFaturaId', $ultimaFatura);
-        }
-
-        $lastCheckedFaturaId = $session->get('lastCheckedFaturaId');
-
-        $novasCompras = Faturas::find()
-            ->where(['>', 'id', $lastCheckedFaturaId])
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
-
-        if (!empty($novasCompras)) {
-            $session->set('lastCheckedFaturaId', $novasCompras[0]->id);
-        }
-
         return $this->render('index', [
             'totalFaturado' => $totalFaturado ?? 0,
             'totalFaturas' => $totalFaturas ?? 0,
             'totalClientes' => $totalClientes ?? 0,
             'meses' => $meses,
             'faturado' => $faturado,
-            'novosClientes' => $novosClientes,
-            'novasCompras' => $novasCompras
+            'currentYear' => $currentYear,
+            'prevYear' => $prevYear,
+            'nextYear' => $nextYear,
         ]);
     }
+
 
     /**
      * Login action.
