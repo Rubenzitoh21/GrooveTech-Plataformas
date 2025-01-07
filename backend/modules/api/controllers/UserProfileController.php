@@ -49,8 +49,8 @@ class UserProfileController extends ActiveController
 
         // Definir texto de placeholder para campos vazios
         $placeholderText = [
-            'primeironome' => 'primeironome não definido',
-            'apelido' => 'apelido não definido',
+            'primeironome' => '',
+            'apelido' => '',
             'codigopostal' => '',
             'localidade' => '',
             'rua' => '',
@@ -91,6 +91,7 @@ class UserProfileController extends ActiveController
         if ($updatedFields) {
             $updatedFieldsWithValues = [];
             foreach ($updatedFields as $field) {
+                Yii::info("Updated field: $field with value: " . $userProfileData->$field);
                 $updatedFieldsWithValues[] = $field . ': ' . $userProfileData->$field;
             }
             $this->sendErrorResponse(200, 'Perfil atualizado com sucesso.', [
@@ -114,6 +115,7 @@ class UserProfileController extends ActiveController
         foreach ($params as $field => $value) {
             if (!in_array($field, $validFields)) {
                 $invalidFields[] = $field;
+                Yii::info("Request params: " . print_r($params, true), 'debug');
             }
         }
 
@@ -127,7 +129,7 @@ class UserProfileController extends ActiveController
         }
 
         foreach ($validFields as $field) {
-            if (isset($params[$field]) && !empty($params[$field])) {
+            if (isset($params[$field]) ) {
 
                 // Validação da data de nascimento
                 if ($field == 'dtanasc') {
@@ -141,6 +143,10 @@ class UserProfileController extends ActiveController
                 //  Validação do género verifica se o campo na request é "genero" e obriga que o valor seja M ou F
                 if ($field == 'genero' && !in_array($params[$field], ['M', 'F'])) {
                     $this->sendErrorResponse(400, 'Género inválido. Por favor, insira M, F ou O');
+                }
+                // Validação do NIF verifica se o campo na request é "nif" e obriga que o valor tenha 9 dígitos
+                if ($field == 'nif' && !preg_match('/^\d{9}$/', $params[$field])) {
+                    $this->sendErrorResponse(400, 'NIF inválido. O NIF deve conter 9 dígitos.');
                 }
                 $userProfileData->$field = $params[$field];
                 $updatedFields[] = $field;
@@ -159,12 +165,6 @@ class UserProfileController extends ActiveController
     {
         return $this->modelClass::find()->where(['user_id' => $userId])->one();
     }
-
-    private function getUserByIdAndToken($id, $accessToken)
-    {
-        return $this->userModelClass::find()->where(['id' => $id, 'auth_key' => $accessToken])->one();
-    }
-
     private function sendErrorResponse($code, $message, $details = [])
     {
         Yii::$app->response->statusCode = $code;
