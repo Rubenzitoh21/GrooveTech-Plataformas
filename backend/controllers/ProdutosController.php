@@ -151,12 +151,9 @@ class ProdutosController extends Controller
                 $imagens = Imagens::find()->where(['produto_id' => $model->id])->all();
 
                 foreach ($imagens as $imagem) {
-                    $filePath = Yii::getAlias('@webroot/images/' . $imagem->fileName);
-
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
-                    }
                     $imagem->delete();
+                    unlink(Yii::getAlias('@frontend/web/images/') . $imagem->fileName);
+                    unlink(Yii::getAlias('@backend/web/images/') . $imagem->fileName);
                 }
 
                 Yii::$app->session->setFlash('success', 'Produto eliminado com sucesso. (Incluindo as imagens associadas)');

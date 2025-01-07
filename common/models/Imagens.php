@@ -53,21 +53,16 @@ class Imagens extends \yii\db\ActiveRecord
                 $uid = uniqid();
                 $fileName = $uid . $file->baseName . '.' . $file->extension;
 
-                // Caminhos para salvar a imagem
                 $uploadPathBack = Yii::getAlias('@backend/web/images/') . $fileName;
                 $uploadPathFront = Yii::getAlias('@frontend/web/images/') . $fileName;
 
-                // Salva temporariamente a imagem original
                 $file->saveAs($uploadPathBack, false);
 
-                // Redimensiona/corta e salva diretamente sobrescrevendo o arquivo original
                 Image::thumbnail($uploadPathBack, 500, 600)
                     ->save($uploadPathBack, ['quality' => 80]);
 
-                // Copia a imagem processada para o diretório do frontend
                 copy($uploadPathBack, $uploadPathFront);
 
-                // Adiciona o caminho da imagem processada ao array de caminhos
                 $uploadPaths[] = $uploadPathBack;
             }
 
