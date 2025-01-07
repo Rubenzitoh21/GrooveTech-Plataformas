@@ -88,6 +88,22 @@ return [
                         'GET search/{query}' => 'search',
                     ],
                 ],
+                //CARRINHOS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/carrinho',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST create' => 'create-cart',
+                    ],
+                ],
+                //PRODUTOS CARRINHO
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/produtos-carrinho',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST create' => 'create-produtos-carrinho',
+                    ],
+                ],
             ],
         ],
     ],

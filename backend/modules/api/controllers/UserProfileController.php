@@ -30,7 +30,7 @@ class UserProfileController extends ActiveController
         $accessToken = Yii::$app->request->get('access-token');
 
         if (!$accessToken) {
-            throw new \yii\web\BadRequestHttpException("Missing required parameter: access-token");
+            throw new \yii\web\BadRequestHttpException("Falta o parâmetro: access-token");
         }
 
 
