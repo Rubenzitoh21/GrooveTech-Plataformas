@@ -2,6 +2,10 @@
 
 namespace backend\controllers;
 
+use common\models\Avaliacoes;
+use common\models\Carrinhos;
+use common\models\Faturas;
+use common\models\ProdutosCarrinhos;
 use common\models\UserProfile;
 use backend\models\UserProfileSearch;
 use Yii;
@@ -145,14 +149,31 @@ class UserProfileController extends Controller
         }
 
         $model = $this->findModel($id);
+        $user = $model->user;
 
         try {
-            $model->delete();
-            Yii::$app->session->setFlash('success', 'Utilizador excluído com sucesso.');
+            $faturas = Faturas::find()->where(['user_id' => $user->id])->exists();
+            $avaliacoes = Avaliacoes::find()->where(['user_id' => $user->id])->exists();
+
+            if ($faturas || $avaliacoes) {
+                Yii::$app->session->setFlash('error', 'Não é possível eliminar este Utilizador porque está associado a outros registos.');
+            } else {
+
+                $carrinhos = Carrinhos::find()->where(['user_id' => $user->id])->all();
+                foreach ($carrinhos as $carrinho) {
+                    ProdutosCarrinhos::deleteAll(['carrinhos_id' => $carrinho->id]);
+                }
+                Carrinhos::deleteAll(['user_id' => $user->id]);
+
+                $model->delete();
+                $user->delete();
+
+                Yii::$app->session->setFlash('success', 'Utilizador eliminado com sucesso.');
+            }
         } catch (\yii\db\IntegrityException $e) {
-            Yii::$app->session->setFlash('error', 'Não é possível excluir este Utilizador porque está associado a outros registos.');
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar este Utilizador porque está associado a outros registos.');
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o Utilizador.');
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar o Utilizador.');
         }
 
         return $this->redirect(['index']);

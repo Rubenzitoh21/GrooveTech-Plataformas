@@ -147,11 +147,11 @@ class PagamentosController extends Controller
 
         try {
             $model->delete();
-            Yii::$app->session->setFlash('success', 'Pagamento excluído com sucesso.');
+            Yii::$app->session->setFlash('success', 'Pagamento eliminado com sucesso.');
         } catch (\yii\db\IntegrityException $e) {
-            Yii::$app->session->setFlash('error', 'Não é possível excluir este Pagamento porque está associado a outros registos.');
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar este Pagamento porque está associado a outros registos.');
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o Pagamento.');
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar o Pagamento.');
         }
 
         return $this->redirect(['index']);

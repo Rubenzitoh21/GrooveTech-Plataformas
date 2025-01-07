@@ -139,36 +139,36 @@ class ProdutosController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-{
-    if (!Yii::$app->user->can('apagarProdutos')) {
-        throw new \yii\web\ForbiddenHttpException('Acesso negado.');
-    }
-
-    $model = $this->findModel($id);
-
-    $imagens = Imagens::find()->where(['produto_id' => $model->id])->all();
-
-    foreach ($imagens as $imagem) {
-        $filePath = Yii::getAlias('@webroot/images/' . $imagem->fileName);
-        
-        if (file_exists($filePath)) {
-            unlink($filePath);
+    {
+        if (!Yii::$app->user->can('apagarProdutos')) {
+            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $imagem->delete();
-    }
+        $model = $this->findModel($id);
 
-    try {
-        $model->delete();
-        Yii::$app->session->setFlash('success', 'Produto excluído com sucesso.');
-    } catch (\yii\db\IntegrityException $e) {
-        Yii::$app->session->setFlash('error', 'Não é possível excluir este Produto porque está associado a outros registos.');
-    } catch (\Exception $e) {
-        Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o Produto.');
-    }
+        try {
+            if ($model->delete()) {
+                $imagens = Imagens::find()->where(['produto_id' => $model->id])->all();
 
-    return $this->redirect(['index']);
-}
+                foreach ($imagens as $imagem) {
+                    $filePath = Yii::getAlias('@webroot/images/' . $imagem->fileName);
+
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                    $imagem->delete();
+                }
+
+                Yii::$app->session->setFlash('success', 'Produto eliminado com sucesso. (Incluindo as imagens associadas)');
+            }
+        } catch (\yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar este Produto porque está associado a outros registos.');
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar o Produto.');
+        }
+
+        return $this->redirect(['index']);
+    }
 
     /**
      * Finds the Produtos model based on its primary key value.

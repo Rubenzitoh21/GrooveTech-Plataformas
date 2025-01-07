@@ -151,11 +151,11 @@ class IvasController extends Controller
 
         try {
             $model->delete();
-            Yii::$app->session->setFlash('success', 'IVA excluído com sucesso.');
+            Yii::$app->session->setFlash('success', 'IVA eliminado com sucesso.');
         } catch (\yii\db\IntegrityException $e) {
-            Yii::$app->session->setFlash('error', 'Não é possível excluir este IVA porque está associado a outros registos.');
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar este IVA porque está associado a outros registos.');
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir o IVA.');
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar o IVA.');
         }
 
         return $this->redirect(['index']);

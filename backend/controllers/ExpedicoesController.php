@@ -146,11 +146,11 @@ class ExpedicoesController extends Controller
         $model = $this->findModel($id);
         try {
             $model->delete();
-            Yii::$app->session->setFlash('success', 'Expedição excluída com sucesso.');
+            Yii::$app->session->setFlash('success', 'Expedição eliminada com sucesso.');
         } catch (\yii\db\IntegrityException $e) {
-            Yii::$app->session->setFlash('error', 'Não é possível excluir esta Expedição porque está associado a outros registos.');
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar esta Expedição porque está associado a outros registos.');
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar excluir a Expedição.');
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar a Expedição.');
         }
 
         return $this->redirect(['index']);
