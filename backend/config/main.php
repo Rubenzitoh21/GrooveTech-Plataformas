@@ -84,8 +84,33 @@ return [
                     'controller' => 'api/produto',
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'GET all' => 'allprodutos',
+                        'GET all' => 'allproducts',
                         'GET search/{query}' => 'search',
+                    ],
+                ],
+                //CARRINHOS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/carrinho',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST create' => 'create-cart',
+                        'GET cart/{user_id}' => 'get-cart-by-userid',
+                        'DELETE cart/{user_id}' => 'delete-cart-by-userid',
+                    ],
+                    'tokens' => [
+                        '{user_id}' => '<user_id:\\d+>',
+                    ],
+                ],
+                //LINHAS CARRINHO
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/produtos-carrinho',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST create' => 'create-cart-lines',
+                        'GET cartline/{id}' => 'get-cart-lines-by-cartid',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
                     ],
                 ],
             ],

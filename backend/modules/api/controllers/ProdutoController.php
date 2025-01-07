@@ -14,7 +14,7 @@ class ProdutoController extends ActiveController
         return $this->render('index');
     }
 
-    public function actionAllprodutos()
+    public function actionAllproducts()
     {
         // Fetch all products with associated category, iva, and image in a single query
         $produtos = $this->modelClass::find()

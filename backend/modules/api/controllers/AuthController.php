@@ -2,10 +2,10 @@
 
 namespace backend\modules\api\controllers;
 
+use Carbon\Carbon;
 use Exception;
 use Yii;
 use yii\rest\ActiveController;
-use Carbon\Carbon;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -97,6 +97,7 @@ class AuthController extends ActiveController
             // Create user profile
             $userProfile = new $this->userProfileModelClass;
             $userProfile->user_id = $user->id;
+            $userProfile->dtaregisto = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
 
             if (!$userProfile->save()) {
                 Yii::error($userProfile->errors, 'debug');
@@ -115,7 +116,9 @@ class AuthController extends ActiveController
             }
 
             $transaction->commit();
-            return $user;
+            return [
+                'user' => $user,
+            ];
         } catch (Exception $e) {
             $transaction->rollBack();
             throw $e;
