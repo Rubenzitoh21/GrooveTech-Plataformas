@@ -4,6 +4,7 @@ namespace backend\modules\api\controllers;
 
 use DateTime;
 use Yii;
+use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
 
@@ -13,10 +14,15 @@ class UserProfileController extends ActiveController
     public $modelClass = 'common\models\UserProfile';
     public $userModelClass = 'common\models\User';
 
-    public function actionIndex()
+    public function behaviors()
     {
-        return $this->render('index');
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
+        ];
+        return $behaviors;
     }
+
 
     /**
      * Get profile data for a user based on ID and access token
@@ -27,42 +33,55 @@ class UserProfileController extends ActiveController
      */
     public function actionGetProfile($id)
     {
-        $accessToken = Yii::$app->request->get('access-token');
-
-        if (!$accessToken) {
-            throw new \yii\web\BadRequestHttpException("Falta o parâmetro: access-token");
+        $authenticatedUser_id = Yii::$app->user->id;
+        if ($authenticatedUser_id != $id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
-
-        $userModel = new $this->userModelClass;
-        $user = $userModel::find()->where(['id' => $id, 'auth_key' => $accessToken])->one();
-
-        if ($user == null) {
-            throw new NotFoundHttpException("Utilizador não encontrado com o ID " . $id . " e o token de acesso " . $accessToken);
-        }
+        $user = $this->userModelClass::findOne($id);
 
         $userProfile = new $this->modelClass;
-        $userProfileData = $userProfile::find()->where(['user_id' => $user->id])->one();
+        $userProfileData = $userProfile::find()->where(['user_id' => $id])->one();
+
+        if (!$userProfileData) {
+            $this->sendErrorResponse(404, 'Profile not found.');
+        }
+
+        // Definir texto de placeholder para campos vazios
+        $placeholderText = [
+            'primeironome' => 'primeironome não definido',
+            'apelido' => 'apelido não definido',
+            'codigopostal' => '',
+            'localidade' => '',
+            'rua' => '',
+            'nif' => '',
+            'dtanasc' => '',
+            'telefone' => '',
+            'genero' => ''
+        ];
+
+        foreach ($placeholderText as $field => $placeholder) {
+            if (empty($userProfileData->$field)) {
+                // atribui o valor do placeholder ao campo vazio
+                $userProfileData->$field = $placeholder;
+            }
+        }
 
         return ['user' => $user, 'profile' => $userProfileData];
     }
 
+
     public function actionUpdateProfile($id)
     {
-        $accessToken = Yii::$app->request->get('access-token');
-        if (!$accessToken) {
-            $this->sendErrorResponse(400, 'Parâmetro obrigatório em falta: access-token');
+        $authenticatedUser_id = Yii::$app->user->id;
+        if ($authenticatedUser_id != $id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
-        $user = $this->getUserByIdAndToken($id, $accessToken);
-        if (!$user) {
-            $this->sendErrorResponse(404, 'Utilizador não encontrado com o ID ' . $id . ' e o token de acesso ' . $accessToken);
-        }
-
-        $userProfileData = $this->getUserProfile($user->id);
+        $userProfileData = $this->getUserProfile($id);
         if (!$userProfileData) {
             $this->sendErrorResponse(404, 'Perfil do utilizador não foi encontrado.', [
-                'user_id' => $user->id
+                'user_id' => $id
             ]);
         }
 
