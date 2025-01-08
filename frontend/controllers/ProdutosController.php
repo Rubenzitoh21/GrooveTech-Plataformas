@@ -146,7 +146,7 @@ class ProdutosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Produto não encontrado.');
     }
     public function foiComprado($produtoId)
     {

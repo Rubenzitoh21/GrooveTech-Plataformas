@@ -81,6 +81,26 @@ class SiteController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
+        $session = Yii::$app->session;
+
+        //Notificações de novos clientes e compras
+        if (!$session->has('lastCheckedUserId')) {
+            $ultimoCliente = UserProfile::find()
+                ->select(['id'])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            $session->set('lastCheckedUserId', $ultimoCliente);
+        }
+        $lastCheckedUserId = $session->get('lastCheckedUserId');
+        if (!$session->has('lastCheckedFaturaId')) {
+            $ultimaFatura = Faturas::find()
+                ->select(['id'])
+                ->orderBy(['id' => SORT_DESC])
+                ->scalar();
+            $session->set('lastCheckedFaturaId', $ultimaFatura);
+        }
+        $lastCheckedFaturaId = $session->get('lastCheckedFaturaId');
+
         // Determina o ano atual
         $currentYear = $year ?? date('Y');
         $prevYear = $currentYear - 1;
@@ -127,6 +147,7 @@ class SiteController extends Controller
         foreach ($faturas as $fatura) {
             $faturado[(int)$fatura['mes']] = (float)$fatura['total'];
         }
+
 
         return $this->render('index', [
             'totalFaturado' => $totalFaturado ?? 0,

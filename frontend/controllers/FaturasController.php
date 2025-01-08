@@ -167,7 +167,7 @@ class FaturasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('A página requisitada não existe.');
     }
 
     public function actionPrint($id)

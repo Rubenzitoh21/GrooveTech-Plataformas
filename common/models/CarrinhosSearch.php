@@ -18,7 +18,7 @@ class CarrinhosSearch extends Carrinhos
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['dtapedido', 'metodo_envio', 'status'], 'safe'],
+            [['dtapedido', 'status'], 'safe'],
             [['valortotal'], 'number'],
         ];
     }
@@ -43,7 +43,6 @@ class CarrinhosSearch extends Carrinhos
     {
         $query = Carrinhos::find()->where(['user_id' => $this->user_id, 'status' => 'Ativo']);
 
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,12 +51,9 @@ class CarrinhosSearch extends Carrinhos
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'dtapedido' => $this->dtapedido,

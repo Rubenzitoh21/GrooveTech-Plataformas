@@ -55,45 +55,6 @@ class ProdutosCarrinhosController extends Controller
     }
 
 
-//    /**
-//     * Lists all ProdutosCarrinhos models.
-//     *
-//     * @return string
-//     */
-//    public function actionIndex()
-//    {
-//        if (!Yii::$app->user->can('verCompras')) {
-//            throw new \yii\web\ForbiddenHttpException('Acesso negado');
-//        }
-//
-//        $searchModel = new ProdutosCarrinhosSearch();
-//        $dataProvider = $searchModel->search($this->request->queryParams);
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
-//    }
-//
-//    /**
-//     * Displays a single ProdutosCarrinhos model.
-//     * @param int $id ID
-//     * @param int $carrinhos_id Carrinhos ID
-//     * @param int $produtos_id Produtoss ID
-//     * @return string
-//     * @throws NotFoundHttpException if the model cannot be found
-//     */
-//    public function actionView($id, $carrinhos_id, $produtos_id)
-//    {
-//        if (!Yii::$app->user->can('verCompras')) {
-//            throw new \yii\web\ForbiddenHttpException('Acesso negado.');
-//        }
-//
-//        return $this->render('view', [
-//            'model' => $this->findModel($id, $carrinhos_id, $produtos_id),
-//        ]);
-//    }
-
     /**
      * Creates a new ProdutosCarrinhos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -119,7 +80,6 @@ class ProdutosCarrinhosController extends Controller
         }
         $model->carrinhos_id = $modelCarrinhos->id;
         $linhaCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $modelCarrinhos->id, 'produtos_id' => $produtos_id])->one();
-        // Set other attributes and validation as needed
         $model->produtos_id = $produtos_id;
 
         if($linhaCarrinho != null){
@@ -143,7 +103,6 @@ class ProdutosCarrinhosController extends Controller
         if ($model->save() && $modelCarrinhos->save()) {
             return $this->redirect(['carrinhos/index']);
         } else {
-
             Yii::$app->session->setFlash('error', 'Para realizar compras, tem que iniciar sessão!');
         }
 
@@ -211,6 +170,6 @@ class ProdutosCarrinhosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('A página requisitada não existe.');
     }
 }

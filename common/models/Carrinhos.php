@@ -29,30 +29,6 @@ class Carrinhos extends \yii\db\ActiveRecord
         return 'carrinhos';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['dtapedido'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['dtapedido'],
-                ],
-                'value' => function () {
-                    return date('Y-m-d H:i:s'); // Format as required
-                },
-            ],
-        ];
-    }
-
-    public function beforeValidate()
-    {
-        if ($this->isNewRecord && empty($this->dtapedido)) {
-            $this->dtapedido = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
-        }
-        return parent::beforeValidate();
-    }
-
     /**
      * {@inheritdoc}
      */

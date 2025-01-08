@@ -173,7 +173,7 @@ $this->registerJs(<<<JS
             }
         }
     });
-     // Novo cliente registado
+     // Notificações de novos clientes e compras
     var toastEl = document.querySelector('.toast');
         var toast = new bootstrap.Toast(toastEl);
         toast.show();

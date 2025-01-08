@@ -79,7 +79,15 @@ class AvaliacoesController extends Controller
             throw new \yii\web\ForbiddenHttpException('Acesso negado.');
         }
 
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        try {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Avaliação eliminada com sucesso.');
+        } catch (\yii\db\IntegrityException $e) {
+            Yii::$app->session->setFlash('error', 'Não é possível eliminar esta Avaliação porque está associado a outros registos.');
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', 'Ocorreu um erro ao tentar eliminar a Avaliação.');
+        }
 
         return $this->redirect(['index']);
     }
