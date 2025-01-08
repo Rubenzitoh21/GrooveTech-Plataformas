@@ -89,8 +89,13 @@ class EmpresasController extends Controller
 
         $empresa = $this->findModel();
 
-        if ($this->request->isPost && $empresa->load($this->request->post()) && $empresa->save()) {
-            return $this->redirect(['view']);
+        if ($this->request->isPost && $empresa->load($this->request->post())) {
+            if ($empresa->save()) {
+                Yii::$app->session->setFlash('success', 'Empresa atualizada com sucesso.');
+                return $this->redirect(['view']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao atualizar a Empresa.');
+            }
         }
 
         return $this->render('update', [

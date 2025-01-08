@@ -94,8 +94,13 @@ class PagamentosController extends Controller
         $model = new Pagamentos();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Método de Pagamento criado com sucesso.');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o Método de Pagamento.');
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -121,8 +126,13 @@ class PagamentosController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Método de Pagamento atualizado com sucesso.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao atualizar o Método de Pagamento.');
+            }
         }
 
         return $this->render('update', [

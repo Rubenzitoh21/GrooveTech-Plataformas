@@ -99,8 +99,13 @@ class UserProfileController extends Controller
         $model = new UserProfile();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Utilizador criado com sucesso.');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o Utilizador.');
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -125,9 +130,15 @@ class UserProfileController extends Controller
         }
 
         $model = $this->findModel($id);
+        $user = $model->user;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $user->load($this->request->post())) {
+            if ($model->save() && $user->save()) {
+                Yii::$app->session->setFlash('success', 'Utilizador atualizado com sucesso.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao Utilizador o Produto.');
+            }
         }
 
         return $this->render('update', [

@@ -97,8 +97,13 @@ class FaturasController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Fatura atualizada com sucesso.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao atualizar a Fatura.');
+            }
         }
 
         return $this->render('update', [

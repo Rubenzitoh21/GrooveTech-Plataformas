@@ -95,11 +95,14 @@ class CategoriasProdutosController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                if($urlCallback === 'produto'){
+                Yii::$app->session->setFlash('success', 'Categoria criada com sucesso.');
+                if ($urlCallback === 'produto') {
                     return $this->redirect(['produtos/create']);
                 } else {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar a Categoria.');
             }
         } else {
             $model->loadDefaultValues();
@@ -125,8 +128,13 @@ class CategoriasProdutosController extends Controller
 
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Categoria atualizada com sucesso.');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao atualizar a Categoria.');
+            }
         }
 
         return $this->render('update', [

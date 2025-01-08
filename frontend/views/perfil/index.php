@@ -7,7 +7,6 @@ use yii\helpers\Html;
 /** @var common\models\User $userData */
 /** @var common\models\UserProfile $userDataAdditional */
 /** @var common\models\User $passwordModel */
-/** @var bool $mode */
 
 $this->title = 'Perfil';
 //$this->params['breadcrumbs'][] = $this->title;

@@ -113,7 +113,6 @@ class ImagensController extends Controller
 
                         $newModel->fileName = $fileImagem['basename'];
                         $newModel->produto_id = $model->produto_id;
-                        // If $produto_id is provided, set it in the new model
                         if ($produto_id != null) {
                             $newModel->produto_id = $produto_id;
                         }
@@ -121,11 +120,14 @@ class ImagensController extends Controller
                         $newModel->save();
                     }
 
-                    if($urlCallback === 'produto'){
+                    Yii::$app->session->setFlash('success', 'Imagem criada com sucesso.');
+                    if ($urlCallback === 'produto') {
                         return $this->redirect(['produtos/view', 'id' => $model->produto_id]);
                     } else {
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar a Imagem.');
                 }
             }
         } else {
@@ -167,11 +169,14 @@ class ImagensController extends Controller
                     }
                 }
 
+                Yii::$app->session->setFlash('success', 'Imagem atualizada com sucesso.');
                 if($urlCallback === 'produto'){
                     return $this->redirect(['produtos/view', 'id' => $model->produto_id]);
                 } else {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocorreu um erro ao atualizar a Imagem.');
             }
         }
 

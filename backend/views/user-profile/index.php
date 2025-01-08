@@ -40,9 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             /*'id',*/
             'user.username',
+            'user.email',
             'primeironome:text:Nome',
             'apelido',
-            'user.email',
             /*'auth.item_name:text:Role',*/
             [
                 'attribute' => 'auth.item_name',
