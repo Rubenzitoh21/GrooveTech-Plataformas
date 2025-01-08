@@ -58,7 +58,7 @@ class PerfilController extends Controller
         $user = Yii::$app->user->identity;
 
         if ($user->load(Yii::$app->request->post()) && $user->save()) {
-            Yii::$app->session->setFlash('success', 'Profile updated successfully');
+            Yii::$app->session->setFlash('success', 'Perfil alterado com sucesso');
             return $this->refresh();
         }
 
@@ -95,7 +95,7 @@ class PerfilController extends Controller
         if ($loadedPost && $user->validate()) {
             $user->password = $user->newPassword;
             $user->save(false);
-            Yii::$app->session->setFlash('success', 'Palavra-passe alterada com sucesso');
+            Yii::$app->session->setFlash('success', 'Password alterada com sucesso');
             return $this->redirect(['index']);
         }
 
@@ -117,6 +117,6 @@ class PerfilController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('A página solicitada não existe.');
     }
 }

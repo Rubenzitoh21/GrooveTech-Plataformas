@@ -35,8 +35,8 @@ $this->title = 'Perfil';
                                         <?php
                                         $form = ActiveForm::begin([
                                             'options' => ['class' => 'form'],
-                                            'action' => ['perfil/index', 'mode' => 'data'], // Update the action attribute
-                                            'method' => 'post', // Set the method to post
+                                            'action' => ['perfil/index', 'mode' => 'data'],
+                                            'method' => 'post',
                                         ]);
                                         ?>
                                         <?= $form->field($userData, 'username')->textInput(['value' => $userData->username, 'placeholder' => 'Insira o seu nome de utilizador'])->label('Nome de Utilizador') ?>
@@ -171,8 +171,8 @@ $this->title = 'Perfil';
                                         $formPassword = ActiveForm::begin([
                                             'id' => 'password-form',
                                             'options' => ['class' => 'form'],
-                                            'action' => ['perfil/index', 'mode' => 'password'], // Update the action attribute
-                                            'method' => 'post', // Set the method to post
+                                            'action' => ['perfil/index', 'mode' => 'password'],
+                                            'method' => 'post',
                                         ]);
                                         ?>
 

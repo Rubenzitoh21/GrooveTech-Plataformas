@@ -112,6 +112,6 @@ class EmpresasController extends Controller
             return $empresa;
         }
 
-        throw new NotFoundHttpException('Nenhuma empresa foi encontrada.');
+        throw new NotFoundHttpException('A página solicitada não existe.');
     }
 }

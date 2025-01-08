@@ -64,7 +64,7 @@ class PerfilController extends Controller
                     if ($user->load(Yii::$app->request->post())) {
                         if ($user->validate()) {
                             if (empty($user->newPassword)) {
-                                Yii::$app->session->setFlash('error', 'A nova senha não pode estar vazia.');
+                                Yii::$app->session->setFlash('error', 'A nova password não pode estar vazia.');
                                 break;
                             }
                             $userData->setPassword($user->newPassword);

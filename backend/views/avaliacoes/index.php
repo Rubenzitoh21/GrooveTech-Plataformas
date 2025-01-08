@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'produto_id',
                 'label' => 'Produto',
-                'format' => 'raw', // Permite usar HTML no conteúdo da célula
+                'format' => 'raw',
                 'value' => function ($model) {
                     $produto = $model->linhasFaturas->produtos ?? null;
                     if ($produto) {
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dtarating',
             [
                 'attribute' => 'rating',
-                'format' => 'raw', // Permite HTML bruto na célula
+                'format' => 'raw',
                 'value' => function ($model) {
                     $stars = '';
                     for ($i = 1; $i <= 5; $i++) {
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     return $stars;
                 },
-                'contentOptions' => ['class' => 'text-center'], // Centraliza as estrelas na coluna
+                'contentOptions' => ['class' => 'text-center'],
             ],
             [
                 'attribute' => 'user_id',

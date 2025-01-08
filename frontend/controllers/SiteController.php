@@ -98,6 +98,7 @@ class SiteController extends Controller
             ->limit(3)
             ->all();
 
+        // Adiciona produtos com a melhor avaliação, limite de 3
         $produtosAvaliados = (new Query())
             ->select([
                 'produtos.id',
@@ -119,7 +120,7 @@ class SiteController extends Controller
         $produtosAvaliadosIds = array_column($produtosAvaliados, 'id');
         $quantidadeRestante = 3 - count($produtosAvaliados);
 
-        // Adiciona produtos aleatórios, excluindo os que já estão na lista de avaliados
+        // Adiciona produtos aleatórios
         if ($quantidadeRestante > 0) {
             $produtosAleatorios = (new Query())
                 ->select([
@@ -308,11 +309,11 @@ class SiteController extends Controller
             throw new BadRequestHttpException($e->getMessage());
         }
         if (($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
-            Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+            Yii::$app->session->setFlash('success', 'O seu email foi verificado com sucesso!');
             return $this->goHome();
         }
 
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        Yii::$app->session->setFlash('error', 'Desculpe, não conseguimos verificar o seu email com o token fornecido.');
         return $this->goHome();
     }
 
@@ -326,10 +327,10 @@ class SiteController extends Controller
         $model = new ResendVerificationEmailForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'Verifique o seu email para obter mais instruções.');
                 return $this->goHome();
             }
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
+            Yii::$app->session->setFlash('error', 'Desculpe, não conseguimos reenviar o email de verificação para o email fornecido.');
         }
 
         return $this->render('resendVerificationEmail', [

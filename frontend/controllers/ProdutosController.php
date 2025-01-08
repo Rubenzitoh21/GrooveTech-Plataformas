@@ -52,20 +52,16 @@ class ProdutosController extends Controller
 
     public function actionIndex($categorias_id = null, $search = null, $sort = null)
     {
-        // Cria a consulta base
         $query = Produtos::find();
 
-        // Filtrar por categoria (somente se existir uma categoria válida)
         if (!empty($categorias_id)) {
             $query->andWhere(['categorias_produtos_id' => $categorias_id]);
         }
 
-        // Filtrar por pesquisa (somente se o valor de pesquisa for preenchido)
         if (!empty($search)) {
             $query->andWhere(['like', 'nome', $search]);
         }
 
-        // Aplicar ordenação com base na seleção do dropdown
         switch ($sort) {
             case 'price_asc':
                 $query->orderBy(['preco' => SORT_ASC]);
@@ -90,18 +86,15 @@ class ProdutosController extends Controller
                 $query->orderBy(['id' => SORT_DESC]);
         }
 
-        // Configurar o DataProvider para paginação e consulta
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 12, // Número de produtos por página
+                'pageSize' => 12,
             ],
         ]);
 
-        // Buscar todas as categorias
         $categorias = CategoriasProdutos::find()->all();
 
-        // Renderizar a view com os dados necessários
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'categorias' => $categorias,
@@ -178,7 +171,7 @@ class ProdutosController extends Controller
                 'faturas.user_id' => $userId,
                 'linhas_faturas.produtos_id' => $produtoId,
             ])
-            ->orderBy(['linhas_faturas.id' => SORT_DESC]) // Ordena pela última criada
+            ->orderBy(['linhas_faturas.id' => SORT_DESC])
             ->one();
 
         return $linhaFatura ? $linhaFatura->id : null;

@@ -162,7 +162,7 @@ class ImagensController extends Controller
                     $model->fileName = $fileInfo['basename'];
 
                     if (!$model->save()) {
-                        Yii::$app->session->setFlash('error', 'Erro ao salvar as alterações.');
+                        Yii::$app->session->setFlash('error', 'Erro ao guardar as alterações.');
                         return $this->redirect(['update', 'id' => $model->id]);
                     }
                 }
@@ -214,6 +214,6 @@ class ImagensController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('A página solicitada não existe.');
     }
 }
