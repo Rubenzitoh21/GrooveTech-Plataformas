@@ -92,6 +92,15 @@ class SiteController extends Controller
             $session->set('lastCheckedUserId', $ultimoCliente);
         }
         $lastCheckedUserId = $session->get('lastCheckedUserId');
+        $novosClientes = UserProfile::find()
+            ->where(['>', 'id', $lastCheckedUserId])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        if (!empty($novosClientes)) {
+            $session->set('lastCheckedUserId', $novosClientes[0]->id);
+        }
+
         if (!$session->has('lastCheckedFaturaId')) {
             $ultimaFatura = Faturas::find()
                 ->select(['id'])
@@ -100,6 +109,14 @@ class SiteController extends Controller
             $session->set('lastCheckedFaturaId', $ultimaFatura);
         }
         $lastCheckedFaturaId = $session->get('lastCheckedFaturaId');
+        $novasCompras = Faturas::find()
+            ->where(['>', 'id', $lastCheckedFaturaId])
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        if (!empty($novasCompras)) {
+            $session->set('lastCheckedFaturaId', $novasCompras[0]->id);
+        }
 
         // Determina o ano atual
         $currentYear = $year ?? date('Y');
@@ -150,6 +167,8 @@ class SiteController extends Controller
 
 
         return $this->render('index', [
+            'novasCompras' => $novasCompras,
+            'novosClientes' => $novosClientes,
             'totalFaturado' => $totalFaturado ?? 0,
             'totalFaturas' => $totalFaturas ?? 0,
             'totalClientes' => $totalClientes ?? 0,
