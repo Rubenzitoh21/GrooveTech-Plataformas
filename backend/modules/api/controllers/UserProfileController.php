@@ -129,7 +129,7 @@ class UserProfileController extends ActiveController
         }
 
         foreach ($validFields as $field) {
-            if (isset($params[$field]) ) {
+            if (isset($params[$field])) {
 
                 // Validação da data de nascimento
                 if ($field == 'dtanasc') {
@@ -145,8 +145,25 @@ class UserProfileController extends ActiveController
                     $this->sendErrorResponse(400, 'Género inválido. Por favor, insira M, F ou O');
                 }
                 // Validação do NIF verifica se o campo na request é "nif" e obriga que o valor tenha 9 dígitos
-                if ($field == 'nif' && !preg_match('/^\d{9}$/', $params[$field])) {
-                    $this->sendErrorResponse(400, 'NIF inválido. O NIF deve conter 9 dígitos.');
+                if ($field == 'nif' && !empty($params[$field]) && !preg_match('/^\d{9}$/', $params[$field])) {
+                    $this->sendErrorResponse(400, 'NIF inválido. O NIF deve estar vazio ou conter exatamente 9 dígitos.');
+                }
+                // Verifica se o numero de telefone já está em uso por outro utilizador
+                $userHasPhone = $this->modelClass::find()
+                    ->where(['telefone' => $params['telefone']])
+                    ->andWhere(['!=', 'user_id', $userProfileData->user_id]) // Exclui o utilizador atual da pesquisa
+                    ->one();
+                if ($userHasPhone) {
+                    $this->sendErrorResponse(400, 'O telefone fornecido já está em uso por outro utilizador.');
+                }
+                // Verifica se o NIF já está em uso por outro utilizador
+                $userHasNif = $this->modelClass::find()
+                    ->where(['nif' => $params['nif']])
+                    ->andWhere(['!=', 'user_id', $userProfileData->user_id]) // Exclui o utilizador atual da pesquisa
+                    ->one();
+
+                if ($userHasNif) {
+                    $this->sendErrorResponse(400, 'O NIF fornecido já está em uso por outro utilizador.');
                 }
                 $userProfileData->$field = $params[$field];
                 $updatedFields[] = $field;
@@ -165,6 +182,7 @@ class UserProfileController extends ActiveController
     {
         return $this->modelClass::find()->where(['user_id' => $userId])->one();
     }
+
     private function sendErrorResponse($code, $message, $details = [])
     {
         Yii::$app->response->statusCode = $code;
