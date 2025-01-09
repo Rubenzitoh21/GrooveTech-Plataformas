@@ -74,7 +74,7 @@ class AuthController extends ActiveController
         $transaction = Yii::$app->db->beginTransaction();
         try {
 
-            // Create user
+            // Criar um novo utilizador
             $user = new $this->modelClass;
             $user->username = $username;
             $user->email = $email;
@@ -89,12 +89,12 @@ class AuthController extends ActiveController
                 throw new ServerErrorHttpException("Erro ao salvar o utilizador.");
             }
 
-            // Assign role
+            // Atribuir o role de cliente ao utilizador
             $auth = Yii::$app->authManager;
             $userRole = $auth->getRole('cliente');
             $auth->assign($userRole, $user->id);
 
-            // Create user profile
+            // Criar um perfil para o utilizador
             $userProfile = new $this->userProfileModelClass;
             $userProfile->user_id = $user->id;
             $userProfile->dtaregisto = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
@@ -104,7 +104,7 @@ class AuthController extends ActiveController
                 throw new ServerErrorHttpException("Erro ao salvar o perfil do utilizador.");
             }
 
-            // Create initial cart
+            /*// Criar um carrinho para o utilizador
             $carrinhoNovo = new $this->carrinhosModelClass;
             $carrinhoNovo->user_id = $user->id;
             $carrinhoNovo->dtapedido = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
@@ -113,7 +113,7 @@ class AuthController extends ActiveController
 
             if (!$carrinhoNovo->save()) {
                 throw new ServerErrorHttpException("Erro ao salvar o carrinho.");
-            }
+            }*/
 
             $transaction->commit();
             return [

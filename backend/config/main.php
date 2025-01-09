@@ -107,7 +107,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'PATCH update/{id}' => 'update-cart-line',
-                        'POST create' => 'create-cart-lines',
+                        'POST create' => 'create-cart-line',
                         'GET cartline/{id}' => 'get-cart-lines-by-cartid',
                         'DELETE cartline/{id}' => 'delete-cart-line',
                     ],

@@ -21,19 +21,10 @@ class ProdutosCarrinhoController extends ActiveController
         return $behaviors;
     }
 
-    public function actionCreateCartLines()
+    public function actionCreateCartLine()
     {
         $produtos_id = Yii::$app->request->post('produtos_id');
         $this->checkRequiredParam($produtos_id, 'produtos_id');
-
-        $quantidade = Yii::$app->request->post('quantidade');
-        $this->checkRequiredParam($quantidade, 'quantidade');
-
-        $preco_venda = Yii::$app->request->post('preco_venda');
-        $this->checkRequiredParam($preco_venda, 'preco_venda');
-
-        $valor_iva = Yii::$app->request->post('valor_iva');
-        $this->checkRequiredParam($valor_iva, 'valor_iva');
 
         $user_id = Yii::$app->request->post('user_id');
         $this->checkRequiredParam($user_id, 'user_id');
@@ -50,23 +41,31 @@ class ProdutosCarrinhoController extends ActiveController
         if (!$existingCart) {
             $this->sendErrorResponse(404, 'Carrinho não encontrado para o utilizador com o ID ' . $user_id);
         }
-        $produtosCarrinho = new ProdutosCarrinhos();
-        $produtosCarrinho->quantidade = $quantidade;
-        $produtosCarrinho->preco_venda = $preco_venda;
-        $produtosCarrinho->valor_iva = $valor_iva;
-        $produtosCarrinho->subtotal = $quantidade * ($preco_venda + $valor_iva);
-        $produtosCarrinho->produtos_id = $produtos_id;
-        $produtosCarrinho->carrinhos_id = $existingCart->id;
+        $productsInCartLine = ProdutosCarrinhos::find()->where(['produtos_id' => $produtos_id, 'carrinhos_id' => $existingCart->id])->one();
 
-        if ($produtosCarrinho->save()) {
+        // Encontrar o iva associado ao produto
+        $iva = $productsInCartLine->ivas;
+        if (!$iva) {
+            $this->sendErrorResponse(500, 'IVA associado ao produto não encontrado.');
+        }
+
+        $cartLines = new ProdutosCarrinhos();
+        $cartLines->quantidade = "1";
+        $cartLines->preco_venda = $productsInCartLine->preco_venda;
+        $cartLines->valor_iva = $productsInCartLine->preco_venda * ($productsInCartLine->ivas->percentagem / 100) * $productsInCartLine->quantidade;
+        $cartLines->subtotal = $productsInCartLine->quantidade * ($productsInCartLine->preco_venda + $productsInCartLine->valor_iva);
+        $cartLines->produtos_id = $produtos_id;
+        $cartLines->carrinhos_id = $existingCart->id;
+
+        if ($cartLines->save()) {
             return [
                 'message' => 'Linha do carrinho criada com sucesso.',
-                'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($produtosCarrinho)
+                'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($cartLines)
             ];
         } else {
-            $this->sendErrorResponse(500, 'Erro ao criar o produto no carrinho.', $produtosCarrinho->getErrors());
+            $this->sendErrorResponse(500, 'Erro ao criar o produto no carrinho.', $cartLines->getErrors());
         }
-        return $produtosCarrinho;
+        return $cartLines;
     }
 
     public function actionUpdateCartLine($id)
