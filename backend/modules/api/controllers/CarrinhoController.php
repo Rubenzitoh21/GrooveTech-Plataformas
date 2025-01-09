@@ -45,7 +45,7 @@ class CarrinhoController extends ActiveController
         // Create a new cart
         $cart = new Carrinhos();
         $cart->user_id = $user_id;
-        $cart->dtapedido = Carbon::now();
+        $cart->dtapedido = Carbon::now("h:i:s");
         $cart->valortotal = 0;
         $cart->status = "Ativo";
 
