@@ -3,6 +3,7 @@
 namespace backend\modules\api\controllers;
 
 use common\models\Carrinhos;
+use common\models\Produtos;
 use common\models\ProdutosCarrinhos;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
@@ -23,15 +24,18 @@ class ProdutosCarrinhoController extends ActiveController
 
     public function actionCreateCartLine()
     {
-        $produtos_id = Yii::$app->request->post('produtos_id');
-        $this->checkRequiredParam($produtos_id, 'produtos_id');
+        $products_id = Yii::$app->request->post('produtos_id');
+        $this->checkRequiredParam($products_id, 'produtos_id');
 
-        $user_id = Yii::$app->request->post('user_id');
-        $this->checkRequiredParam($user_id, 'user_id');
+        $user_id = ProdutosCarrinhos::find()
+            ->select('carrinhos.user_id')
+            ->joinWith('carrinhos')
+            ->where(['produtos_carrinhos.produtos_id' => $products_id])
+            ->scalar();
 
-        $authenticatedUser_id = Yii::$app->user->id;
+        $autenticatedUser_id = Yii::$app->user->id;
 
-        if ($authenticatedUser_id != $user_id) {
+        if ($autenticatedUser_id != $user_id) {
             $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
@@ -41,20 +45,22 @@ class ProdutosCarrinhoController extends ActiveController
         if (!$existingCart) {
             $this->sendErrorResponse(404, 'Carrinho não encontrado para o utilizador com o ID ' . $user_id);
         }
-        $productsInCartLine = ProdutosCarrinhos::find()->where(['produtos_id' => $produtos_id, 'carrinhos_id' => $existingCart->id])->one();
+        $productWithIva = Produtos::find()
+            ->joinWith('ivas')
+            ->where(['produtos.id' => $products_id])
+            ->one();
 
-        // Encontrar o iva associado ao produto
-        $iva = $productsInCartLine->ivas;
+        $iva = $productWithIva->ivas;
         if (!$iva) {
             $this->sendErrorResponse(500, 'IVA associado ao produto não encontrado.');
         }
 
         $cartLines = new ProdutosCarrinhos();
         $cartLines->quantidade = "1";
-        $cartLines->preco_venda = $productsInCartLine->preco_venda;
-        $cartLines->valor_iva = $productsInCartLine->preco_venda * ($productsInCartLine->ivas->percentagem / 100) * $productsInCartLine->quantidade;
-        $cartLines->subtotal = $productsInCartLine->quantidade * ($productsInCartLine->preco_venda + $productsInCartLine->valor_iva);
-        $cartLines->produtos_id = $produtos_id;
+        $cartLines->preco_venda = $productWithIva->preco;
+        $cartLines->valor_iva = $productWithIva->preco * ($iva->percentagem / 100) * $cartLines->quantidade;
+        $cartLines->subtotal = $cartLines->quantidade * ($productWithIva->preco + $cartLines->valor_iva);
+        $cartLines->produtos_id = $products_id;
         $cartLines->carrinhos_id = $existingCart->id;
 
         if ($cartLines->save()) {
@@ -66,6 +72,25 @@ class ProdutosCarrinhoController extends ActiveController
             $this->sendErrorResponse(500, 'Erro ao criar o produto no carrinho.', $cartLines->getErrors());
         }
         return $cartLines;
+    }
+    public function actionGetCartLinesByCartid($id)
+    {
+        $existingCart = Carrinhos::find()->where(['id' => $id, 'status' => "Ativo"])
+            ->orderBy(['dtapedido' => SORT_DESC])->one();
+
+        if (!$existingCart) {
+            $this->sendErrorResponse(404, 'Carrinho não encontrado  com o ID ' . $id);
+        }
+        $produtosCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $id])->all();
+        if (!$produtosCarrinho && !$existingCart) {
+            $this->sendErrorResponse(404, 'linhas do carrinho não encontradas para o carrinho com o ID ' . $id);
+        }
+
+        return [
+            'message' => 'Linhas do carrinho encontradas associadas ao carrinho com o ID ' . $id,
+            'linhaCarrinho' => $produtosCarrinho
+        ];
+
     }
 
     public function actionUpdateCartLine($id)
@@ -152,27 +177,6 @@ class ProdutosCarrinhoController extends ActiveController
         if (!$cart->save()) {
             $this->sendErrorResponse(500, 'Erro ao atualizar o total do cart.', $cart->getErrors());
         }
-    }
-
-
-    public function actionGetCartLinesByCartid($id)
-    {
-        $existingCart = Carrinhos::find()->where(['id' => $id, 'status' => "Ativo"])
-            ->orderBy(['dtapedido' => SORT_DESC])->one();
-
-        if (!$existingCart) {
-            $this->sendErrorResponse(404, 'Carrinho não encontrado  com o ID ' . $id);
-        }
-        $produtosCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $id])->all();
-        if (!$produtosCarrinho && !$existingCart) {
-            $this->sendErrorResponse(404, 'linhas do carrinho não encontradas para o carrinho com o ID ' . $id);
-        }
-
-        return [
-            'message' => 'Linhas do carrinho encontradas associadas ao carrinho com o ID ' . $id,
-            'linhaCarrinho' => $produtosCarrinho
-        ];
-
     }
 
     private function checkRequiredParam($param, $paramName)

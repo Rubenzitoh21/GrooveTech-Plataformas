@@ -159,8 +159,6 @@ class UserProfileController extends ActiveController
                     $this->sendErrorResponse(400, 'O NIF fornecido já está em uso por outro utilizador.');
                 }
                 $userProfileData->$field = $params[$field];
-                Yii::info('Field: ' . $field . ' Value: ' . $params[$field],"debug");
-                Yii::info('User Profile Data: ' .$userProfileData, true, "debug");
             }
         }
 
