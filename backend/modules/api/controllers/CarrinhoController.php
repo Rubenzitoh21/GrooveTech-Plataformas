@@ -2,9 +2,9 @@
 
 namespace backend\modules\api\controllers;
 
+use Carbon\Carbon;
 use common\models\Carrinhos;
 use common\models\ProdutosCarrinhos;
-use common\models\User;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
@@ -45,6 +45,7 @@ class CarrinhoController extends ActiveController
         // Create a new cart
         $cart = new Carrinhos();
         $cart->user_id = $user_id;
+        $cart->dtapedido = Carbon::now();
         $cart->valortotal = 0;
         $cart->status = "Ativo";
 
@@ -61,21 +62,20 @@ class CarrinhoController extends ActiveController
 
     }
 
-    public function actionDeleteCartByUserid($user_id)
+    public function actionDeleteCartByUserid($id)
     {
-        // Get the access token from the GET request
-        $accessToken = Yii::$app->request->get('access-token');
-        if (!$accessToken) {
-            $this->sendErrorResponse(400, 'Parâmetro obrigatório em falta: access-token');
+        $authenticatedUser_id = Yii::$app->user->id;
+        if ($authenticatedUser_id != $id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
         $cart = Carrinhos::findOne([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'status' => "Ativo"
         ]);
 
         if (!$cart) {
-            $this->sendErrorResponse(404, 'Nenhum carrinho ativo encontrado para este utilizador com o id: ' . $user_id);
+            $this->sendErrorResponse(404, 'Nenhum carrinho ativo encontrado para este utilizador com o id: ' . $id);
         }
 
 
@@ -86,7 +86,7 @@ class CarrinhoController extends ActiveController
         if ($cart->delete()) {
             return [
                 'message' => 'Carrinho e linhas do carrinho excluídos com sucesso.',
-                'user_id' => $user_id,
+                'user_id' => $id,
                 'carrinho_id_excluido' => $cart->id,
                 'linhas_carrinho' => $cartLines_id,
                 'linhas_carrinho_excluidas' => $cartLinesTotal
@@ -101,29 +101,23 @@ class CarrinhoController extends ActiveController
     }
 
 
-    public function actionGetCartByUserid($user_id)
+    public function actionGetCartByUserid($id)
     {
-        $accessToken = Yii::$app->request->get('access-token');
-        if (!$accessToken) {
-            $this->sendErrorResponse(400, 'Parâmetro obrigatório em falta: access-token');
+
+        $authenticatedUser_id = Yii::$app->user->id;
+        if ($authenticatedUser_id != $id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
-        $this->getUserByIdAndToken($user_id, $accessToken);
         $activeCart = Carrinhos::findOne([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'status' => "Ativo"
         ]);
         if (!$activeCart) {
-            $this->sendErrorResponse(404, 'Nenhum carrinho ativo encontrado para este utilizador com o id: ' . $user_id);
+            $this->sendErrorResponse(404, 'Nenhum carrinho ativo encontrado para este utilizador com o id: ' . $id);
         }
 
         return $activeCart;
-    }
-
-    public function getUserByIdAndToken($id, $accessToken)
-    {
-        $userModel = new User();
-        return $userModel::find()->where(['id' => $id, 'auth_key' => $accessToken])->one();
     }
 
     private function sendErrorResponse($code, $message, $details = [])

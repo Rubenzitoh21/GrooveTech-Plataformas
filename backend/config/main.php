@@ -94,11 +94,11 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'POST create' => 'create-cart',
-                        'GET cart/{user_id}' => 'get-cart-by-userid',
-                        'DELETE cart/{user_id}' => 'delete-cart-by-userid',
+                        'GET cart/{id}' => 'get-cart-by-userid',
+                        'DELETE cart/{id}' => 'delete-cart-by-userid',
                     ],
                     'tokens' => [
-                        '{user_id}' => '<user_id:\\d+>',
+                        '{id}' => '<id:\\d+>',
                     ],
                 ],
                 //LINHAS CARRINHO
@@ -106,8 +106,10 @@ return [
                     'controller' => 'api/produtos-carrinho',
                     'pluralize' => false,
                     'extraPatterns' => [
+                        'PATCH update/{id}' => 'update-cart-line',
                         'POST create' => 'create-cart-lines',
                         'GET cartline/{id}' => 'get-cart-lines-by-cartid',
+                        'DELETE cartline/{id}' => 'delete-cart-line',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',

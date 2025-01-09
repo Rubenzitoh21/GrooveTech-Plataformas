@@ -4,11 +4,9 @@ namespace backend\modules\api\controllers;
 
 use common\models\Carrinhos;
 use common\models\ProdutosCarrinhos;
-use common\models\User;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
-use yii\web\Response;
 
 class ProdutosCarrinhoController extends ActiveController
 {
@@ -37,9 +35,6 @@ class ProdutosCarrinhoController extends ActiveController
         $valor_iva = Yii::$app->request->post('valor_iva');
         $this->checkRequiredParam($valor_iva, 'valor_iva');
 
-        $subtotal = Yii::$app->request->post('subtotal');
-        $this->checkRequiredParam($subtotal, 'subtotal');
-
         $user_id = Yii::$app->request->post('user_id');
         $this->checkRequiredParam($user_id, 'user_id');
 
@@ -59,17 +54,107 @@ class ProdutosCarrinhoController extends ActiveController
         $produtosCarrinho->quantidade = $quantidade;
         $produtosCarrinho->preco_venda = $preco_venda;
         $produtosCarrinho->valor_iva = $valor_iva;
-        $produtosCarrinho->subtotal = $subtotal;
+        $produtosCarrinho->subtotal = $quantidade * ($preco_venda + $valor_iva);
         $produtosCarrinho->produtos_id = $produtos_id;
         $produtosCarrinho->carrinhos_id = $existingCart->id;
 
         if ($produtosCarrinho->save()) {
-            return $this->generateSuccessResponse($produtosCarrinho);
+            return [
+                'message' => 'Linha do carrinho criada com sucesso.',
+                'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($produtosCarrinho)
+            ];
         } else {
             $this->sendErrorResponse(500, 'Erro ao criar o produto no carrinho.', $produtosCarrinho->getErrors());
         }
         return $produtosCarrinho;
     }
+
+    public function actionUpdateCartLine($id)
+    {
+        $cartline = ProdutosCarrinhos::findOne($id);
+        if (!$cartline) {
+            $this->sendErrorResponse(404, 'Produto no carrinho não encontrado.');
+        }
+
+        $authenticatedUser_id = Yii::$app->user->id;
+        $user_id = $cartline->carrinhos->user_id;
+
+        if ($authenticatedUser_id != $user_id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
+        }
+
+        $quantidade = Yii::$app->request->post('quantidade');
+        $this->checkRequiredParam($quantidade, 'quantidade');
+        $cartline->quantidade = $quantidade;
+
+        $cartline->subtotal = $cartline->quantidade * ($cartline->preco_venda + $cartline->valor_iva);
+
+        if ($cartline->save()) {
+            $this->updateCartTotal($cartline->carrinhos_id);
+
+            return [
+                'message' => 'Linha do carrinho atualizada com sucesso.',
+                'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($cartline)
+            ];
+        } else {
+            $this->sendErrorResponse(500, 'Erro ao atualizar o produto no carrinho.', $cartline->getErrors());
+        }
+    }
+
+    public function actionDeleteCartLine($id)
+    {
+        $produtosCarrinho = ProdutosCarrinhos::findOne($id);
+        if (!$produtosCarrinho) {
+            $this->sendErrorResponse(404, 'linha no carrinho não encontrada.');
+        }
+
+        $authenticatedUser_id = Yii::$app->user->id;
+        $user_id = $produtosCarrinho->carrinhos->user_id;
+
+        if ($authenticatedUser_id != $user_id) {
+            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            if (!$produtosCarrinho->delete()) {
+                throw new \Exception('Erro ao eliminar a linha no carrinho.');
+            }
+
+            $this->updateCartTotal($produtosCarrinho->carrinhos_id);
+
+            $transaction->commit();
+
+            return [
+                'message' => 'Linha do carrinho ' . $id . ' removida com sucesso.',
+            ];
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            $this->sendErrorResponse(500, 'Erro ao remover o produto do carrinho.', ['error' => $e->getMessage()]);
+        }
+    }
+
+
+    protected function updateCartTotal($id)
+    {
+        $cart = Carrinhos::findOne($id);
+        if (!$cart) {
+            $this->sendErrorResponse(404, 'Carrinho não encontrado.');
+        }
+
+        $cartLines = ProdutosCarrinhos::find()->where(['carrinhos_id' => $id])->all();
+        $newTotal = 0;
+        foreach ($cartLines as $line) {
+            $newTotal += $line->subtotal;
+        }
+
+        $cart->valortotal = $newTotal;
+        if (!$cart->save()) {
+            $this->sendErrorResponse(500, 'Erro ao atualizar o total do cart.', $cart->getErrors());
+        }
+    }
+
 
     public function actionGetCartLinesByCartid($id)
     {
@@ -118,17 +203,7 @@ class ProdutosCarrinhoController extends ActiveController
         Yii::$app->end();
     }
 
-    private function generateSuccessResponse(ProdutosCarrinhos $produtosCarrinho)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        Yii::$app->response->data = [
-            'message' => 'Linha do carrinho criada com sucesso . ',
-            'ProdutosCarrinhos' => $this->mapProdutosCarrinhosResponse($produtosCarrinho)
-        ];
-        return Yii::$app->response;
-    }
-
-    private function mapProdutosCarrinhosResponse(ProdutosCarrinhos $produtosCarrinho)
+    private function mapProdutosCarrinhosResponse($produtosCarrinho)
     {
         return [
             'id' => (string)$produtosCarrinho->id,

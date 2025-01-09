@@ -86,19 +86,12 @@ class UserProfileController extends ActiveController
         }
 
         $params = Yii::$app->request->getBodyParams();
-        $updatedFields = $this->updateUserProfile($params, $userProfileData);
+        $this->updateUserProfile($params, $userProfileData);
 
-        if ($updatedFields) {
-            $updatedFieldsWithValues = [];
-            foreach ($updatedFields as $field) {
-                Yii::info("Updated field: $field with value: " . $userProfileData->$field);
-                $updatedFieldsWithValues[] = $field . ': ' . $userProfileData->$field;
-            }
-            $this->sendErrorResponse(200, 'Perfil atualizado com sucesso.', [
-                'updated_fields' => $updatedFieldsWithValues,
-                'profileOnUpdate' => $userProfileData
-            ]);
-        }
+        return [
+            'message' => 'Perfil atualizado com sucesso.',
+            'profile' => $userProfileData
+        ];
     }
 
     private function updateUserProfile($params, $userProfileData)
@@ -108,17 +101,16 @@ class UserProfileController extends ActiveController
             'primeironome', 'apelido', 'telefone', 'nif', 'rua', 'localidade', 'codigopostal', 'genero', 'dtanasc'
         ];
 
-        $updatedFields = [];
         $invalidFields = [];
 
         //Valida os campos recebidos, se não encontrar campos válidos, adiciona-os à lista de campos inválidos
         foreach ($params as $field => $value) {
             if (!in_array($field, $validFields)) {
                 $invalidFields[] = $field;
-                Yii::info("Request params: " . print_r($params, true), 'debug');
             }
         }
 
+        // Se existirem campos inválidos, envia uma resposta de erro e mostra os campos inválidos junta com os campos válidos
         if (!empty($invalidFields)) {
             $this->sendErrorResponse(400, 'A request não pode ser executada porque tem alguns campos inválidos', [
                 'invalid_fields' => $invalidFields,
@@ -137,16 +129,17 @@ class UserProfileController extends ActiveController
                     if ($date && $date->format('d-m-Y') === $params[$field]) {
                         $params[$field] = $date->format('Y-m-d');
                     } else {
-                        $this->sendErrorResponse(400, 'Data de nascimento inválida. Por favor, insira a data no formato dd-mm-aaaa');
+                        $this->sendErrorResponse(400,
+                            'Data de nascimento inválida. Por favor, insira a data no formato dd-mm-aaaa (ex: 01-01-2000).');
                     }
                 }
                 //  Validação do género verifica se o campo na request é "genero" e obriga que o valor seja M ou F
-                if ($field == 'genero' && !in_array($params[$field], ['M', 'F'])) {
-                    $this->sendErrorResponse(400, 'Género inválido. Por favor, insira M, F ou O');
+                if ($field == 'genero' && !in_array($params[$field], ['M', 'F', ''])) {
+                    $this->sendErrorResponse(400, 'Género inválido. Por favor, insira M, F ou deixe em branco.');
                 }
                 // Validação do NIF verifica se o campo na request é "nif" e obriga que o valor tenha 9 dígitos
                 if ($field == 'nif' && !empty($params[$field]) && !preg_match('/^\d{9}$/', $params[$field])) {
-                    $this->sendErrorResponse(400, 'NIF inválido. O NIF deve estar vazio ou conter exatamente 9 dígitos.');
+                    $this->sendErrorResponse(400, 'NIF inválido. O NIF deve conter exatamente 9 dígitos.');
                 }
                 // Verifica se o numero de telefone já está em uso por outro utilizador
                 $userHasPhone = $this->modelClass::find()
@@ -166,12 +159,13 @@ class UserProfileController extends ActiveController
                     $this->sendErrorResponse(400, 'O NIF fornecido já está em uso por outro utilizador.');
                 }
                 $userProfileData->$field = $params[$field];
-                $updatedFields[] = $field;
+                Yii::info('Field: ' . $field . ' Value: ' . $params[$field],"debug");
+                Yii::info('User Profile Data: ' .$userProfileData, true, "debug");
             }
         }
 
-        if ($updatedFields && $userProfileData->save()) {
-            return $updatedFields;
+        if ($userProfileData->save()) {
+            return $userProfileData;
         }
 
         return null;
