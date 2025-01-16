@@ -47,7 +47,7 @@ class FaturaController extends ActiveController
         $fatura->pagamentos_id = $pagamentos_id;
         $fatura->expedicoes_id = $expedicoes_id;
         $fatura->save();
-        Yii::info($fatura->getErrors(),"debug");
+        Yii::info($fatura->getErrors(), "debug");
 
         $linhasFaturas = new LinhasFaturas();
         $cartLines = ProdutosCarrinhos::find()->where(['carrinhos_id' => $existingCart->id])->all();
@@ -68,6 +68,20 @@ class FaturaController extends ActiveController
             'fatura' => $fatura,
             'linhasFaturas' => $linhasFaturas
         ];
+    }
+
+    //get fatura by user id
+    public function actionGetFaturaByUserid($id)
+    {
+        $authenticatedUserId = Yii::$app->user->id;
+
+        $fatura = $this->modelClass::find()->where(['user_id' => $id])->all();
+
+        if (!$fatura) {
+            $this->sendErrorResponse(404, 'Fatura não encontrada para o utilizador com o ID ' . $id);
+        }
+
+        return $fatura;
     }
 
     private function checkRequiredParam($param, $paramName)

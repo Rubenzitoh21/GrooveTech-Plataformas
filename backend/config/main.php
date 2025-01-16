@@ -57,12 +57,27 @@ return [
             'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+                //LINHAS FATURAS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/linhas-fatura',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET linhafatura/{id}' => 'get-all-linhas-fatura-by-fatura-id',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
                 //FATURAS
                 ['class' => 'yii\rest\UrlRule',
                     'controller' => 'api/fatura',
                     'pluralize' => false,
                     'extraPatterns' => [
                         'POST create' => 'create-fatura',
+                        'GET fatura/{id}' => 'get-fatura-by-userid',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
                     ],
                 ],
                 //PAGAMENTOS
