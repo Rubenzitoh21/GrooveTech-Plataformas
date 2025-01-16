@@ -57,6 +57,30 @@ return [
             'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+                //FATURAS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/fatura',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST create' => 'create-fatura',
+                    ],
+                ],
+                //PAGAMENTOS
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/pagamento',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET all' => 'get-all-pagamentos',
+                    ],
+                ],
+                //EXPEDICOES
+                ['class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/expedicao',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET all' => 'get-all-expedicoes',
+                    ],
+                ],
                 //USER PROFILE
                 ['class' => 'yii\rest\UrlRule',
                     'controller' => 'api/user-profile',
@@ -108,7 +132,9 @@ return [
                     'extraPatterns' => [
                         'PATCH update/{id}' => 'update-cart-line',
                         'POST create' => 'create-cart-line',
-                        'GET cartline/{id}' => 'get-cart-lines-by-cartid',
+                        'PATCH increase-quantity/{id}' => 'increase-quantity-cartline',
+                        'PATCH decrease-quantity/{id}' => 'decrease-quantity-cartline',
+                        'GET cartline/{id}' => 'get-cart-lines-by-userid',
                         'DELETE cartline/{id}' => 'delete-cart-line',
                     ],
                     'tokens' => [

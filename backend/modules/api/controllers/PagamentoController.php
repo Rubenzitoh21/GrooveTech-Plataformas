@@ -12,7 +12,17 @@ class PagamentoController extends ActiveController
     {
         return $this->render('index');
     }
-}
-{
+
+    public function actionGetAllPagamentos()
+    {
+        $pagamentos = $this->modelClass::find()
+            ->all();
+
+        if (empty($pagamentos)) {
+            throw new NotFoundHttpException("Não existem pagamentos");
+        }
+
+        return $pagamentos;
+    }
 
 }

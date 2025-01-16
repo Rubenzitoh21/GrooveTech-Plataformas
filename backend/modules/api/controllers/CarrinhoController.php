@@ -45,7 +45,7 @@ class CarrinhoController extends ActiveController
         // Create a new cart
         $cart = new Carrinhos();
         $cart->user_id = $user_id;
-        $cart->dtapedido = Carbon::now("h:i:s");
+        $cart->dtapedido = Carbon::now()->toDateTimeString();
         $cart->valortotal = 0;
         $cart->status = "Ativo";
 
@@ -116,8 +116,21 @@ class CarrinhoController extends ActiveController
         if (!$activeCart) {
             $this->sendErrorResponse(404, 'Nenhum carrinho ativo encontrado para este utilizador com o id: ' . $id);
         }
+        $existingCartLines = ProdutosCarrinhos::findAll(['carrinhos_id' => $activeCart->id]);
 
-        return $activeCart;
+
+        // Calculate the valor_iva of each cartline
+        $iva = 0;
+        foreach ($existingCartLines as $cartLine) {
+            $iva += $cartLine->valor_iva * $cartLine->quantidade;
+        }
+
+        $subtotal = $activeCart->valortotal - $iva;
+        return [
+            'carrinho' => $activeCart,
+            'total_iva' => $iva,
+            'subtotal' => $subtotal
+        ];
     }
 
     private function sendErrorResponse($code, $message, $details = [])

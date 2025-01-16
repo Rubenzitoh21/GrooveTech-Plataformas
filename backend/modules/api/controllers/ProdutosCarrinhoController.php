@@ -24,7 +24,7 @@ class ProdutosCarrinhoController extends ActiveController
 
     public function actionCreateCartLine()
     {
-        $products_id = Yii::$app->request->post('produtos_id');
+        $products_id = (int)Yii::$app->request->post('produtos_id');
         $this->checkRequiredParam($products_id, 'produtos_id');
 
         $user_id = Yii::$app->user->id;
@@ -35,52 +35,41 @@ class ProdutosCarrinhoController extends ActiveController
         if (!$existingCart) {
             $this->sendErrorResponse(404, 'Carrinho não encontrado para o utilizador com o ID ' . $user_id);
         }
-        $productWithIva = Produtos::find()
-            ->joinWith('ivas')
-            ->where(['produtos.id' => $products_id])
-            ->one();
+        $product = Produtos::findOne($products_id);
 
-        $iva = $productWithIva->ivas;
-        if (!$iva) {
-            $this->sendErrorResponse(500, 'IVA associado ao produto não encontrado.');
-        }
         $existingCartLines = ProdutosCarrinhos::find()->where(['carrinhos_id' => $existingCart->id, 'produtos_id' => $products_id])->one();
         if ($existingCartLines) {
-            $this->sendErrorResponse(400, 'Produto já existe no carrinho.');
-            $existingCartLines->quantidade = $existingCartLines->quantidade + 1;
-            $existingCartLines->subtotal = $existingCartLines->quantidade * $productWithIva->preco;
+            $existingCartLines->quantidade = (intval($existingCartLines->quantidade) + 1) . '';
+            $existingCartLines->valor_iva = $product->preco * ($product->ivas->percentagem / 100);
+            $existingCartLines->subtotal = $existingCartLines->quantidade * $product->preco;
             $existingCartLines->save();
             $this->updateCartTotal($existingCart->id);
-            return $existingCartLines;
-
+            return $this->mapProdutosCarrinhosResponse($existingCartLines, 'Quantidade da linha do carrinho atualizada com sucesso.');
         } else {
             $cartLines = new ProdutosCarrinhos();
             $cartLines->quantidade = "1";
-            $cartLines->preco_venda = $productWithIva->preco;
-            $cartLines->valor_iva = $productWithIva->preco * ($iva->percentagem / 100) * $cartLines->quantidade;
-            $cartLines->subtotal = $cartLines->quantidade * $productWithIva->preco;
+            $cartLines->preco_venda = $product->preco;
+            $cartLines->valor_iva = $product->preco * ($product->ivas->percentagem / 100);
+            $cartLines->subtotal = $cartLines->quantidade * $product->preco;
             $cartLines->produtos_id = $products_id;
             $cartLines->carrinhos_id = $existingCart->id;
 
             if ($cartLines->save()) {
                 $this->updateCartTotal($existingCart->id);
-                return [
-                    'message' => 'Linha do carrinho criada com sucesso.',
-                    'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($cartLines)
-                ];
+                $this->mapProdutosCarrinhosResponse($cartLines, 'Linha do carrinho criada com sucesso.');
             } else {
                 $this->sendErrorResponse(500, 'Erro ao criar o produto no carrinho.', $cartLines->getErrors());
             }
-            return $cartLines;
+            return $this->mapProdutosCarrinhosResponse($cartLines, 'Linha do carrinho criada com sucesso.');
         }
 
     }
 
-    public function actionGetCartLinesByCartid($id)
+    public function actionGetCartLinesByUserid($id)
     {
         $authenticatedUserId = Yii::$app->user->id;
 
-        $existingCart = Carrinhos::find()->where(['id' => $id, 'status' => "Ativo"])
+        $existingCart = Carrinhos::find()->where(['user_id' => $id, 'status' => "Ativo"])
             ->orderBy(['dtapedido' => SORT_DESC])->one();
 
 
@@ -92,49 +81,88 @@ class ProdutosCarrinhoController extends ActiveController
             $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
         }
 
-        $produtosCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $id])->all();
+        $produtosCarrinho = ProdutosCarrinhos::find()->where(['carrinhos_id' => $existingCart->id])->all();
         if (!$produtosCarrinho && !$existingCart) {
             $this->sendErrorResponse(404, 'linhas do carrinho não encontradas para o carrinho com o ID ' . $id);
         }
 
-        return [
-            'message' => 'Linhas do carrinho encontradas associadas ao carrinho com o ID ' . $id . ' e com o utilizador ID ' .
-                $authenticatedUserId,
-            'linhaCarrinho' => $produtosCarrinho
-        ];
+        return $produtosCarrinho;
+
 
     }
 
-    public function actionUpdateCartLine($id)
+    public function actionIncreaseQuantityCartline($id)
     {
-        $cartline = ProdutosCarrinhos::findOne($id);
-        if (!$cartline) {
-            $this->sendErrorResponse(404, 'Produto no carrinho não encontrado.');
+        $user_id = Yii::$app->user->id;
+
+        $existingCart = Carrinhos::find()->where(['user_id' => $user_id, 'status' => "Ativo"])
+            ->orderBy(['dtapedido' => SORT_DESC])->one();
+
+        if (!$existingCart) {
+            $this->sendErrorResponse(404, 'Carrinho "Ativo" não encontrado associado ao utilizador:' . $user_id);
+        }
+        $existingCartLine =
+            ProdutosCarrinhos::find()->where(['id' => $id, 'carrinhos_id' => $existingCart->id])->one();
+
+        $product = Produtos::findOne($existingCartLine->produtos_id);
+        if (!$existingCartLine) {
+            $this->sendErrorResponse(404, 'Linha do Carrinho não encontrada');
         }
 
-        $authenticatedUser_id = Yii::$app->user->id;
-        $user_id = $cartline->carrinhos->user_id;
+        $existingCartLine->quantidade = (intval($existingCartLine->quantidade) + 1) . '';
+        $existingCartLine->subtotal = $existingCartLine->quantidade * $product->preco;
+        $existingCartLine->valor_iva = $product->preco * ($product->ivas->percentagem / 100);
 
-        if ($authenticatedUser_id != $user_id) {
-            $this->sendErrorResponse(403, 'Token não corresponde ao utilizador fornecido.');
-        }
-
-        $quantidade = Yii::$app->request->post('quantidade');
-        $this->checkRequiredParam($quantidade, 'quantidade');
-        $cartline->quantidade = $quantidade;
-
-        $cartline->subtotal = $cartline->quantidade * ($cartline->preco_venda + $cartline->valor_iva);
-
-        if ($cartline->save()) {
-            $this->updateCartTotal($cartline->carrinhos_id);
-
+        if ($existingCartLine->save()) {
+            $this->updateCartTotal($existingCart->id);
             return [
-                'message' => 'Linha do carrinho atualizada com sucesso.',
-                'linhaCarrinho' => $this->mapProdutosCarrinhosResponse($cartline)
+                'message' => 'Quantidade da Linha do Carrinho atualizada com sucesso',
+                'linhaCarrinho' => $existingCartLine,
             ];
         } else {
-            $this->sendErrorResponse(500, 'Erro ao atualizar o produto no carrinho.', $cartline->getErrors());
+            $this->sendErrorResponse(500, "Erro ao Atualizar a Quantidade da Linha do Carrinho " . $id);
+            $existingCartLine->getErrors();
         }
+        return $existingCartLine;
+    }
+
+    public function actionDecreaseQuantityCartline($id)
+    {
+        $user_id = Yii::$app->user->id;
+
+        $existingCart = Carrinhos::find()->where(['user_id' => $user_id, 'status' => "Ativo"])
+            ->orderBy(['dtapedido' => SORT_DESC])->one();
+
+        if (!$existingCart) {
+
+            $this->sendErrorResponse(404, 'Carrinho "Ativo" não encontrado associado ao utilizador:' . $user_id);
+        }
+        $existingCartLine =
+            ProdutosCarrinhos::find()->where(['id' => $id, 'carrinhos_id' => $existingCart->id])->one();
+
+        $product = Produtos::findOne($existingCartLine->produtos_id);
+        if (!$existingCartLine) {
+            $this->sendErrorResponse(404, 'Linha do Carrinho não encontrada');
+        }
+
+        if ($existingCartLine->quantidade == 1) {
+            $this->sendErrorResponse(400, 'Quantidade mínima atingida', ['quantidade' => $existingCartLine->quantidade]);
+        }
+        $existingCartLine->quantidade = (intval($existingCartLine->quantidade) - 1) . '';
+        $existingCartLine->subtotal = $existingCartLine->quantidade * $product->preco;
+        $existingCartLine->valor_iva = $product->preco * ($product->ivas->percentagem / 100);
+
+        if ($existingCartLine->save()) {
+            $this->updateCartTotal($existingCart->id);
+            return [
+                'message' => 'Quantidade da Linha do Carrinho atualizada com sucesso',
+                'linhaCarrinho' => $existingCartLine,
+            ];
+        } else {
+            $this->sendErrorResponse(500, "Erro ao Atualizar a Quantidade da Linha do Carrinho " . $id);
+            $existingCartLine->getErrors();
+        }
+        return $existingCartLine;
     }
 
     public function actionDeleteCartLine($id)
@@ -218,16 +246,23 @@ class ProdutosCarrinhoController extends ActiveController
         Yii::$app->end();
     }
 
-    private function mapProdutosCarrinhosResponse($produtosCarrinho)
+    protected function mapProdutosCarrinhosResponse($cartLine, $message = null)
     {
-        return [
-            'id' => (string)$produtosCarrinho->id,
-            'quantidade' => (string)$produtosCarrinho->quantidade,
-            'preco_venda' => (string)$produtosCarrinho->preco_venda,
-            'valor_iva' => (string)$produtosCarrinho->valor_iva,
-            'subtotal' => (string)$produtosCarrinho->subtotal,
-            'produtos_id' => (string)$produtosCarrinho->produtos_id,
-            'carrinhos_id' => (string)$produtosCarrinho->carrinhos_id
+        $response = [
+            'message' => $message,
+            'id' => $cartLine->id,
+            'quantidade' => $cartLine->quantidade,
+            'preco_venda' => $cartLine->preco_venda,
+            'valor_iva' => $cartLine->valor_iva,
+            'subtotal' => $cartLine->subtotal,
+            'produtos_id' => $cartLine->produtos_id,
+            'carrinhos_id' => $cartLine->carrinhos_id,
         ];
+
+        if ($message) {
+            $response['message'] = $message;
+        }
+
+        return $response;
     }
 }
