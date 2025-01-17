@@ -64,11 +64,11 @@ class AuthController extends ActiveController
         $email = $request->post('email');
 
         if ($this->modelClass::findOne(['username' => $username])) {
-            throw new BadRequestHttpException("Utilizador já existe");
+            $this->sendErrorResponse(400, 'Username já existe');
         }
 
         if ($this->modelClass::findOne(['email' => $email])) {
-            throw new BadRequestHttpException("Email já existe");
+            $this->sendErrorResponse(400, 'Email já existe');
         }
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -104,16 +104,6 @@ class AuthController extends ActiveController
                 throw new ServerErrorHttpException("Erro ao salvar o perfil do utilizador.");
             }
 
-            /*// Criar um carrinho para o utilizador
-            $carrinhoNovo = new $this->carrinhosModelClass;
-            $carrinhoNovo->user_id = $user->id;
-            $carrinhoNovo->dtapedido = Carbon::now('Europe/Lisbon')->format('Y-m-d H:i:s');
-            $carrinhoNovo->status = 'Ativo';
-            $carrinhoNovo->valortotal = 0;
-
-            if (!$carrinhoNovo->save()) {
-                throw new ServerErrorHttpException("Erro ao salvar o carrinho.");
-            }*/
 
             $transaction->commit();
             return [
@@ -123,6 +113,26 @@ class AuthController extends ActiveController
             $transaction->rollBack();
             throw $e;
         }
+    }
+
+    private function sendErrorResponse($code, $message, $details = [])
+    {
+        Yii::$app->response->statusCode = $code;
+
+        $responseData = [
+            'error' => [
+                'code' => $code,
+                'message' => $message,
+            ]
+        ];
+
+        if ($details) {
+            $responseData['error']['details'] = $details;
+        }
+
+        Yii::$app->response->data = $responseData;
+        Yii::$app->response->send();
+        Yii::$app->end();
     }
 
 
