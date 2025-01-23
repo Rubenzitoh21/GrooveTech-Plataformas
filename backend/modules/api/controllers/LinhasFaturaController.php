@@ -2,6 +2,7 @@
 
 namespace backend\modules\api\controllers;
 
+use common\models\Faturas;
 use common\models\LinhasFaturas;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
@@ -24,6 +25,7 @@ class LinhasFaturaController extends ActiveController
     //get all linhas fatura by fatura id
     public function actionGetAllLinhasFaturaByFaturaId($id)
     {
+        $fatura = Faturas::findOne($id);
         $linhasFatura = $this->modelClass::find()
             ->where(['faturas_id' => $id])
             ->all();
@@ -36,8 +38,9 @@ class LinhasFaturaController extends ActiveController
         $subtotal = 0;
         foreach ($linhasFaturasData as $linha) {
             $totalIva += $linha->valor_iva;
-            $subtotal += $linha->subtotal;
+
         }
+        $subtotal = $fatura->valortotal - $totalIva;
 
         if (empty($linhasFatura)) {
             throw new NotFoundHttpException("Não existem linhas de fatura");

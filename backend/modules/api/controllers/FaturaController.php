@@ -40,7 +40,7 @@ class FaturaController extends ActiveController
         ]);
 
         $fatura = new $this->modelClass;
-        $fatura->data = Carbon::now()->toDateTimeString();
+        $fatura->data = Carbon::now();
         $fatura->valortotal = $existingCart->valortotal;
         $fatura->status = "Pago";
         $fatura->user_id = $userId;
@@ -53,6 +53,7 @@ class FaturaController extends ActiveController
         $cartLines = ProdutosCarrinhos::find()->where(['carrinhos_id' => $existingCart->id])->all();
 
         foreach ($cartLines as $cartLine) {
+            $linhasFaturas = new LinhasFaturas();
             $linhasFaturas->faturas_id = $fatura->id;
             $linhasFaturas->produtos_id = $cartLine->produtos_id;
             $linhasFaturas->quantidade = $cartLine->quantidade;
@@ -62,7 +63,10 @@ class FaturaController extends ActiveController
             $linhasFaturas->save();
 
 
+            $cartLine->delete();
         }
+        $existingCart->delete();
+
         return [
             'message' => 'Fatura criada com sucesso e linhas de fatura criadas com sucesso.',
             'fatura' => $fatura,
@@ -89,5 +93,24 @@ class FaturaController extends ActiveController
         if (!$param) {
             $this->sendErrorResponse(400, "Parâmetro obrigatório em falta: {$paramName}");
         }
+    }
+    private function sendErrorResponse($code, $message, $details = [])
+    {
+        Yii::$app->response->statusCode = $code;
+
+        $responseData = [
+            'error' => [
+                'code' => $code,
+                'message' => $message,
+            ]
+        ];
+
+        if ($details) {
+            $responseData['error']['details'] = $details;
+        }
+
+        Yii::$app->response->data = $responseData;
+        Yii::$app->response->send();
+        Yii::$app->end();
     }
 }

@@ -74,7 +74,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'POST create' => 'create-fatura',
-                        'GET fatura/{id}' => 'get-fatura-by-userid',
+                        'GET all/{id}' => 'get-fatura-by-userid',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',

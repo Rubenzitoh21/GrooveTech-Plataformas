@@ -127,7 +127,18 @@ class UserProfileController extends ActiveController
                 if ($field == 'dtanasc') {
                     $date = DateTime::createFromFormat('d-m-Y', $params[$field]);
                     if ($date && $date->format('d-m-Y') === $params[$field]) {
-                        $params[$field] = $date->format('Y-m-d');
+                        $currentDate = new DateTime();
+                        $minDate = (clone $currentDate)->modify('-16 years'); // Minimum date for 16 years
+
+                        if ($date > $currentDate) {
+                            $this->sendErrorResponse(400,
+                                'Data de nascimento inválida. A data não pode ser no futuro.');
+                        } elseif ($date > $minDate) {
+                            $this->sendErrorResponse(400,
+                                'Data de nascimento inválida. A idade mínima permitida é 16 anos.');
+                        } else {
+                            $params[$field] = $date->format('Y-m-d');
+                        }
                     } else {
                         $this->sendErrorResponse(400,
                             'Data de nascimento inválida. Por favor, insira a data no formato dd-mm-aaaa (ex: 01-01-2000).');
