@@ -35,18 +35,23 @@ class ProdutoController extends ActiveController
                 'descricao' => $produto->descricao,
                 'obs' => $produto->obs,
                 'iva' => $produto->ivas ? $produto->ivas->percentagem : 0,  // Default to 0 if iva is not found
-                'categoria' => $produto->categoriasProdutos  ? $produto->categoriasProdutos ->nome : 'Desconhecida', // Default to 'Desconhecida' if category is not found
+                'categoria' => $produto->categoriasProdutos ? $produto->categoriasProdutos->nome : 'Desconhecida',
+                // Default to 'Desconhecida' if category is not found
                 'imagem' => $produto->imagens ? $produto->imagens[0]->fileName : 'sem imagem',  // Default to 'sem imagem' if no image
             ];
         }, $produtos);
 
         return $produtosArray;
     }
+
     public function actionSearch($query)
     {
         $produtos = $this->modelClass::find()
             ->joinWith(['categoriasProdutos', 'ivas', 'imagens'])
-            ->where(['like', 'produtos.nome', $query])
+            ->where(['or',
+                ['like', 'produtos.nome', $query],
+                ['like', 'categorias_produtos.nome', $query] // Adicionando a pesquisa por categoria
+            ])
             ->all();
 
         if (empty($produtos)) {
