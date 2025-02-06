@@ -161,14 +161,16 @@ class UserProfileController extends ActiveController
                     $this->sendErrorResponse(400, 'O telefone fornecido já está em uso por outro utilizador.');
                 }
                 // Verifica se o NIF já está em uso por outro utilizador
-                $userHasNif = $this->modelClass::find()
-                    ->where(['nif' => $params['nif']])
-                    ->andWhere(['!=', 'user_id', $userProfileData->user_id]) // Exclui o utilizador atual da pesquisa
-                    ->one();
-
-                if ($userHasNif) {
-                    $this->sendErrorResponse(400, 'O NIF fornecido já está em uso por outro utilizador.');
+                if (isset($params['nif']) && !empty($params['nif'])) {
+                    $userHasNif = $this->modelClass::find()
+                        ->where(['nif' => $params['nif']])
+                        ->andWhere(['!=', 'user_id', $userProfileData->user_id]) // Exclui o utilizador atual da pesquisa
+                        ->one();
+                    if ($userHasNif) {
+                        $this->sendErrorResponse(400, 'O NIF fornecido já está em uso por outro utilizador.');
+                    }
                 }
+
                 $userProfileData->$field = $params[$field];
             }
         }

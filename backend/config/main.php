@@ -116,6 +116,7 @@ return [
                     'extraPatterns' => [
                         'POST login' => 'login',
                         'POST signup' => 'signup',
+                        'POST refresh/token' => 'refresh-token'
                     ],
                 ],
                 //PRODUTOS

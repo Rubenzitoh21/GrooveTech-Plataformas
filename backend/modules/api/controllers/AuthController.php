@@ -117,31 +117,15 @@ class AuthController extends ActiveController
     public function actionRefreshToken()
     {
         $request = Yii::$app->request;
+        $username = $request->post('username');
+        $user = $this->modelClass::findOne(['username' => $username]);
 
-        // Get the current token from the request
-        $currentToken = $request->post('current_token');
-        if (empty($currentToken)) {
-            throw new BadRequestHttpException("O token atual é obrigatório.");
-        }
-
-        // Find the user associated with the current token
-        $user = $this->modelClass::findOne(['auth_key' => $currentToken]);
         if (!$user) {
-            throw new UnauthorizedHttpException("Token inválido ou expirado.");
-        }
-
-        // Generate a new token for the user
-        $user->generateAuthKey();
-
-        // Save the new token in the database
-        if (!$user->save()) {
-            Yii::error($user->getErrors(), 'debug');
-            throw new ServerErrorHttpException("Erro ao atualizar o token.");
+            throw new NotFoundHttpException("User not found.");
         }
 
         return [
-            'user_id' => $user->id,
-            'new_token' => $user->auth_key,
+            'latest_token' => $user->auth_key, // Ensure this returns the latest token
         ];
     }
 
