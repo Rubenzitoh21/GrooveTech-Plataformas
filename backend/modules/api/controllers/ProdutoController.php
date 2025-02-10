@@ -2,6 +2,7 @@
 
 namespace backend\modules\api\controllers;
 
+use Yii;
 use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
 
@@ -54,9 +55,8 @@ class ProdutoController extends ActiveController
             ])
             ->all();
 
-        if (empty($produtos)) {
-            throw new NotFoundHttpException("Não foram encontrados produtos para o termo '$query'");
-        }
+        if (empty($produtos))
+            $this->sendErrorResponse(404, "Não foram encontrados produtos para o termo '$query'");
 
         return array_map(function ($produto) {
             return [
@@ -70,6 +70,25 @@ class ProdutoController extends ActiveController
                 'imagem' => $produto->imagens ? $produto->imagens[0]->fileName : 'sem imagem',
             ];
         }, $produtos);
+    }
+    private function sendErrorResponse($code, $message, $details = [])
+    {
+        Yii::$app->response->statusCode = $code;
+
+        $responseData = [
+            'error' => [
+                'code' => $code,
+                'message' => $message,
+            ]
+        ];
+
+        if ($details) {
+            $responseData['error']['details'] = $details;
+        }
+
+        Yii::$app->response->data = $responseData;
+        Yii::$app->response->send();
+        Yii::$app->end();
     }
 
 
