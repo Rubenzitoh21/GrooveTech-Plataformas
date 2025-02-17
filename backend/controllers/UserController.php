@@ -96,15 +96,13 @@ class UserController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
-                if ($model->save()) {
+                if ($model->createUser()) {
                     Yii::$app->session->setFlash('success', 'Utilizador criado com sucesso.');
                     return $this->redirect(['view', 'id' => $model->id]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Ocorreu um erro ao criar o Utilizador.');
                 }
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', ['model' => $model]);
